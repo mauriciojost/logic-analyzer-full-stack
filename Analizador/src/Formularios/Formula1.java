@@ -25,131 +25,31 @@ public class Formula1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jComboBox1 = new javax.swing.JComboBox();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jComboBox2 = new javax.swing.JComboBox();
+        jComboBox1 = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
-        jComboBox4 = new javax.swing.JComboBox();
+        jComboBox2 = new javax.swing.JComboBox();
         jPanel4 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JSeparator();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jSeparator13 = new javax.swing.JSeparator();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
-        jMenuItem9 = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JSeparator();
-        jMenuItem10 = new javax.swing.JMenuItem();
-        jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem8 = new javax.swing.JMenuItem();
-        jMenuItem11 = new javax.swing.JMenuItem();
-        jMenuItem12 = new javax.swing.JMenuItem();
-        jMenuItem13 = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JSeparator();
-        jMenuItem14 = new javax.swing.JMenuItem();
-        jMenu5 = new javax.swing.JMenu();
-        jMenuItem15 = new javax.swing.JMenuItem();
-        jMenuItem16 = new javax.swing.JMenuItem();
-        jMenu6 = new javax.swing.JMenu();
-        jMenuItem17 = new javax.swing.JMenuItem();
-        jSeparator4 = new javax.swing.JSeparator();
-        jMenuItem18 = new javax.swing.JMenuItem();
-        jMenuBar3 = new javax.swing.JMenuBar();
-        jMenu7 = new javax.swing.JMenu();
-        jMenuItem19 = new javax.swing.JMenuItem();
-        jMenuItem20 = new javax.swing.JMenuItem();
-        jMenuItem21 = new javax.swing.JMenuItem();
-        jMenuItem22 = new javax.swing.JMenuItem();
-        jSeparator5 = new javax.swing.JSeparator();
-        jMenuItem23 = new javax.swing.JMenuItem();
-        jMenu8 = new javax.swing.JMenu();
-        jMenuItem24 = new javax.swing.JMenuItem();
-        jMenuItem25 = new javax.swing.JMenuItem();
-        jMenu9 = new javax.swing.JMenu();
-        jMenuItem26 = new javax.swing.JMenuItem();
-        jSeparator6 = new javax.swing.JSeparator();
-        jMenuItem27 = new javax.swing.JMenuItem();
-        jMenuBar4 = new javax.swing.JMenuBar();
-        jMenu10 = new javax.swing.JMenu();
-        jMenuItem28 = new javax.swing.JMenuItem();
-        jMenuItem29 = new javax.swing.JMenuItem();
-        jMenuItem30 = new javax.swing.JMenuItem();
-        jMenuItem31 = new javax.swing.JMenuItem();
-        jSeparator7 = new javax.swing.JSeparator();
-        jMenuItem32 = new javax.swing.JMenuItem();
-        jMenu11 = new javax.swing.JMenu();
-        jMenuItem33 = new javax.swing.JMenuItem();
-        jMenuItem34 = new javax.swing.JMenuItem();
-        jMenu12 = new javax.swing.JMenu();
-        jMenuItem35 = new javax.swing.JMenuItem();
-        jSeparator8 = new javax.swing.JSeparator();
-        jMenuItem36 = new javax.swing.JMenuItem();
-        jMenuBar5 = new javax.swing.JMenuBar();
-        jMenu13 = new javax.swing.JMenu();
-        jMenuItem37 = new javax.swing.JMenuItem();
-        jMenuItem38 = new javax.swing.JMenuItem();
-        jMenuItem39 = new javax.swing.JMenuItem();
-        jMenuItem40 = new javax.swing.JMenuItem();
-        jSeparator9 = new javax.swing.JSeparator();
-        jMenuItem41 = new javax.swing.JMenuItem();
-        jMenu14 = new javax.swing.JMenu();
-        jMenuItem42 = new javax.swing.JMenuItem();
-        jMenuItem43 = new javax.swing.JMenuItem();
-        jMenu15 = new javax.swing.JMenu();
-        jMenuItem44 = new javax.swing.JMenuItem();
-        jSeparator10 = new javax.swing.JSeparator();
-        jMenuItem45 = new javax.swing.JMenuItem();
-        jMenuBar6 = new javax.swing.JMenuBar();
-        jMenu16 = new javax.swing.JMenu();
-        jMenuItem46 = new javax.swing.JMenuItem();
-        jMenuItem47 = new javax.swing.JMenuItem();
-        jMenuItem48 = new javax.swing.JMenuItem();
-        jMenuItem49 = new javax.swing.JMenuItem();
-        jSeparator11 = new javax.swing.JSeparator();
-        jMenuItem50 = new javax.swing.JMenuItem();
-        jMenu17 = new javax.swing.JMenu();
-        jMenuItem51 = new javax.swing.JMenuItem();
-        jMenuItem52 = new javax.swing.JMenuItem();
-        jMenu18 = new javax.swing.JMenu();
-        jMenuItem53 = new javax.swing.JMenuItem();
-        jSeparator12 = new javax.swing.JSeparator();
-        jMenuItem54 = new javax.swing.JMenuItem();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jMenuBar6 = new javax.swing.JMenuBar();
-        jMenu16 = new javax.swing.JMenu();
-        jMenuItem46 = new javax.swing.JMenuItem();
-        jMenuItem47 = new javax.swing.JMenuItem();
-        jMenuItem48 = new javax.swing.JMenuItem();
-        jMenuItem49 = new javax.swing.JMenuItem();
-        jSeparator11 = new javax.swing.JSeparator();
-        jMenuItem50 = new javax.swing.JMenuItem();
-        jMenu17 = new javax.swing.JMenu();
-        jMenuItem51 = new javax.swing.JMenuItem();
-        jMenuItem52 = new javax.swing.JMenuItem();
-        jMenu18 = new javax.swing.JMenu();
-        jMenuItem53 = new javax.swing.JMenuItem();
-        jSeparator12 = new javax.swing.JSeparator();
-        jMenuItem54 = new javax.swing.JMenuItem();
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jComboBox1);
+        jSeparator14 = new javax.swing.JSeparator();
+        jMenuItem9 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Analizador Lógico");
@@ -171,37 +71,37 @@ public class Formula1 extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Modo"));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Síncrono", "Asíncrono" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Síncrono", "Asíncrono" }));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Frecuencia de muestreo"));
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "50KHz", "100KHz", "150KHz", "200KHz" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "50KHz", "100KHz", "150KHz", "200KHz" }));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jComboBox4, 0, 125, Short.MAX_VALUE)
+            .addComponent(jComboBox2, 0, 125, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -229,21 +129,26 @@ public class Formula1 extends javax.swing.JFrame {
 
         jMenu1.setText("Archivo");
 
-        jMenuItem4.setText("Nuevo");
-        jMenu1.add(jMenuItem4);
+        jMenuItem1.setText("Nuevo");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
 
-        jMenuItem5.setText("Abrir");
-        jMenu1.add(jMenuItem5);
+        jMenuItem2.setText("Abrir");
+        jMenu1.add(jMenuItem2);
 
         jMenuItem3.setText("Guardar");
         jMenu1.add(jMenuItem3);
 
-        jMenuItem2.setText("Guardar como...");
-        jMenu1.add(jMenuItem2);
-        jMenu1.add(jSeparator1);
+        jMenuItem4.setText("Guardar como...");
+        jMenu1.add(jMenuItem4);
+        jMenu1.add(jSeparator13);
 
-        jMenuItem1.setText("Salir");
-        jMenu1.add(jMenuItem1);
+        jMenuItem5.setText("Salir");
+        jMenu1.add(jMenuItem5);
 
         jMenuBar1.add(jMenu1);
 
@@ -257,266 +162,23 @@ public class Formula1 extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu4.setText("Ayuda");
+        jMenu3.setText("Ayuda");
 
-        jMenuItem9.setText("Ayuda");
-        jMenu4.add(jMenuItem9);
-        jMenu4.add(jSeparator2);
-
-        jMenuItem10.setText("Acerca de Analizardor");
-        jMenu4.add(jMenuItem10);
-
-        jMenuBar1.add(jMenu4);
-
-        jMenu3.setText("Archivo");
-
-        jMenuItem8.setText("Nuevo");
+        jMenuItem8.setText("Ayuda");
         jMenu3.add(jMenuItem8);
-
-        jMenuItem11.setText("Abrir");
-        jMenu3.add(jMenuItem11);
-
-        jMenuItem12.setText("Guardar");
-        jMenu3.add(jMenuItem12);
-
-        jMenuItem13.setText("Guardar como...");
-        jMenu3.add(jMenuItem13);
-        jMenu3.add(jSeparator3);
-
-        jMenuItem14.setText("Salir");
-        jMenu3.add(jMenuItem14);
-
-        jMenuBar2.add(jMenu3);
-
-        jMenu5.setText("Editar");
-
-        jMenuItem15.setText("Opciones");
-        jMenu5.add(jMenuItem15);
-
-        jMenuItem16.setText("Preferencias");
-        jMenu5.add(jMenuItem16);
-
-        jMenuBar2.add(jMenu5);
-
-        jMenu6.setText("Ayuda");
-
-        jMenuItem17.setText("Ayuda");
-        jMenu6.add(jMenuItem17);
-        jMenu6.add(jSeparator4);
-
-        jMenuItem18.setText("Acerca de Analizardor");
-        jMenu6.add(jMenuItem18);
-
-        jMenuBar2.add(jMenu6);
-
-        jMenu7.setText("Archivo");
-
-        jMenuItem19.setText("Nuevo");
-        jMenu7.add(jMenuItem19);
-
-        jMenuItem20.setText("Abrir");
-        jMenu7.add(jMenuItem20);
-
-        jMenuItem21.setText("Guardar");
-        jMenu7.add(jMenuItem21);
-
-        jMenuItem22.setText("Guardar como...");
-        jMenu7.add(jMenuItem22);
-        jMenu7.add(jSeparator5);
-
-        jMenuItem23.setText("Salir");
-        jMenu7.add(jMenuItem23);
-
-        jMenuBar3.add(jMenu7);
-
-        jMenu8.setText("Editar");
-
-        jMenuItem24.setText("Opciones");
-        jMenu8.add(jMenuItem24);
-
-        jMenuItem25.setText("Preferencias");
-        jMenu8.add(jMenuItem25);
-
-        jMenuBar3.add(jMenu8);
-
-        jMenu9.setText("Ayuda");
-
-        jMenuItem26.setText("Ayuda");
-        jMenu9.add(jMenuItem26);
-        jMenu9.add(jSeparator6);
-
-        jMenuItem27.setText("Acerca de Analizardor");
-        jMenu9.add(jMenuItem27);
-
-        jMenuBar3.add(jMenu9);
-
-        jMenu10.setText("Archivo");
-
-        jMenuItem28.setText("Nuevo");
-        jMenu10.add(jMenuItem28);
-
-        jMenuItem29.setText("Abrir");
-        jMenu10.add(jMenuItem29);
-
-        jMenuItem30.setText("Guardar");
-        jMenu10.add(jMenuItem30);
-
-        jMenuItem31.setText("Guardar como...");
-        jMenu10.add(jMenuItem31);
-        jMenu10.add(jSeparator7);
-
-        jMenuItem32.setText("Salir");
-        jMenu10.add(jMenuItem32);
-
-        jMenuBar4.add(jMenu10);
-
-        jMenu11.setText("Editar");
-
-        jMenuItem33.setText("Opciones");
-        jMenu11.add(jMenuItem33);
-
-        jMenuItem34.setText("Preferencias");
-        jMenu11.add(jMenuItem34);
-
-        jMenuBar4.add(jMenu11);
-
-        jMenu12.setText("Ayuda");
-
-        jMenuItem35.setText("Ayuda");
-        jMenu12.add(jMenuItem35);
-        jMenu12.add(jSeparator8);
-
-        jMenuItem36.setText("Acerca de Analizardor");
-        jMenu12.add(jMenuItem36);
-
-        jMenuBar4.add(jMenu12);
-
-        jMenu13.setText("Archivo");
-
-        jMenuItem37.setText("Nuevo");
-        jMenu13.add(jMenuItem37);
-
-        jMenuItem38.setText("Abrir");
-        jMenu13.add(jMenuItem38);
-
-        jMenuItem39.setText("Guardar");
-        jMenu13.add(jMenuItem39);
-
-        jMenuItem40.setText("Guardar como...");
-        jMenu13.add(jMenuItem40);
-        jMenu13.add(jSeparator9);
-
-        jMenuItem41.setText("Salir");
-        jMenu13.add(jMenuItem41);
-
-        jMenuBar5.add(jMenu13);
-
-        jMenu14.setText("Editar");
-
-        jMenuItem42.setText("Opciones");
-        jMenu14.add(jMenuItem42);
-
-        jMenuItem43.setText("Preferencias");
-        jMenu14.add(jMenuItem43);
-
-        jMenuBar5.add(jMenu14);
-
-        jMenu15.setText("Ayuda");
-
-        jMenuItem44.setText("Ayuda");
-        jMenu15.add(jMenuItem44);
-        jMenu15.add(jSeparator10);
-
-        jMenuItem45.setText("Acerca de Analizardor");
-        jMenu15.add(jMenuItem45);
-
-        jMenuBar5.add(jMenu15);
-
-        jMenu16.setText("Archivo");
-
-        jMenuItem46.setText("Nuevo");
-        jMenu16.add(jMenuItem46);
-
-        jMenuItem47.setText("Abrir");
-        jMenu16.add(jMenuItem47);
-
-        jMenuItem48.setText("Guardar");
-        jMenu16.add(jMenuItem48);
-
-        jMenuItem49.setText("Guardar como...");
-        jMenu16.add(jMenuItem49);
-        jMenu16.add(jSeparator11);
-
-        jMenuItem50.setText("Salir");
-        jMenu16.add(jMenuItem50);
-
-        jMenuBar6.add(jMenu16);
-
-        jMenu17.setText("Editar");
-
-        jMenuItem51.setText("Opciones");
-        jMenu17.add(jMenuItem51);
-
-        jMenuItem52.setText("Preferencias");
-        jMenu17.add(jMenuItem52);
-
-        jMenuBar6.add(jMenu17);
-
-        jMenu18.setText("Ayuda");
-
-        jMenuItem53.setText("Ayuda");
-        jMenu18.add(jMenuItem53);
-        jMenu18.add(jSeparator12);
-
-        jMenuItem54.setText("Acerca de Analizardor");
-        jMenu18.add(jMenuItem54);
-
-        jMenuBar6.add(jMenu18);
-
-        setJMenuBar(jMenuBar6);
-
-        jMenu16.setText("Archivo");
-
-        jMenuItem46.setText("Nuevo");
-        jMenu16.add(jMenuItem46);
-
-        jMenuItem47.setText("Abrir");
-        jMenu16.add(jMenuItem47);
-
-        jMenuItem48.setText("Guardar");
-        jMenu16.add(jMenuItem48);
-
-        jMenuItem49.setText("Guardar como...");
-        jMenu16.add(jMenuItem49);
-        jMenu16.add(jSeparator11);
-
-        jMenuItem50.setText("Salir");
-        jMenu16.add(jMenuItem50);
-
-        jMenuBar6.add(jMenu16);
-
-        jMenu17.setText("Editar");
-
-        jMenuItem51.setText("Opciones");
-        jMenu17.add(jMenuItem51);
-
-        jMenuItem52.setText("Preferencias");
-        jMenu17.add(jMenuItem52);
-
-        jMenuBar6.add(jMenu17);
-
-        jMenu18.setText("Ayuda");
-
-        jMenuItem53.setText("Ayuda");
-        jMenu18.add(jMenuItem53);
-        jMenu18.add(jSeparator12);
-
-        jMenuItem54.setText("Acerca de Analizardor");
-        jMenu18.add(jMenuItem54);
-
-        jMenuBar6.add(jMenu18);
-
-        setJMenuBar(jMenuBar6);
+        jMenu3.add(jSeparator14);
+
+        jMenuItem9.setText("Acerca de Analizardor");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem9);
+
+        jMenuBar1.add(jMenu3);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -530,7 +192,7 @@ public class Formula1 extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -541,15 +203,19 @@ public class Formula1 extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
 // TODO add your handling code here:
-}//GEN-LAST:event_jComboBox1ActionPerformed
+}//GEN-LAST:event_jMenuItem9ActionPerformed
+
+private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_jMenuItem1ActionPerformed
     
     /**
      * @param args the command line arguments
@@ -568,81 +234,15 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JButton jButton3;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
-    private javax.swing.JComboBox jComboBox4;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu10;
-    private javax.swing.JMenu jMenu11;
-    private javax.swing.JMenu jMenu12;
-    private javax.swing.JMenu jMenu13;
-    private javax.swing.JMenu jMenu14;
-    private javax.swing.JMenu jMenu15;
-    private javax.swing.JMenu jMenu16;
-    private javax.swing.JMenu jMenu17;
-    private javax.swing.JMenu jMenu18;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
-    private javax.swing.JMenu jMenu7;
-    private javax.swing.JMenu jMenu8;
-    private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuBar jMenuBar3;
-    private javax.swing.JMenuBar jMenuBar4;
-    private javax.swing.JMenuBar jMenuBar5;
-    private javax.swing.JMenuBar jMenuBar6;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem10;
-    private javax.swing.JMenuItem jMenuItem11;
-    private javax.swing.JMenuItem jMenuItem12;
-    private javax.swing.JMenuItem jMenuItem13;
-    private javax.swing.JMenuItem jMenuItem14;
-    private javax.swing.JMenuItem jMenuItem15;
-    private javax.swing.JMenuItem jMenuItem16;
-    private javax.swing.JMenuItem jMenuItem17;
-    private javax.swing.JMenuItem jMenuItem18;
-    private javax.swing.JMenuItem jMenuItem19;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem20;
-    private javax.swing.JMenuItem jMenuItem21;
-    private javax.swing.JMenuItem jMenuItem22;
-    private javax.swing.JMenuItem jMenuItem23;
-    private javax.swing.JMenuItem jMenuItem24;
-    private javax.swing.JMenuItem jMenuItem25;
-    private javax.swing.JMenuItem jMenuItem26;
-    private javax.swing.JMenuItem jMenuItem27;
-    private javax.swing.JMenuItem jMenuItem28;
-    private javax.swing.JMenuItem jMenuItem29;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem30;
-    private javax.swing.JMenuItem jMenuItem31;
-    private javax.swing.JMenuItem jMenuItem32;
-    private javax.swing.JMenuItem jMenuItem33;
-    private javax.swing.JMenuItem jMenuItem34;
-    private javax.swing.JMenuItem jMenuItem35;
-    private javax.swing.JMenuItem jMenuItem36;
-    private javax.swing.JMenuItem jMenuItem37;
-    private javax.swing.JMenuItem jMenuItem38;
-    private javax.swing.JMenuItem jMenuItem39;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem40;
-    private javax.swing.JMenuItem jMenuItem41;
-    private javax.swing.JMenuItem jMenuItem42;
-    private javax.swing.JMenuItem jMenuItem43;
-    private javax.swing.JMenuItem jMenuItem44;
-    private javax.swing.JMenuItem jMenuItem45;
-    private javax.swing.JMenuItem jMenuItem46;
-    private javax.swing.JMenuItem jMenuItem47;
-    private javax.swing.JMenuItem jMenuItem48;
-    private javax.swing.JMenuItem jMenuItem49;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem50;
-    private javax.swing.JMenuItem jMenuItem51;
-    private javax.swing.JMenuItem jMenuItem52;
-    private javax.swing.JMenuItem jMenuItem53;
-    private javax.swing.JMenuItem jMenuItem54;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
@@ -652,19 +252,8 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator10;
-    private javax.swing.JSeparator jSeparator11;
-    private javax.swing.JSeparator jSeparator12;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JSeparator jSeparator6;
-    private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JSeparator jSeparator8;
-    private javax.swing.JSeparator jSeparator9;
+    private javax.swing.JSeparator jSeparator13;
+    private javax.swing.JSeparator jSeparator14;
     // End of variables declaration//GEN-END:variables
     
 }
