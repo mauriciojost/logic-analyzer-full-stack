@@ -19,13 +19,13 @@ import javax.swing.JScrollPane;
  */
 public class Dibujo extends JPanel{
     
-    int[] muestras = {1,0,1,0};
-    Color color = Color.RED;
-    String nombre = "Canal1";
-    int ancho_bit = 25; // this.getWidth() / muestras.length;
-    int altura_bit = 50;
-    int altura_eje = 60;
-    int ancho_eje = 60;
+    private int[] muestras = {1,0,1,0};
+    private Color color = Color.RED;
+    private String nombre = "Canal1";
+    private int ancho_bit = 25; // this.getWidth() / muestras.length;
+    private int altura_bit = 50;
+    private int altura_eje = 60;
+    private int ancho_eje = 60;
     
     public Dibujo(){
         super();
