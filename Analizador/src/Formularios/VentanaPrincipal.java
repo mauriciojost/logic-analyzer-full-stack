@@ -13,26 +13,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
     
     private void initComponentsPropio() {
-
+        int[] muestras = {0, 1, 0, 1};
         GridBagLayout gbl = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
-        jPanel5.setLayout(gbl);
+        panelDibujos.setLayout(gbl);
                 
-        dibujo1 = new Dibujo();
+        dibujo1 = new Dibujo(1,muestras);
         controlCanal1 = new ControlCanal(null,null);
-        dibujo2 = new Dibujo();
+        dibujo2 = new Dibujo(2,muestras);
         controlCanal2 = new ControlCanal(null,null);
-        dibujo3 = new Dibujo();
+        dibujo3 = new Dibujo(3,muestras);
         controlCanal3 = new ControlCanal(null,null);
-        dibujo4 = new Dibujo();
+        dibujo4 = new Dibujo(4,muestras);
         controlCanal4 = new ControlCanal(null,null);
-        dibujo5 = new Dibujo();
+        dibujo5 = new Dibujo(5,muestras);
         controlCanal5 = new ControlCanal(null,null);
-        dibujo6 = new Dibujo();
+        dibujo6 = new Dibujo(6,muestras);
         controlCanal6 = new ControlCanal(null,null);
-        dibujo7 = new Dibujo();
+        dibujo7 = new Dibujo(7,muestras);
         controlCanal7 = new ControlCanal(null,null);
-        dibujo8 = new Dibujo();
+        dibujo8 = new Dibujo(8,muestras);
         controlCanal8 = new ControlCanal(null,null);
         
         gbc.gridx=0;
@@ -40,59 +40,60 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gbc.ipadx = 100;
         gbc.ipady = 30;
         gbl.setConstraints(controlCanal1,gbc);
-        jPanel5.add(controlCanal1);
+        panelDibujos.add(controlCanal1);
         gbc.gridy=1;
         gbl.setConstraints(controlCanal2,gbc);
-        jPanel5.add(controlCanal2);
+        panelDibujos.add(controlCanal2);
         gbc.gridy=2;
         gbl.setConstraints(controlCanal3,gbc);
-        jPanel5.add(controlCanal3);
+        panelDibujos.add(controlCanal3);
         gbc.gridy=3;
         gbl.setConstraints(controlCanal4,gbc);
-        jPanel5.add(controlCanal4);
+        panelDibujos.add(controlCanal4);
         gbc.gridy=4;
         gbl.setConstraints(controlCanal5,gbc);
-        jPanel5.add(controlCanal5);
+        panelDibujos.add(controlCanal5);
         gbc.gridy=5;
         gbl.setConstraints(controlCanal6,gbc);
-        jPanel5.add(controlCanal6);
+        panelDibujos.add(controlCanal6);
         gbc.gridy=6;
         gbl.setConstraints(controlCanal7,gbc);
-        jPanel5.add(controlCanal7);
+        panelDibujos.add(controlCanal7);
         gbc.gridy=7;
         gbl.setConstraints(controlCanal8,gbc);
-        jPanel5.add(controlCanal8);
+        panelDibujos.add(controlCanal8);
         
         gbc.ipadx= 450;
         gbc.ipady= 30;
         gbc.gridx=1;
         gbc.gridy=0;
         gbl.setConstraints(dibujo1,gbc);
-        jPanel5.add(dibujo1);
+        panelDibujos.add(dibujo1);
         gbc.gridy=1;
         gbl.setConstraints(dibujo2,gbc);
-        jPanel5.add(dibujo2);
+        panelDibujos.add(dibujo2);
         gbc.gridy=2;
         gbl.setConstraints(dibujo3,gbc);
-        jPanel5.add(dibujo3);
+        panelDibujos.add(dibujo3);
         gbc.gridy=3;
         gbl.setConstraints(dibujo4,gbc);
-        jPanel5.add(dibujo4);
+        panelDibujos.add(dibujo4);
         gbc.gridy=4;
         gbl.setConstraints(dibujo5,gbc);
-        jPanel5.add(dibujo5);
+        panelDibujos.add(dibujo5);
         gbc.gridy=5;
         gbl.setConstraints(dibujo6,gbc);
-        jPanel5.add(dibujo6);
+        panelDibujos.add(dibujo6);
         gbc.gridy=6;
         gbl.setConstraints(dibujo7,gbc);
-        jPanel5.add(dibujo7);
+        panelDibujos.add(dibujo7);
         gbc.gridy=7;
         gbl.setConstraints(dibujo8,gbc);
-        jPanel5.add(dibujo8);
+        panelDibujos.add(dibujo8);
         
       
         
+
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -106,7 +107,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelZoom = new javax.swing.JPanel();
         botonZoomIn = new javax.swing.JButton();
         botonZoomOut = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
+        panelDibujos = new javax.swing.JPanel();
         menu = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         jMenuItem55 = new javax.swing.JMenuItem();
@@ -125,6 +126,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Analizador Lógico");
+        setResizable(false);
 
         panelCapturar.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Muestras"));
 
@@ -217,14 +219,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap(11, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelDibujosLayout = new javax.swing.GroupLayout(panelDibujos);
+        panelDibujos.setLayout(panelDibujosLayout);
+        panelDibujosLayout.setHorizontalGroup(
+            panelDibujosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 545, Short.MAX_VALUE)
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panelDibujosLayout.setVerticalGroup(
+            panelDibujosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 332, Short.MAX_VALUE)
         );
 
@@ -291,7 +293,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addComponent(panelFrecuencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelZoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(panelDibujos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -303,7 +305,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(panelFrecuencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelZoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelDibujos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -341,7 +343,6 @@ private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JMenuItem jMenuItem61;
     private javax.swing.JMenuItem jMenuItem62;
     private javax.swing.JMenuItem jMenuItem63;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator14;
     private javax.swing.JMenuBar menu;
@@ -349,6 +350,7 @@ private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JMenu menuAyuda;
     private javax.swing.JMenu menuEditar;
     private javax.swing.JPanel panelCapturar;
+    private javax.swing.JPanel panelDibujos;
     private javax.swing.JPanel panelFrecuencia;
     private javax.swing.JPanel panelModo;
     private javax.swing.JPanel panelZoom;

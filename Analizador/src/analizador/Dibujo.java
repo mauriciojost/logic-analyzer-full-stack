@@ -2,74 +2,82 @@
 package analizador;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 public class Dibujo extends JPanel{
     
-    private int[] muestras = {1,0,1,0};
+    private int canalID;
+    private int[] muestras;
     private Color color = Color.RED;
-    private String nombre = "Canal1";
+    private Color colorNombre = new Color(104,104,104);
+    private Font fuente = new Font("Arial", Font.BOLD|Font.ITALIC, 25);
+    private String nombre;
     private int ancho_bit; 
     private int altura_bit;
-    private int altura_eje;
-    private int ancho_eje;
+    private int referenciaY;
+    private int desplazamientoHorizontal;
     
-    public Dibujo(){
+    public Dibujo(int canal, int[] muestras){
         super();
+        this.setBorder(new LineBorder(Color.white, 2, false)); // Mauri: puesto para poder cambiarlo en un futuro (no tengo tan mal gusto).
+        this.canalID=canal;
         this.setBackground(Color.BLACK);
+        this.cambiarRango(muestras);
+        this.nombre = "Canal "+ canal;
     }
-    
+        
     public void cambiarRango(int[] muestras){
         this.muestras = muestras;
-        repaint();
+        actualizarDibujo();
     }
 
     public void cambiarColor(Color color){
         this.color = color;
-        repaint();
+        actualizarDibujo();
     }
     
     public void cambiarNombre(String nombre){
         this.nombre = nombre;
-        repaint();
+        actualizarDibujo();
     }
 
     private void actualizarDibujo(){
         repaint();
     }
     
-    private void setLayout1(){
-        ancho_bit = 25; 
-        altura_bit = 50;
-        altura_eje = 60;
-        ancho_eje = 60;
-    }
     /* Estos metodo deben ejecutarse despues 
      de que se inicialice la altura del Jpanel*/
-    private void setLayout2(){
-        ancho_bit = 25; 
+    private void configurarReferencias(){
+        referenciaY = this.getHeight()-5;
+        //desplazamientoHorizontal = 60;
+        desplazamientoHorizontal = 0;
         altura_bit = this.getHeight()-10;
-        altura_eje = this.getHeight()-5;
-        ancho_eje = 60;
+        ancho_bit = (this.getWidth()-desplazamientoHorizontal)/muestras.length; 
     }
     
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent (g);
         Graphics2D g2 = (Graphics2D)g;
-        //setLayout1();
-        setLayout2();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        configurarReferencias();
+        g2.setColor(colorNombre);
+        g2.setFont(fuente);
+        g2.drawString(nombre,5,referenciaY-10);
         g2.setColor(color);
-        g2.drawString(nombre,5,altura_eje-(altura_bit/2));
         for (int i = 0; i<muestras.length;i++){
             System.out.println(muestras[i]);
             if (i>0 && muestras[i]!=muestras[i-1]){ // Si hay un cambio de signo..   
-                g2.drawLine(ancho_eje + ancho_bit*i, altura_eje - altura_bit ,ancho_eje+ancho_bit*i, altura_eje); // dibujo una linea vertical antes de..
+                g2.drawLine(desplazamientoHorizontal + ancho_bit*i, referenciaY - altura_bit ,desplazamientoHorizontal+ancho_bit*i, referenciaY); // dibujo una linea vertical antes de..
             }
-            g2.drawLine(ancho_eje+ancho_bit*i,altura_eje - muestras[i]*altura_bit ,ancho_eje+ancho_bit*(i+1), altura_eje - muestras[i]*altura_bit); // dibujar la proxima linea horizontal
+            g2.drawLine(desplazamientoHorizontal+ancho_bit*i,referenciaY - muestras[i]*altura_bit ,desplazamientoHorizontal+ancho_bit*(i+1), referenciaY - muestras[i]*altura_bit); // dibujar la proxima linea horizontal
         }
+        
     }
     
 }
