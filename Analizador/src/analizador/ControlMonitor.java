@@ -7,13 +7,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Observable;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 
 public class ControlMonitor extends Observable{
     private int i=0; // Valores actuales de representación de muestras.
     private int f=1023;
     private Font fuenteEjes = new Font("Courier New", Font.BOLD,10);
-
+    private Color colorEjes = Color.red;
+    private Color colorFondo = Color.black;
     private static JPanel panel;
     
     public ControlMonitor(){
@@ -22,14 +22,16 @@ public class ControlMonitor extends Observable{
             public void paintComponent(Graphics g){
                 int cant=f-i+1;
                 float espaciamiento = (float)panel.getWidth()/cant;
-                g.setColor(Color.black);
+                g.setColor(colorFondo);
                 g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
                 g.setFont(fuenteEjes);
-                g.setColor(Color.red);
+                g.setColor(colorEjes);
+                for(int k=0; k<cant;k=k+1){
+                    g.drawLine((int)(espaciamiento*k+1), 0, (int)(espaciamiento*k+1), 5);
+                }
                 int intervalo =(cant/10)>0?(cant/10):1;
                 for(int k=0; k<cant;k=k+intervalo){
-                    g.drawLine((int)(espaciamiento*k+1), 0, (int)(espaciamiento*k+1), 5);
-                    g.drawString(""+(k+i), (int)(espaciamiento*((0.1)+k)), 15);
+                    g.drawString(""+(k+i), (int)(espaciamiento*k), 15);
                 }
             }
         };
@@ -37,18 +39,23 @@ public class ControlMonitor extends Observable{
         panel.setSize(200,200);
         MouseAdapter myListener = new MouseAdapter(){
             private boolean iniciadoArrastre=false;
-            private int x1;
-            private int boton;
+            private int x1, boton; // Posición X y botón de inicio del clic.
             public void mousePressed(MouseEvent e) {x1 = e.getX();boton=e.getButton();}
-            public void mouseDragged(MouseEvent e) {iniciadoArrastre=true;}
+            public void mouseDragged(MouseEvent e) {
+                iniciadoArrastre=true;
+                Graphics g = panel.getGraphics();
+                g.setColor(colorFondo);
+                g.fillRect(0, 15, panel.getWidth(), 10); // Borrado
+                g.setColor(colorEjes);
+                g.drawLine(x1, 20, e.getX(), 20);
+                g.drawLine(x1, 18, x1, 22);
+                g.drawLine(e.getX(), 18, e.getX(), 22);
+                
+            }
             public void mouseReleased(MouseEvent e) {
                 if (iniciadoArrastre){
-                    if ((boton==MouseEvent.BUTTON1) && (e.getButton()==MouseEvent.BUTTON1)){
-                        arrastre(x1,e.getX());
-                    }
-                }else{
-                        clic(x1,e.getButton());
-                }
+                    if ((boton==MouseEvent.BUTTON1) && (e.getButton()==MouseEvent.BUTTON1)){arrastre(x1,e.getX());}
+                }else{clic(x1,e.getButton());}
                 iniciadoArrastre=false;
             }
             private void clic(int pixelX, int boton){
@@ -70,12 +77,14 @@ public class ControlMonitor extends Observable{
                 int hasta = pto1+pto2-desde; // Toma el otro.
                 nuevoRango(desde,hasta);
             }
-    
+            int mapear(int pixelX){ // Mapea una posición de pixel en una posición de muestra de la señal (por ejemplo: pixel 33 -> muestra 1023).
+                int qpixeles = panel.getWidth();
+                int qmuestras = f-i+1;
+                return (i+(int)((float)pixelX/qpixeles*qmuestras));   
+            }
         };   
         panel.addMouseListener(myListener);
         panel.addMouseMotionListener(myListener);
-        panel.setBorder(new LineBorder(Color.white, 2, false));
-        panel.setBackground(Color.white);
     }
     public JPanel getPanel(){
         return panel;
@@ -96,10 +105,5 @@ public class ControlMonitor extends Observable{
     public void dibujarEscala(){
         panel.repaint();
     }
-
-    int mapear(int pixelX){ // Mapea una posición de pixel en una posición de muestra de la señal (por ejemplo: pixel 33 -> muestra 1023).
-        int qpixeles = panel.getWidth();
-        int qmuestras = f-i+1;
-        return (i+(int)((float)pixelX/qpixeles*qmuestras));   
-    }
+    
 }
