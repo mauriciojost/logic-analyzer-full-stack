@@ -19,6 +19,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         dibujo = new Dibujo();
+        dibujo2 = new Dibujo();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem55 = new javax.swing.JMenuItem();
@@ -178,6 +179,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(dibujo, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE)
+            .addComponent(dibujo2, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,7 +190,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dibujo, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
+                .addComponent(dibujo, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                .addComponent(dibujo2, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
         );
         pack();
     }// </editor-fold>
@@ -199,6 +202,7 @@ private void jMenuItem63ActionPerformed(java.awt.event.ActionEvent evt) {
 
 private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
     dibujo.repaint();
+    dibujo2.repaint();
 }
     
     /**
@@ -236,6 +240,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private Dibujo dibujo;
+    private Dibujo dibujo2;
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator14;
     // End of variables declaration
