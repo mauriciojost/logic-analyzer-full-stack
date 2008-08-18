@@ -1,6 +1,7 @@
 package Formularios;
 
 import analizador.ControlCanal;
+import analizador.ControlMonitor;
 import analizador.Dibujo;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -34,6 +35,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         controlCanal7 = new ControlCanal(null,null);
         dibujo8 = new Dibujo(8,muestras);
         controlCanal8 = new ControlCanal(null,null);
+        controlMonitor = new ControlMonitor();
         
         gbc.gridx=0;
         gbc.gridy=0;
@@ -90,6 +92,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gbc.gridy=7;
         gbl.setConstraints(dibujo8,gbc);
         panelDibujos.add(dibujo8);
+        gbc.gridy=8;
+        gbl.setConstraints(controlMonitor.getPanel(),gbc);
+        panelDibujos.add(controlMonitor.getPanel());
         
       
         
@@ -361,4 +366,5 @@ private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private ControlCanal controlCanal1,controlCanal2,
             controlCanal3,controlCanal4,controlCanal5,
             controlCanal6,controlCanal7,controlCanal8;
+    private ControlMonitor controlMonitor;
 }
