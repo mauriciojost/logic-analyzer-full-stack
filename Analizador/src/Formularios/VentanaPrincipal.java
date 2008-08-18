@@ -1,8 +1,9 @@
 package Formularios;
 
+import analizador.ControlCanal;
 import analizador.Dibujo;
-import java.awt.GridLayout;
-import java.awt.LayoutManager;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 public class VentanaPrincipal extends javax.swing.JFrame {
     
@@ -12,16 +13,86 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
     
     private void initComponentsPropio() {
-        LayoutManager layout = new GridLayout(8,1);
-        jPanel5.setLayout(layout);
-        jPanel5.add(new Dibujo());
-        jPanel5.add(new Dibujo());
-        jPanel5.add(new Dibujo());
-        jPanel5.add(new Dibujo());
-        jPanel5.add(new Dibujo());
-        jPanel5.add(new Dibujo());
-        jPanel5.add(new Dibujo());
-        jPanel5.add(new Dibujo());
+
+        GridBagLayout gbl = new GridBagLayout();
+        GridBagConstraints gbc = new GridBagConstraints();
+        jPanel5.setLayout(gbl);
+                
+        dibujo1 = new Dibujo();
+        controlCanal1 = new ControlCanal(null,null);
+        dibujo2 = new Dibujo();
+        controlCanal2 = new ControlCanal(null,null);
+        dibujo3 = new Dibujo();
+        controlCanal3 = new ControlCanal(null,null);
+        dibujo4 = new Dibujo();
+        controlCanal4 = new ControlCanal(null,null);
+        dibujo5 = new Dibujo();
+        controlCanal5 = new ControlCanal(null,null);
+        dibujo6 = new Dibujo();
+        controlCanal6 = new ControlCanal(null,null);
+        dibujo7 = new Dibujo();
+        controlCanal7 = new ControlCanal(null,null);
+        dibujo8 = new Dibujo();
+        controlCanal8 = new ControlCanal(null,null);
+        
+        gbc.gridx=0;
+        gbc.gridy=0;
+        gbc.ipadx = 100;
+        gbc.ipady = 30;
+        gbl.setConstraints(controlCanal1,gbc);
+        jPanel5.add(controlCanal1);
+        gbc.gridy=1;
+        gbl.setConstraints(controlCanal2,gbc);
+        jPanel5.add(controlCanal2);
+        gbc.gridy=2;
+        gbl.setConstraints(controlCanal3,gbc);
+        jPanel5.add(controlCanal3);
+        gbc.gridy=3;
+        gbl.setConstraints(controlCanal4,gbc);
+        jPanel5.add(controlCanal4);
+        gbc.gridy=4;
+        gbl.setConstraints(controlCanal5,gbc);
+        jPanel5.add(controlCanal5);
+        gbc.gridy=5;
+        gbl.setConstraints(controlCanal6,gbc);
+        jPanel5.add(controlCanal6);
+        gbc.gridy=6;
+        gbl.setConstraints(controlCanal7,gbc);
+        jPanel5.add(controlCanal7);
+        gbc.gridy=7;
+        gbl.setConstraints(controlCanal8,gbc);
+        jPanel5.add(controlCanal8);
+        
+        gbc.ipadx= 450;
+        gbc.ipady= 30;
+        gbc.gridx=1;
+        gbc.gridy=0;
+        gbl.setConstraints(dibujo1,gbc);
+        jPanel5.add(dibujo1);
+        gbc.gridy=1;
+        gbl.setConstraints(dibujo2,gbc);
+        jPanel5.add(dibujo2);
+        gbc.gridy=2;
+        gbl.setConstraints(dibujo3,gbc);
+        jPanel5.add(dibujo3);
+        gbc.gridy=3;
+        gbl.setConstraints(dibujo4,gbc);
+        jPanel5.add(dibujo4);
+        gbc.gridy=4;
+        gbl.setConstraints(dibujo5,gbc);
+        jPanel5.add(dibujo5);
+        gbc.gridy=5;
+        gbl.setConstraints(dibujo6,gbc);
+        jPanel5.add(dibujo6);
+        gbc.gridy=6;
+        gbl.setConstraints(dibujo7,gbc);
+        jPanel5.add(dibujo7);
+        gbc.gridy=7;
+        gbl.setConstraints(dibujo8,gbc);
+        jPanel5.add(dibujo8);
+        
+      
+        
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -283,4 +354,9 @@ private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPanel panelZoom;
     // End of variables declaration//GEN-END:variables
     
+    private Dibujo dibujo1,dibujo2,dibujo3,dibujo4,
+            dibujo5,dibujo6,dibujo7,dibujo8;
+    private ControlCanal controlCanal1,controlCanal2,
+            controlCanal3,controlCanal4,controlCanal5,
+            controlCanal6,controlCanal7,controlCanal8;
 }
