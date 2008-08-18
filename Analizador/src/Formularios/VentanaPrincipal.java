@@ -14,91 +14,35 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
     
     private void initComponentsPropio() {
-        int[] muestras = {0, 1, 0, 1};
+        int[] muestras = {1,1,1,0,0,1,0};
         GridBagLayout gbl = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
         panelDibujos.setLayout(gbl);
-                
-        dibujo1 = new Dibujo(1,muestras);
-        controlCanal1 = new ControlCanal(null,null);
-        dibujo2 = new Dibujo(2,muestras);
-        controlCanal2 = new ControlCanal(null,null);
-        dibujo3 = new Dibujo(3,muestras);
-        controlCanal3 = new ControlCanal(null,null);
-        dibujo4 = new Dibujo(4,muestras);
-        controlCanal4 = new ControlCanal(null,null);
-        dibujo5 = new Dibujo(5,muestras);
-        controlCanal5 = new ControlCanal(null,null);
-        dibujo6 = new Dibujo(6,muestras);
-        controlCanal6 = new ControlCanal(null,null);
-        dibujo7 = new Dibujo(7,muestras);
-        controlCanal7 = new ControlCanal(null,null);
-        dibujo8 = new Dibujo(8,muestras);
-        controlCanal8 = new ControlCanal(null,null);
+        
+        dibujo = new Dibujo[8];
+        controlCanal = new ControlCanal[8];
+        for (int i=0;i<8;i++){
+            dibujo[i] = new Dibujo(i,muestras);
+            controlCanal[i] = new ControlCanal(null,null);
+        }
+        
         controlMonitor = new ControlMonitor();
         
-        gbc.gridx=0;
-        gbc.gridy=0;
-        gbc.ipadx = 100;
-        gbc.ipady = 30;
-        gbl.setConstraints(controlCanal1,gbc);
-        panelDibujos.add(controlCanal1);
-        gbc.gridy=1;
-        gbl.setConstraints(controlCanal2,gbc);
-        panelDibujos.add(controlCanal2);
-        gbc.gridy=2;
-        gbl.setConstraints(controlCanal3,gbc);
-        panelDibujos.add(controlCanal3);
-        gbc.gridy=3;
-        gbl.setConstraints(controlCanal4,gbc);
-        panelDibujos.add(controlCanal4);
-        gbc.gridy=4;
-        gbl.setConstraints(controlCanal5,gbc);
-        panelDibujos.add(controlCanal5);
-        gbc.gridy=5;
-        gbl.setConstraints(controlCanal6,gbc);
-        panelDibujos.add(controlCanal6);
-        gbc.gridy=6;
-        gbl.setConstraints(controlCanal7,gbc);
-        panelDibujos.add(controlCanal7);
-        gbc.gridy=7;
-        gbl.setConstraints(controlCanal8,gbc);
-        panelDibujos.add(controlCanal8);
+        gbc.gridx=0;gbc.gridy=0;gbc.ipadx = 100;gbc.ipady = 30;
+        for (int i=0;i<8;i++){
+            gbl.setConstraints(controlCanal[i],gbc);
+            panelDibujos.add(controlCanal[i]);
+            gbc.gridy=i+1;
+        }
         
-        gbc.ipadx= 450;
-        gbc.ipady= 30;
-        gbc.gridx=1;
-        gbc.gridy=0;
-        gbl.setConstraints(dibujo1,gbc);
-        panelDibujos.add(dibujo1);
-        gbc.gridy=1;
-        gbl.setConstraints(dibujo2,gbc);
-        panelDibujos.add(dibujo2);
-        gbc.gridy=2;
-        gbl.setConstraints(dibujo3,gbc);
-        panelDibujos.add(dibujo3);
-        gbc.gridy=3;
-        gbl.setConstraints(dibujo4,gbc);
-        panelDibujos.add(dibujo4);
-        gbc.gridy=4;
-        gbl.setConstraints(dibujo5,gbc);
-        panelDibujos.add(dibujo5);
-        gbc.gridy=5;
-        gbl.setConstraints(dibujo6,gbc);
-        panelDibujos.add(dibujo6);
-        gbc.gridy=6;
-        gbl.setConstraints(dibujo7,gbc);
-        panelDibujos.add(dibujo7);
-        gbc.gridy=7;
-        gbl.setConstraints(dibujo8,gbc);
-        panelDibujos.add(dibujo8);
-        gbc.gridy=8;
+        gbc.ipadx= 450;gbc.ipady= 30;gbc.gridx=1;gbc.gridy=0;
+        for (int i=0;i<8;i++){
+            gbl.setConstraints(dibujo[i],gbc);
+            panelDibujos.add(dibujo[i]);
+            gbc.gridy=i+1;
+        }
         gbl.setConstraints(controlMonitor.getPanel(),gbc);
         panelDibujos.add(controlMonitor.getPanel());
-        
-      
-        
-
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -131,7 +75,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Analizador Lógico");
-        setResizable(false);
 
         panelCapturar.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Muestras"));
 
@@ -155,7 +98,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             panelCapturarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCapturarLayout.createSequentialGroup()
                 .addComponent(botonCapturar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         panelModo.setBorder(javax.swing.BorderFactory.createTitledBorder("Modo"));
@@ -175,7 +118,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             panelModoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelModoLayout.createSequentialGroup()
                 .addComponent(comboBoxModo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         panelFrecuencia.setBorder(javax.swing.BorderFactory.createTitledBorder("Frecuencia de muestreo"));
@@ -195,7 +138,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             panelFrecuenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFrecuenciaLayout.createSequentialGroup()
                 .addComponent(comboBoxFrecuencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         panelZoom.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Zoom"));
@@ -221,7 +164,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addGroup(panelZoomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonZoomIn)
                     .addComponent(botonZoomOut))
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panelDibujosLayout = new javax.swing.GroupLayout(panelDibujos);
@@ -232,7 +175,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         );
         panelDibujosLayout.setVerticalGroup(
             panelDibujosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 332, Short.MAX_VALUE)
+            .addGap(0, 397, Short.MAX_VALUE)
         );
 
         menuArchivo.setText("Archivo");
@@ -289,17 +232,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(panelDibujos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(panelCapturar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelModo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelFrecuencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelZoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(panelDibujos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addComponent(panelZoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -361,10 +304,7 @@ private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPanel panelZoom;
     // End of variables declaration//GEN-END:variables
     
-    private Dibujo dibujo1,dibujo2,dibujo3,dibujo4,
-            dibujo5,dibujo6,dibujo7,dibujo8;
-    private ControlCanal controlCanal1,controlCanal2,
-            controlCanal3,controlCanal4,controlCanal5,
-            controlCanal6,controlCanal7,controlCanal8;
+    private Dibujo dibujo[];
+    private ControlCanal controlCanal[];
     private ControlMonitor controlMonitor;
 }
