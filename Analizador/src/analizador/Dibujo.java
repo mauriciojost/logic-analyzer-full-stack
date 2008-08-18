@@ -1,4 +1,3 @@
-
 package analizador;
 
 import java.awt.*;
@@ -71,7 +70,6 @@ public class Dibujo extends JPanel{
             }
             g2.drawLine(desplazamientoHorizontal+(int)(ancho_bit*i),referenciaY - muestras[i]*altura_bit ,desplazamientoHorizontal+(int)(ancho_bit*(i+1)), referenciaY - muestras[i]*altura_bit); // dibujar la proxima linea horizontal
         }
-        
     }
     
 }

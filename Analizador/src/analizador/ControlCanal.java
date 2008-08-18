@@ -13,8 +13,7 @@ public class ControlCanal extends JPanel implements Observer{
     private Dibujo dibujo;
      
     public ControlCanal(Canal canal,Dibujo dibujo){
-        this.setBackground(Color.white);
-        //this.setSize(100,100);
+        this.setBackground(Color.gray);
         this.canal = canal;
         this.dibujo = dibujo;        
     }
@@ -24,11 +23,11 @@ public class ControlCanal extends JPanel implements Observer{
     }
 
     public void cambiarColor(Color color){
-
+        dibujo.cambiarColor(color);
     }
     
     public void cambiarNombre(String nombre){
-
+        dibujo.cambiarNombre(nombre);
     }
     
     private void actualizarDibujo(){

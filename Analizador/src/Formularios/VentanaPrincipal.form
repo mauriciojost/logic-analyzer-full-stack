@@ -306,11 +306,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="In"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="botonZoomInMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="botonZoomOut">
           <Properties>
             <Property name="text" type="java.lang.String" value="Out"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="botonZoomOutMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

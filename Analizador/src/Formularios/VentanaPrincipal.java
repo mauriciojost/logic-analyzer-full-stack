@@ -151,8 +151,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelZoom.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Zoom"));
 
         botonZoomIn.setText("In");
+        botonZoomIn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonZoomInMouseClicked(evt);
+            }
+        });
 
         botonZoomOut.setText("Out");
+        botonZoomOut.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonZoomOutMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelZoomLayout = new javax.swing.GroupLayout(panelZoom);
         panelZoom.setLayout(panelZoomLayout);
@@ -274,6 +284,14 @@ private void jMenuItem63ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCapturarActionPerformed
 
 }//GEN-LAST:event_botonCapturarActionPerformed
+
+private void botonZoomInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonZoomInMouseClicked
+    ControlMonitor.getControlMonitor().zoomTodo(+1);
+}//GEN-LAST:event_botonZoomInMouseClicked
+
+private void botonZoomOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonZoomOutMouseClicked
+    ControlMonitor.getControlMonitor().zoomTodo(-1);
+}//GEN-LAST:event_botonZoomOutMouseClicked
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

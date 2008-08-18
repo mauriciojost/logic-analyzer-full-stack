@@ -15,8 +15,10 @@ public class ControlMonitor extends Observable{
     private Color colorEjes = Color.red;
     private Color colorFondo = Color.black;
     private static JPanel panel;
+    private static ControlMonitor controlMonitor;
     
     public ControlMonitor(){
+        ControlMonitor.controlMonitor = this;
         panel = new JPanel(){
             @Override
             public void paintComponent(Graphics g){
@@ -84,6 +86,10 @@ public class ControlMonitor extends Observable{
         return panel;
     }
     
+    public static ControlMonitor getControlMonitor(){
+        return controlMonitor;
+    }
+    
     public void nuevoRango(int i, int f){
         this.i=(i<0)?0:i;//System.out.println("nuevoRango...(Antes)("+this.i+","+this.f+")");
         this.f=(f>1023)?1023:f;
@@ -97,7 +103,13 @@ public class ControlMonitor extends Observable{
         
     }
     public void zoomTodo(int zoom){
-        
+        int qmuestras=f-i+1, muestra=i+(f-i)/2, largo=(int)(qmuestras/4);
+        if (zoom>0){
+            i=muestra-largo;f=muestra+largo;nuevoRango(i,f);
+        }else{
+            i-=(largo+1);f+=(largo+1);nuevoRango(i,f);
+        }
+        nuevoRango(i, f);
     }
     public void dibujarEscala(){
         panel.repaint();
