@@ -1,5 +1,6 @@
 package Formularios;
 
+import analizador.Canal;
 import analizador.ControlCanal;
 import analizador.ControlMonitor;
 import analizador.Dibujo;
@@ -7,6 +8,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 public class VentanaPrincipal extends javax.swing.JFrame {
+    private Canal canal[];
+    private Dibujo dibujo[];
+    private ControlCanal controlCanal[];
+    private ControlMonitor controlMonitor;
     
     public VentanaPrincipal() {
         initComponents();
@@ -14,19 +19,21 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
     
     private void initComponentsPropio() {
-        int[] muestras = {1,1,1,0,0,1,0};
+        
         GridBagLayout gbl = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
         panelDibujos.setLayout(gbl);
-        
+        controlMonitor = new ControlMonitor();
         dibujo = new Dibujo[8];
         controlCanal = new ControlCanal[8];
-        for (int i=0;i<8;i++){
-            dibujo[i] = new Dibujo(i,muestras);
-            controlCanal[i] = new ControlCanal(null,null);
-        }
+        canal = new Canal[8];
         
-        controlMonitor = new ControlMonitor();
+        for (int i=0;i<8;i++){
+            canal[i] = new Canal();
+            dibujo[i] = new Dibujo(i);
+            controlCanal[i] = new ControlCanal(canal[i],dibujo[i]);
+            controlMonitor.addObserver(controlCanal[i]);
+        }
         
         gbc.gridx=0;gbc.gridy=0;gbc.ipadx = 100;gbc.ipady = 30;
         for (int i=0;i<8;i++){
@@ -304,7 +311,4 @@ private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPanel panelZoom;
     // End of variables declaration//GEN-END:variables
     
-    private Dibujo dibujo[];
-    private ControlCanal controlCanal[];
-    private ControlMonitor controlMonitor;
 }

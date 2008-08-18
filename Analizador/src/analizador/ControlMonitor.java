@@ -47,9 +47,7 @@ public class ControlMonitor extends Observable{
                 g.setColor(colorFondo);
                 g.fillRect(0, 15, panel.getWidth(), 10); // Borrado
                 g.setColor(colorEjes);
-                g.drawLine(x1, 20, e.getX(), 20);
-                g.drawLine(x1, 18, x1, 22);
-                g.drawLine(e.getX(), 18, e.getX(), 22);
+                g.drawLine(x1, 20, e.getX(), 20);g.drawLine(x1, 18, x1, 22);g.drawLine(e.getX(), 18, e.getX(), 22);
                 
             }
             public void mouseReleased(MouseEvent e) {
@@ -59,16 +57,12 @@ public class ControlMonitor extends Observable{
                 iniciadoArrastre=false;
             }
             private void clic(int pixelX, int boton){
-                int qmuestras = f-i+1;
-                int muestra = mapear(pixelX);
-                int largo =(int)(qmuestras/4);
+                int qmuestras=f-i+1, muestra=mapear(pixelX), largo=(int)(qmuestras/4);
 
                 if (boton==MouseEvent.BUTTON1){ // Zoom In
-                    i=muestra-largo;f=muestra+largo;
-                    nuevoRango(i,f);
+                    i=muestra-largo;f=muestra+largo;nuevoRango(i,f);
                 }else{ // Zoom Out           
-                    i-=(largo+1);f+=(largo+1);
-                    nuevoRango(i,f);
+                    i-=(largo+1);f+=(largo+1);nuevoRango(i,f);
                 }
             }
             private void arrastre(int desdePixelX,int hastaPixelX){
@@ -94,8 +88,11 @@ public class ControlMonitor extends Observable{
         this.i=(i<0)?0:i;//System.out.println("nuevoRango...(Antes)("+this.i+","+this.f+")");
         this.f=(f>1023)?1023:f;
         panel.repaint();
-        this.notifyObservers();
+        this.setChanged();
+        int datos[] = {i,f};
+        this.notifyObservers(datos);
     }
+    
     public void desplazarTodo(int desp){
         
     }

@@ -8,17 +8,17 @@ import javax.swing.border.LineBorder;
 public class Dibujo extends JPanel{
     
     private int canalID;
-    private int[] muestras;
+    private int[] muestras = {1,0,1};
     private Color color = Color.RED;
     private Color colorNombre = new Color(104,104,104);
     private Font fuente = new Font("Arial", Font.BOLD|Font.ITALIC, 25);
     private String nombre;
-    private int ancho_bit; 
+    private float ancho_bit; 
     private int altura_bit;
     private int referenciaY;
     private int desplazamientoHorizontal;
     
-    public Dibujo(int canal, int[] muestras){
+    public Dibujo(int canal){
         super();
         this.setBorder(new LineBorder(Color.white, 2, false)); // Mauri: puesto para poder cambiarlo en un futuro (no tengo tan mal gusto).
         this.canalID=canal;
@@ -42,7 +42,7 @@ public class Dibujo extends JPanel{
         actualizarDibujo();
     }
 
-    private void actualizarDibujo(){
+    public void actualizarDibujo(){
         repaint();
     }
     
@@ -50,10 +50,9 @@ public class Dibujo extends JPanel{
      de que se inicialice la altura del Jpanel*/
     private void configurarReferencias(){
         referenciaY = this.getHeight()-5;
-        //desplazamientoHorizontal = 60;
         desplazamientoHorizontal = 0;
         altura_bit = this.getHeight()-10;
-        ancho_bit = (this.getWidth()-desplazamientoHorizontal)/muestras.length; 
+        ancho_bit = (float)(this.getWidth()-desplazamientoHorizontal)/muestras.length; 
     }
     
     @Override
@@ -67,11 +66,10 @@ public class Dibujo extends JPanel{
         g2.drawString(nombre,5,referenciaY-10);
         g2.setColor(color);
         for (int i = 0; i<muestras.length;i++){
-            System.out.println(muestras[i]);
             if (i>0 && muestras[i]!=muestras[i-1]){ // Si hay un cambio de signo..   
-                g2.drawLine(desplazamientoHorizontal + ancho_bit*i, referenciaY - altura_bit ,desplazamientoHorizontal+ancho_bit*i, referenciaY); // dibujo una linea vertical antes de..
+                g2.drawLine(desplazamientoHorizontal + (int)(ancho_bit*i), referenciaY - altura_bit ,desplazamientoHorizontal+(int)(ancho_bit*i), referenciaY); // dibujo una linea vertical antes de..
             }
-            g2.drawLine(desplazamientoHorizontal+ancho_bit*i,referenciaY - muestras[i]*altura_bit ,desplazamientoHorizontal+ancho_bit*(i+1), referenciaY - muestras[i]*altura_bit); // dibujar la proxima linea horizontal
+            g2.drawLine(desplazamientoHorizontal+(int)(ancho_bit*i),referenciaY - muestras[i]*altura_bit ,desplazamientoHorizontal+(int)(ancho_bit*(i+1)), referenciaY - muestras[i]*altura_bit); // dibujar la proxima linea horizontal
         }
         
     }

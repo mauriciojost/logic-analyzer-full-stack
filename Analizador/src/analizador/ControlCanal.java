@@ -19,8 +19,8 @@ public class ControlCanal extends JPanel implements Observer{
         this.dibujo = dibujo;        
     }
     
-    public void cambiarRango(int[] muestras){
-
+    public void cambiarRango(int i, int f){
+        this.dibujo.cambiarRango(canal.obtenerRango(i, f));
     }
 
     public void cambiarColor(Color color){
@@ -32,10 +32,11 @@ public class ControlCanal extends JPanel implements Observer{
     }
     
     private void actualizarDibujo(){
-
+        dibujo.actualizarDibujo();
     }
 
     public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        int[] rango = (int[])arg;
+        cambiarRango(rango[0],rango[1]);
     }
 }
