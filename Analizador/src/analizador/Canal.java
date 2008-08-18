@@ -1,4 +1,3 @@
-
 package analizador;
 
 import java.util.Observable;

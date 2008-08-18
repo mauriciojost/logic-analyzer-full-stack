@@ -3,17 +3,23 @@ package analizador;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Observable;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 public class ControlMonitor extends Observable{
     private int i=0; // Valores actuales de representación de muestras.
     private int f=1023;
-    private Font fuenteEjes = new Font("Courier New", Font.BOLD,10);
-    private Color colorEjes = Color.red;
-    private Color colorFondo = Color.black;
+    private Font fuenteEjes = new Font("Arial", Font.BOLD,9);
+    private Color colorEjes = new Color(110,110,110);
+    private Color colorFlechas = new Color(150,255,150);
+    private Color colorFondo = new Color(90,90,90);
+    private Color colorBorde = new Color(110,110,110);
+    private Color colorLeyenda = Color.yellow;
     private static JPanel panel;
     private static ControlMonitor controlMonitor;
     
@@ -21,8 +27,10 @@ public class ControlMonitor extends Observable{
         ControlMonitor.controlMonitor = this;
         panel = new JPanel(){
             @Override
-            public void paintComponent(Graphics g){
+            public void paintComponent(Graphics g1){
                 int cant=f-i+1;
+                Graphics2D g = (Graphics2D) g1;
+                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
                 float espaciamiento = (float)panel.getWidth()/cant;
                 g.setColor(colorFondo);
                 g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
@@ -31,6 +39,7 @@ public class ControlMonitor extends Observable{
                 for(int k=0; k<cant;k=k+1){
                     g.drawLine((int)(espaciamiento*k+1), 0, (int)(espaciamiento*k+1), 5);
                 }
+                g.setColor(colorLeyenda);
                 int intervalo =(cant/10)>0?(cant/10):1;
                 for(int k=0; k<cant;k=k+intervalo){
                     g.drawString(""+(k+i), (int)(espaciamiento*k), 15);
@@ -38,7 +47,8 @@ public class ControlMonitor extends Observable{
             }
         };
         
-        panel.setSize(200,200);
+        panel.setBorder(new LineBorder(colorBorde,1));
+        
         MouseAdapter myListener = new MouseAdapter(){
             private boolean iniciadoArrastre=false;
             private int x1, boton; // Posición X y botón de inicio del clic.
@@ -47,9 +57,9 @@ public class ControlMonitor extends Observable{
                 iniciadoArrastre=true;
                 Graphics g = panel.getGraphics();
                 g.setColor(colorFondo);
-                g.fillRect(0, 15, panel.getWidth(), 10); // Borrado
-                g.setColor(colorEjes);
-                g.drawLine(x1, 20, e.getX(), 20);g.drawLine(x1, 18, x1, 22);g.drawLine(e.getX(), 18, e.getX(), 22);
+                g.fillRect(1, 15, panel.getWidth()-2, 10); // Borrado.
+                g.setColor(colorFlechas);
+                g.drawLine(x1, 20, e.getX(), 20);g.drawLine(x1, 18, x1, 22);g.drawLine(e.getX(), 18, e.getX(), 22); // Pintado de las flechas indicadoras de zoom.
                 
             }
             public void mouseReleased(MouseEvent e) {

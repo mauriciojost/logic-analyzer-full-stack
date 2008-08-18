@@ -11,9 +11,10 @@ public class ControlCanal extends JPanel implements Observer{
     private String nombre;
     private Canal canal;
     private Dibujo dibujo;
+    private Color colorFondo = new Color(90,90,90);
      
     public ControlCanal(Canal canal,Dibujo dibujo){
-        this.setBackground(Color.gray);
+        this.setBackground(colorFondo);
         this.canal = canal;
         this.dibujo = dibujo;        
     }
