@@ -53,7 +53,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         canal = new Canal[8];
         gbc.gridx=0;gbc.gridy=0;gbc.ipadx = 100;gbc.ipady = 30;
         for (int i=0;i<8;i++){
-            canal[i] = new Canal();
+            canal[i] = new Canal(i);
             dibujo[i] = new Dibujo(i);
             controlCanal[i] = new ControlCanal(canal[i],dibujo[i]);
             controlMonitor.addObserver(controlCanal[i]);
@@ -104,6 +104,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Analizador Lógico");
+        setResizable(false);
 
         panelCapturar.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Muestras"));
 
