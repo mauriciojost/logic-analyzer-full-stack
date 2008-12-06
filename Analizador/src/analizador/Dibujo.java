@@ -80,7 +80,7 @@ public class Dibujo extends JPanel{
                 g2.setColor(colorEjesRef);
                 g2.drawLine(desplazamientoHorizontal + (int)(ancho_bit*i), referenciaY - altura_bit ,desplazamientoHorizontal+(int)(ancho_bit*i), referenciaY); // dibujo una linea vertical antes de..
                 g2.setColor(colorSeñal);
-                if (i>0 && señal[i]!=señal[i-1]){ // Si hay un cambio de signo..   
+                if (i>0 && señal[i]!=señal[i-1]){ // Si hay un cambio de valor..   
                     g2.drawLine(desplazamientoHorizontal + (int)(ancho_bit*i), referenciaY - altura_bit ,desplazamientoHorizontal+(int)(ancho_bit*i), referenciaY); // dibujo una linea vertical antes de..
                 }
                 g2.drawLine(desplazamientoHorizontal+(int)(ancho_bit*i),referenciaY - señal[i]*altura_bit ,desplazamientoHorizontal+(int)(ancho_bit*(i+1)), referenciaY - señal[i]*altura_bit); // dibujar la proxima linea horizontal

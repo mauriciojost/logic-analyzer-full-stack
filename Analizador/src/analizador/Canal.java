@@ -30,10 +30,13 @@ public class Canal implements Observer{
 
     public void update(Observable o, Object arg) {
         int i;
-        this.señal = (char[])arg;
-        for (i=0;i<this.señal.length;i++){
-            this.señal[i] = (char)((this.señal[i]>>id)&1);
+        char[] argumento = (char[])arg;
+        this.señal = new char[1024];
+        
+        for (i=0;i<argumento.length;i++){
+            this.señal[i] = (char)((argumento[i]>>this.id)&1);
         }
+        //System.out.println("Listo");
     }
 
 }

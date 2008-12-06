@@ -72,6 +72,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gbl.setConstraints(controlMonitor.getPanel(),gbc);
         panelDibujos.add(controlMonitor.getPanel());
         this.getContentPane().setBackground(menu.getBackground());
+        
+        
+        //char a = 8; // 1000
+        //a = (char)((a>>3)&1);
+        
+        //System.out.println("a es "+(int)a);
+        
+        
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

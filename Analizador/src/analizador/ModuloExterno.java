@@ -20,6 +20,7 @@ public class ModuloExterno extends Observable{
 
     public void prueba(){
         señal = generarSeñalAleatoria();
+       
         this.setChanged();
         this.notifyObservers(señal);
     }
@@ -28,7 +29,7 @@ public class ModuloExterno extends Observable{
         char[] rango = new char[1024];
         Random a = new Random();
         for (int k=0;k<1024;k++){
-            rango[k] = (char)(a.nextBoolean()?1:0);
+            rango[k] = (char)(a.nextInt());
         }
         return rango;
     }
