@@ -3,6 +3,7 @@ package Formularios;
 import analizador.Canal;
 import analizador.ControlCanal;
 import analizador.ControlMonitor;
+import analizador.ModuloExterno;
 import analizador.Dibujo;
 import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
 import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
@@ -19,6 +20,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private Dibujo dibujo[];
     private ControlCanal controlCanal[];
     private ControlMonitor controlMonitor;
+    private ModuloExterno moduloExterno;
     
     public VentanaPrincipal() {
         //Todo esto es para borrar, la idea es que decidamos cómo queda mejor la cosa...
@@ -45,6 +47,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         panelDibujos.setLayout(gbl);
         controlMonitor = new ControlMonitor();
+        moduloExterno = new ModuloExterno(null);
         dibujo = new Dibujo[8];
         controlCanal = new ControlCanal[8];
         canal = new Canal[8];
@@ -54,6 +57,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             dibujo[i] = new Dibujo(i);
             controlCanal[i] = new ControlCanal(canal[i],dibujo[i]);
             controlMonitor.addObserver(controlCanal[i]);
+            moduloExterno.addObserver(canal[i]);
             gbl.setConstraints(controlCanal[i],gbc);
             panelDibujos.add(controlCanal[i]);
             gbc.gridy=i+1;
@@ -305,7 +309,7 @@ private void jMenuItem63ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 }//GEN-LAST:event_jMenuItem63ActionPerformed
 
 private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCapturarActionPerformed
-
+    ModuloExterno.getModuloExterno().prueba();
 }//GEN-LAST:event_botonCapturarActionPerformed
 
 private void botonZoomInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonZoomInMouseClicked

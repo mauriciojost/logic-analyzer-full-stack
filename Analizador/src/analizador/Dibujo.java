@@ -68,7 +68,7 @@ public class Dibujo extends JPanel{
         
         g2.setColor(colorNombre);
         g2.setFont(fuente);
-        g2.drawString(nombre,3,referenciaY-15);
+        //g2.drawString(nombre,3,referenciaY-15);
         
         g2.setColor(colorSeñal);
         for (int i = 0; i<muestras.length;i++){

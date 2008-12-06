@@ -2,7 +2,6 @@ package analizador;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
 
 public class Canal implements Observer{
        
@@ -10,16 +9,7 @@ public class Canal implements Observer{
     private int estado;
     
     public Canal(){
-        señal = generarSeñalAleatoria();
-    }
-    
-    private char[] generarSeñalAleatoria(){ // Sólo a los efectos de la depuración.
-        char[] rango = new char[1024];
-        Random a = new Random();
-        for (int k=0;k<1024;k++){
-            rango[k] = (char)(a.nextBoolean()?1:0);
-        }
-        return rango;
+        
     }
     
     public void notify(char[] muestras){
@@ -38,11 +28,11 @@ public class Canal implements Observer{
     }
     
     public int obtenerEstado(){
-        return 0; // Por ahora consideramos que el estado 0 es el de inicialización correcta y muestreo hecho.
+        return this.estado; // Por ahora consideramos que el estado 0 es el de inicialización correcta y muestreo hecho.
     }
 
     public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.señal = (char[])arg;
     }
 
 }
