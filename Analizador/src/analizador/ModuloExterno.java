@@ -8,7 +8,6 @@ public class ModuloExterno extends Observable{
     private int estado;
     private boolean modo;
     private int veloc;
-    private char[] señal;
     private char[] muestras;
     private Comunicador comunicador;
     
@@ -16,14 +15,6 @@ public class ModuloExterno extends Observable{
         this.comunicador = comunicador;
         ModuloExterno.moduloExterno = this;
         System.out.println("Escribió: " + comunicador.recibirComando());
-    }
-
-    private char[] generarSeñalAleatoria(){ // Sólo a los efectos de la depuración.
-        char[] rango = new char[1024];
-        for (int k=0;k<1024;k++){
-            rango[k] = (char)(k);
-        }
-        return rango;
     }
 
     public int obtenerEstado(){
@@ -40,7 +31,7 @@ public class ModuloExterno extends Observable{
         boolean sigue=true;
         
         indice = indice + string_cabecera.length();
-        System.out.println("El primer valor luego de la cabecera es ("+indice+"): " + xml.substring(indice));
+        
         xml = xml.substring(indice); // Descarta la cabecera.
         
         
@@ -58,7 +49,7 @@ public class ModuloExterno extends Observable{
                 retorno[i] = (char)entero;
                 i++;
             }
-            System.out.println(entero);
+            //System.out.println(entero);
             xml = xml.substring(indice); // Se va descartando lo que se analizó.
         }
         
@@ -66,25 +57,34 @@ public class ModuloExterno extends Observable{
     }
     
     public void iniciarMuestreo(){
-        String xml = comunicador.recibirComando();
-        /* En esta parte viene el parseo para extraer los datos.*/
-        /* En esta parte viene el CRC para verificar la validez de los datos obtenidos. */
+        String xml;
         
-        señal = parseo_choto(xml); /* Cosa a tocar por vos Guille!!! */
+        comunicador.enviarComando("<inicio nuevo=1 modo="+ (modo?1:0) +" velocidad="+veloc+"> </inicio>"); // Correcto.
+        //comunicador.enviarComando("<iinicio nuevo=1 modo=1 velocidad=1000> </inicio>"); // Inválido.
         
-        this.setChanged();
-        this.notifyObservers(señal);
+        xml = comunicador.recibirComando();
+        /* En esta parte viene el parseo para extraer los datos. -->> GUILLE!
+         * Recordar que la extracción de datos, no sólo implica las muestras, 
+         * sino todo un estado (modo, velocidad, etc.). 
+         * En esta parte viene el CRC para verificar la validez de los datos obtenidos. 
+         */
+        
+        muestras = parseo_choto(xml); /* Cosa a tocar por vos Guille!!! No olvidar el estado! */
+        
+        
+        this.notificarMuestras(muestras);
     }
     
     public void cambiarModo(boolean modo){
-        
+        this.modo = modo;
     }
     
     public void cambiarVelocidad(int veloc){
-        
+        this.veloc = veloc;
     }
     private void notificarMuestras(char[] muestras){
-        
+        this.setChanged();
+        this.notifyObservers(muestras);
     }
 
     public static ModuloExterno getModuloExterno(){

@@ -1,8 +1,6 @@
 
 package analizador;
 
-import java.util.Random;
-
 public class Comunicador {
     
     byte[] bufferEntrada;
@@ -27,7 +25,7 @@ public class Comunicador {
         String retorno = "<inicio nuevo=1 modo=1 velocidad=1000> ";
         //Random a = new Random();
         int i;
-        //if (chanchada == 11){
+        if (chanchada == 11){
             for (i=0;i<1024;i++){
                 int entero = i;//a.nextInt(255);
                 String string = Integer.valueOf(entero).toString();
@@ -36,8 +34,8 @@ public class Comunicador {
             }
             retorno = retorno.concat("<CRC> 32423 </CRC> </inicio>");
             return retorno;
-        //}else{
-        //    return "";
-        //}
+        }else{
+            return "";
+        }
     }
 }

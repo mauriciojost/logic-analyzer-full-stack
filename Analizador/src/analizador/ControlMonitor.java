@@ -109,6 +109,10 @@ public class ControlMonitor extends Observable{
         this.notifyObservers(datos);
     }
     
+    public void inicializar(){
+        nuevoRango(0,1023);
+    }
+    
     public void desplazarTodo(int desp){
         
     }
