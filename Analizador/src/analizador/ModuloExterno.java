@@ -70,9 +70,18 @@ public class ModuloExterno extends Observable{
          */
         
         muestras = parseo_choto(xml); /* Cosa a tocar por vos Guille!!! No olvidar el estado! */
+        // crc = parseo...
+        // modo = parseo...
+        // velocidad = parseo...
+        // inicio = parseo...
         
         
+        
+        // if crc valido, inicio=requerido, modo=requerido,velocidad=requerida    
         this.notificarMuestras(muestras);
+        // else
+        //   mostrar error
+        // end if
     }
     
     public void cambiarModo(boolean modo){
@@ -89,5 +98,14 @@ public class ModuloExterno extends Observable{
 
     public static ModuloExterno getModuloExterno(){
         return moduloExterno;
+    }
+    
+    private char getCRC(char[] muestras){
+        char crc=0;
+        int i;
+        for (i=0;i<muestras.length;i++){
+            crc = muestras[i];
+        }
+        return crc;
     }
 }
