@@ -1,6 +1,7 @@
 package Formularios;
 
 import analizador.Canal;
+import analizador.Comunicador;
 import analizador.ControlCanal;
 import analizador.ControlMonitor;
 import analizador.ModuloExterno;
@@ -47,7 +48,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         panelDibujos.setLayout(gbl);
         controlMonitor = new ControlMonitor();
-        moduloExterno = new ModuloExterno(null);
+        moduloExterno = new ModuloExterno(new Comunicador());
         dibujo = new Dibujo[8];
         controlCanal = new ControlCanal[8];
         canal = new Canal[8];
@@ -72,12 +73,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gbl.setConstraints(controlMonitor.getPanel(),gbc);
         panelDibujos.add(controlMonitor.getPanel());
         this.getContentPane().setBackground(menu.getBackground());
-        
-        
-        //char a = 8; // 1000
-        //a = (char)((a>>3)&1);
-        
-        //System.out.println("a es "+(int)a);
         
         
     }
@@ -318,7 +313,7 @@ private void jMenuItem63ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 }//GEN-LAST:event_jMenuItem63ActionPerformed
 
 private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCapturarActionPerformed
-    ModuloExterno.getModuloExterno().prueba();
+    ModuloExterno.getModuloExterno().iniciarMuestreo();
 }//GEN-LAST:event_botonCapturarActionPerformed
 
 private void botonZoomInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonZoomInMouseClicked
