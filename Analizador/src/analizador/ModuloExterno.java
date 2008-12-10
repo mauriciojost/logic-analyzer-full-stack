@@ -2,12 +2,15 @@
 package analizador;
 
 import java.util.Observable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ModuloExterno extends Observable{
     private static ModuloExterno moduloExterno;
     private int estado;
     private boolean modo;
     private int veloc;
+    private int crc;
     private char[] muestras;
     private Comunicador comunicador;
     
@@ -70,9 +73,10 @@ public class ModuloExterno extends Observable{
          */
         
         muestras = parseo_choto(xml); /* Cosa a tocar por vos Guille!!! No olvidar el estado! */
-        // crc = parseo...
-        // modo = parseo...
-        // velocidad = parseo...
+        parseoMuestras(xml);
+        crc = parseoCRC(xml);
+        modo = parseoModo(xml);
+        veloc = parseoVelocidad(xml);
         // inicio = parseo...
         
         
@@ -108,4 +112,62 @@ public class ModuloExterno extends Observable{
         }
         return crc;
     }
+
+    public boolean parseoModo(String s){
+        boolean mode = false;
+        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d modo=(\\d) velocidad=\\d+>");
+        Matcher m = strMatch.matcher(s);
+        while (m.find()){
+            //System.out.println( "string = " + m.group(0) );
+            System.out.println( "modo = " + m.group(1));
+            mode = (m.group(1).equals("1"));
+        }
+        return mode;
+    }
+
+    public int parseoVelocidad(String s){
+        int velo = 0;
+        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d modo=\\d velocidad=(\\d+)>");
+        Matcher m = strMatch.matcher( s );
+        while ( m.find() ){
+            //System.out.println( "string = " + m.group(0) );
+            System.out.println( "velocidad = " + m.group(1) );
+            velo = Integer.valueOf(m.group(1));
+        }
+        return velo;
+    }
+
+    public int parseoCRC(String s){
+        int CRC = 0;
+        Pattern strMatch = Pattern.compile( "<CRC> (\\w+) </CRC>");
+        Matcher m = strMatch.matcher( s );
+        while ( m.find() ){
+            //System.out.println( "string = " + m.group(0) );
+            System.out.println( "CRC = " + m.group(1) );
+            CRC = Integer.valueOf(m.group(1));
+        }
+        return CRC;
+    }
+
+    public char[] parseoMuestras(String s){
+        String muestrasTemp = null;
+        char muestrasRet[] = null;
+        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d modo=\\d velocidad=\\d+> (.*) <CRC> \\w+ </CRC> </inicio>");
+        Matcher m = strMatch.matcher(s);
+        while ( m.find() ){
+            muestrasTemp = m.group(1);
+        }
+        System.out.println(muestrasTemp);
+
+        /* Falta la conversion de String a array de chars creeme
+         * que trate de hacerla durante varias horas pero no pude
+         * lograr algo que ande. 
+         * Tambien descubri que no se le puede exigir mucho al regex,
+         * poniendole una expresion regular detallada no soporta mas de
+         * 750 muestras y larga muchisimas exceptiones.
+         */
+
+        return muestrasRet;
+    }
+
 }
