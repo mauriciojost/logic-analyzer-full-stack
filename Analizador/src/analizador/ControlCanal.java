@@ -20,7 +20,11 @@ public class ControlCanal extends JPanel implements Observer{
     }
     
     public void cambiarRango(int i, int f){
-        this.dibujo.cambiarRango(canal.obtenerRango(i, f));
+        try{
+            this.dibujo.cambiarRango(canal.obtenerRango(i, f));
+        }catch(NullPointerException e){
+            System.out.println("Canal no inicializado aún... ("+canal.obtenerId()+")");
+        }
     }
 
     public void cambiarColor(Color color){

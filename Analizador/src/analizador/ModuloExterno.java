@@ -1,4 +1,3 @@
-
 package analizador;
 
 import java.util.Observable;
@@ -24,41 +23,6 @@ public class ModuloExterno extends Observable{
         return 0;
     }
     
-    private char[] parseo_choto(String xml){ /*Esto lo tenés que tocar vos Guille!!! */
-        String string_cabecera = "<inicio nuevo=1 modo=1 velocidad=1000>";
-        int indice = xml.indexOf(string_cabecera);
-        int entero=0;
-        int i=0;
-        char[] retorno = new char[1024];
-        String string = "";
-        boolean sigue=true;
-        
-        indice = indice + string_cabecera.length();
-        
-        xml = xml.substring(indice); // Descarta la cabecera.
-        
-        
-        while (sigue){
-            xml = xml.trim(); // Quita espacios iniciales y finales.
-            indice = xml.indexOf(" "); // Se fija el primer espacio ("11 22 33 44 ..."), que delimita el "11" (valor a analizar).
-            string = xml.substring(0,indice); // Pone en string el "11".
-            try{
-                entero = Integer.valueOf(string); // Pone en entero un 11.
-                sigue = true; // Indica que este valor fue válido, buscar más...
-            }catch(Exception e){
-                sigue = false; // Dejar de buscar, puesto que este valor fue inválido.
-            }
-            if (sigue){
-                retorno[i] = (char)entero;
-                i++;
-            }
-            //System.out.println(entero);
-            xml = xml.substring(indice); // Se va descartando lo que se analizó.
-        }
-        
-        return retorno;
-    }
-    
     public void iniciarMuestreo(){
         String xml;
         
@@ -72,8 +36,7 @@ public class ModuloExterno extends Observable{
          * En esta parte viene el CRC para verificar la validez de los datos obtenidos. 
          */
         
-        muestras = parseo_choto(xml); /* Cosa a tocar por vos Guille!!! No olvidar el estado! */
-        parseoMuestras(xml);
+        muestras = parseoMuestras(xml);
         crc = parseoCRC(xml);
         modo = parseoModo(xml);
         veloc = parseoVelocidad(xml);
@@ -149,25 +112,34 @@ public class ModuloExterno extends Observable{
         return CRC;
     }
 
+    
     public char[] parseoMuestras(String s){
         String muestrasTemp = null;
-        char muestrasRet[] = null;
-        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d modo=\\d velocidad=\\d+> (.*) <CRC> \\w+ </CRC> </inicio>");
+        int indice=0, entero=0, i=0;
+        char[] retorno = new char[1024];
+        
+        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d modo=\\d velocidad=\\d+> (.*) <CRC> \\w+ </CRC> </inicio>");        
         Matcher m = strMatch.matcher(s);
+        
         while ( m.find() ){
-            muestrasTemp = m.group(1);
+            muestrasTemp = m.group(1).trim();
         }
-        System.out.println(muestrasTemp);
 
-        /* Falta la conversion de String a array de chars creeme
-         * que trate de hacerla durante varias horas pero no pude
-         * lograr algo que ande. 
-         * Tambien descubri que no se le puede exigir mucho al regex,
-         * poniendole una expresion regular detallada no soporta mas de
-         * 750 muestras y larga muchisimas exceptiones.
-         */
-
-        return muestrasRet;
+        while (indice!=-1){
+            indice = muestrasTemp.indexOf(" ");     // Se fija el primer espacio ("11 22 33 44 ..."), que delimita el "11" (valor a analizar).
+            if (indice!=-1){                        // Se ha encontrado espacio?
+                entero = Integer.valueOf(muestrasTemp.substring(0, indice));    // Pone en entero un 11.
+                muestrasTemp = muestrasTemp.substring(indice).trim();           // Descartar parte ya analizada.
+            }else{   
+                entero = Integer.valueOf(muestrasTemp);                         // Último valor (no termina con espacio).
+            }
+            retorno[i++] = (char)entero;            // Asignar valor obtenido al vector.
+        }
+        
+        char[] retorno_justo = new char[i];
+        for(i=0;i<retorno_justo.length;i++){retorno_justo[i]=retorno[i];}
+        
+        return retorno_justo;
     }
 
 }

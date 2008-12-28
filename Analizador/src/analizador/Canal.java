@@ -15,9 +15,9 @@ public class Canal implements Observer{
 
     public int[] obtenerRango(int i, int f){
         i = ((i<0)?0:i);
-        f = ((f>1023)?1023:f);
+        f = ((f>señal.length-1)?señal.length-1:f);
         int cant = f-i+1;
-        int bits[] = new int[cant];
+        int bits[] = new int[Math.abs(cant)];
         for (int k=0;k<cant;k++){
             bits[k]=señal[k+i];
         }
@@ -28,15 +28,18 @@ public class Canal implements Observer{
         return this.estado; // Por ahora consideramos que el estado 0 es el de inicialización correcta y muestreo hecho.
     }
 
+    public int obtenerId(){
+        return this.id; // Por ahora consideramos que el estado 0 es el de inicialización correcta y muestreo hecho.
+    }
+    
     public void update(Observable o, Object arg) {
         int i;
         char[] argumento = (char[])arg;
-        this.señal = new char[1024];
+        this.señal = new char[argumento.length];
         
         for (i=0;i<argumento.length;i++){
             this.señal[i] = (char)((argumento[i]>>this.id)&1);
         }
-        //System.out.println("Listo");
     }
 
 }

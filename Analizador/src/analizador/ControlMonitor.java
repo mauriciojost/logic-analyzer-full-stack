@@ -28,7 +28,7 @@ public class ControlMonitor extends Observable{
         panel = new JPanel(){
             @Override
             public void paintComponent(Graphics g1){
-                int cant=f-i+1;
+                int cant=Math.abs(f-i+1);
                 Graphics2D g = (Graphics2D) g1;
                 g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
                 float espaciamiento = (float)panel.getWidth()/cant;
@@ -101,7 +101,7 @@ public class ControlMonitor extends Observable{
     }
     
     public void nuevoRango(int i, int f){
-        this.i=(i<0)?0:i;//System.out.println("nuevoRango...(Antes)("+this.i+","+this.f+")");
+        this.i=(i<0)?0:i;
         this.f=(f>1023)?1023:f;
         panel.repaint();
         this.setChanged();
