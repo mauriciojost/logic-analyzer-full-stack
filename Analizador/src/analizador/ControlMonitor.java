@@ -133,7 +133,7 @@ public class ControlMonitor extends Observable{
             new MouseWheelListener() {
                 public void mouseWheelMoved(MouseWheelEvent mwe) {
                     if (shift_presionado) {
-                        //zoom...
+                        zoomTodo(mwe.getWheelRotation());
                     } else {
                     desplazarTodo(mwe.getWheelRotation());
                     }
