@@ -26,7 +26,7 @@ public class ControlMonitor extends Observable{
     private Color colorLeyenda = Color.yellow;
     private static JPanel panel;
     private static ControlMonitor controlMonitor;
-    private boolean shift_presionado = true;
+    private boolean shift_presionado = false;
     
     public ControlMonitor(){
         ControlMonitor.controlMonitor = this;
@@ -151,12 +151,14 @@ public class ControlMonitor extends Observable{
     }
     
     public void nuevoRango(int i, int f){
-        this.i=(i<0)?0:i;
-        this.f=(f>1023)?1023:f;
-        panel.repaint();
-        this.setChanged();
-        int datos[] = {i,f};
-        this.notifyObservers(datos);
+        //if (Math.abs(i-f) > 10){         // ESTOY TOCANDO YO! :D
+            this.i=(i<0)?0:i;
+            this.f=(f>1023)?1023:f;
+            panel.repaint();
+            this.setChanged();
+            int datos[] = {i,f};
+            this.notifyObservers(datos);
+        //}
     }
     
     public void inicializar(){
@@ -164,12 +166,7 @@ public class ControlMonitor extends Observable{
     }
     
     public void desplazarTodo(int desp){
-        if ( desp < 0 ){
-			nuevoRango(i-1,f-1);
-                    }
-                    else{
-			nuevoRango(i+1,f+1);
-                    }
+        nuevoRango(i+desp,f+desp);
     }
     public void zoomTodo(int zoom){
         int qmuestras=f-i+1, muestra=i+(f-i)/2, largo=(int)(qmuestras/4);
