@@ -59,27 +59,16 @@ public class ControlMonitor extends Observable{
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode()==e.VK_SHIFT) {
                     shift_presionado = true;
-                    System.out.println("Shift presionado...");
                 }
             }
 
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode()==e.VK_SHIFT) {
                     shift_presionado = false;
-                    System.out.println("Chau shift...");
                 }
             }
         
         };
-        
-        /* GUILLE
-         * Ahora tenés visibilidad a una variable shift_presionado. 
-         * Es booleana. True se está shift presionado.
-         * Cuando se mueva la ruedita, preguntás si está o no el shift.
-         * Si está hacés desplazamiento.
-         * Si no está hacés zoom.
-         */
-        
         
         panel.addKeyListener(myListener_teclado);
         panel.setFocusable(true);
@@ -135,7 +124,7 @@ public class ControlMonitor extends Observable{
                     if (shift_presionado) {
                         zoomTodo(mwe.getWheelRotation());
                     } else {
-                    desplazarTodo(mwe.getWheelRotation());
+                        desplazarTodo(mwe.getWheelRotation());
                     }
 		}
             }
@@ -150,15 +139,25 @@ public class ControlMonitor extends Observable{
         return controlMonitor;
     }
     
+    
     public void nuevoRango(int i, int f){
-        //if (Math.abs(i-f) > 10){         // ESTOY TOCANDO YO! :D
-            this.i=(i<0)?0:i;
-            this.f=(f>1023)?1023:f;
-            panel.repaint();
-            this.setChanged();
-            int datos[] = {i,f};
-            this.notifyObservers(datos);
-        //}
+        
+        if (i>f){int aux; aux=f;f=i;i=aux;}
+        
+        i=(i<0)?0:((i>1023)?1023:i);
+        f=(f<0)?0:((f>1023)?1023:f);
+        
+        if (Math.abs(i-f) < 10){    
+        int valor = Math.abs(i-f);
+            if (i!=0) i-=valor;
+            if (f!=1023) f+=valor;
+        }
+        this.i = i;
+        this.f = f;
+        panel.repaint();
+        this.setChanged();
+        int datos[] = {i,f};
+        this.notifyObservers(datos);
     }
     
     public void inicializar(){
@@ -166,16 +165,21 @@ public class ControlMonitor extends Observable{
     }
     
     public void desplazarTodo(int desp){
-        nuevoRango(i+desp,f+desp);
+        if (f+desp>1023){}
+        else{
+            if (i+desp<0){}
+            else
+            {nuevoRango(i+desp,f+desp);}
+        }
     }
     public void zoomTodo(int zoom){
         int qmuestras=f-i+1, muestra=i+(f-i)/2, largo=(int)(qmuestras/4);
         if (zoom>0){
-            i=muestra-largo;f=muestra+largo;nuevoRango(i,f);
+            i=muestra-largo;f=muestra+largo;
         }else{
-            i-=(largo+1);f+=(largo+1);nuevoRango(i,f);
+            i-=(largo+1);f+=(largo+1);
         }
-        nuevoRango(i, f);
+        nuevoRango(i,f);
     }
     public void dibujarEscala(){
         panel.repaint();
