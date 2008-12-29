@@ -132,11 +132,10 @@ public class ControlMonitor extends Observable{
         panel.addMouseWheelListener(
             new MouseWheelListener() {
                 public void mouseWheelMoved(MouseWheelEvent mwe) {
-                    if ( mwe.getWheelRotation() < 0 ){
-			nuevoRango(i-1,f-1);
-                    }
-                    else{
-			nuevoRango(i+1,f+1);
+                    if (shift_presionado) {
+                        //zoom...
+                    } else {
+                    desplazarTodo(mwe.getWheelRotation());
                     }
 		}
             }
@@ -165,7 +164,12 @@ public class ControlMonitor extends Observable{
     }
     
     public void desplazarTodo(int desp){
-        
+        if ( desp < 0 ){
+			nuevoRango(i-1,f-1);
+                    }
+                    else{
+			nuevoRango(i+1,f+1);
+                    }
     }
     public void zoomTodo(int zoom){
         int qmuestras=f-i+1, muestra=i+(f-i)/2, largo=(int)(qmuestras/4);
