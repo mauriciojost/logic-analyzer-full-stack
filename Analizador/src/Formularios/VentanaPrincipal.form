@@ -180,6 +180,8 @@
         <Component class="javax.swing.JButton" name="botonCapturar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Capturar"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="requestFocusEnabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonCapturarActionPerformed"/>
@@ -224,6 +226,7 @@
                 <StringItem index="1" value="As&#xed;ncrono"/>
               </StringArray>
             </Property>
+            <Property name="focusable" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -273,6 +276,7 @@
                 <StringItem index="4" value="200"/>
               </StringArray>
             </Property>
+            <Property name="focusable" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
@@ -323,6 +327,7 @@
         <Component class="javax.swing.JButton" name="botonZoomIn">
           <Properties>
             <Property name="text" type="java.lang.String" value="In"/>
+            <Property name="focusable" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="botonZoomInMouseClicked"/>
@@ -331,6 +336,7 @@
         <Component class="javax.swing.JButton" name="botonZoomOut">
           <Properties>
             <Property name="text" type="java.lang.String" value="Out"/>
+            <Property name="focusable" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="botonZoomOutMouseClicked"/>

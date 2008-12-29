@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -24,6 +26,7 @@ public class ControlMonitor extends Observable{
     private Color colorLeyenda = Color.yellow;
     private static JPanel panel;
     private static ControlMonitor controlMonitor;
+    private boolean shift_presionado = true;
     
     public ControlMonitor(){
         ControlMonitor.controlMonitor = this;
@@ -48,6 +51,38 @@ public class ControlMonitor extends Observable{
                 }
             }
         };
+        
+        KeyListener myListener_teclado = new KeyListener(){
+
+            public void keyTyped(KeyEvent e) {}
+
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==e.VK_SHIFT) {
+                    shift_presionado = true;
+                    System.out.println("Shift presionado...");
+                }
+            }
+
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode()==e.VK_SHIFT) {
+                    shift_presionado = false;
+                    System.out.println("Chau shift...");
+                }
+            }
+        
+        };
+        
+        /* GUILLE
+         * Ahora tenés visibilidad a una variable shift_presionado. 
+         * Es booleana. True se está shift presionado.
+         * Cuando se mueva la ruedita, preguntás si está o no el shift.
+         * Si está hacés desplazamiento.
+         * Si no está hacés zoom.
+         */
+        
+        
+        panel.addKeyListener(myListener_teclado);
+        panel.setFocusable(true);
         
         panel.setBorder(new LineBorder(colorBorde,1));
         
@@ -93,6 +128,7 @@ public class ControlMonitor extends Observable{
         };   
         panel.addMouseListener(myListener);
         panel.addMouseMotionListener(myListener);
+
         panel.addMouseWheelListener(
             new MouseWheelListener() {
                 public void mouseWheelMoved(MouseWheelEvent mwe) {
@@ -105,6 +141,7 @@ public class ControlMonitor extends Observable{
 		}
             }
 	);
+
     }
     public JPanel getPanel(){
         return panel;

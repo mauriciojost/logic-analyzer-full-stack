@@ -113,6 +113,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelCapturar.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Muestras"));
 
         botonCapturar.setText("Capturar");
+        botonCapturar.setFocusable(false);
+        botonCapturar.setRequestFocusEnabled(false);
         botonCapturar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonCapturarActionPerformed(evt);
@@ -138,6 +140,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelModo.setBorder(javax.swing.BorderFactory.createTitledBorder("Modo"));
 
         comboBoxModo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Síncrono", "Asíncrono" }));
+        comboBoxModo.setFocusable(false);
 
         javax.swing.GroupLayout panelModoLayout = new javax.swing.GroupLayout(panelModo);
         panelModo.setLayout(panelModoLayout);
@@ -158,6 +161,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelFrecuencia.setBorder(javax.swing.BorderFactory.createTitledBorder("Frecuencia de muestreo"));
 
         comboBoxFrecuencia.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "50", "100", "150", "200" }));
+        comboBoxFrecuencia.setFocusable(false);
 
         jLabel1.setText("KHz");
 
@@ -184,6 +188,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelZoom.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Zoom"));
 
         botonZoomIn.setText("In");
+        botonZoomIn.setFocusable(false);
         botonZoomIn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 botonZoomInMouseClicked(evt);
@@ -191,6 +196,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
 
         botonZoomOut.setText("Out");
+        botonZoomOut.setFocusable(false);
         botonZoomOut.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 botonZoomOutMouseClicked(evt);
