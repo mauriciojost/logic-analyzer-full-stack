@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.Observable;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
@@ -91,6 +93,18 @@ public class ControlMonitor extends Observable{
         };   
         panel.addMouseListener(myListener);
         panel.addMouseMotionListener(myListener);
+        panel.addMouseWheelListener(
+            new MouseWheelListener() {
+                public void mouseWheelMoved(MouseWheelEvent mwe) {
+                    if ( mwe.getWheelRotation() < 0 ){
+			nuevoRango(i-1,f-1);
+                    }
+                    else{
+			nuevoRango(i+1,f+1);
+                    }
+		}
+            }
+	);
     }
     public JPanel getPanel(){
         return panel;

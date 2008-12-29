@@ -6,7 +6,7 @@ import java.util.Observer;
 public class Canal implements Observer{
        
     private char[] señal;
-    private int estado;
+    private int estado = 0;
     private int id;
     
     public Canal(int i){
@@ -25,7 +25,7 @@ public class Canal implements Observer{
     }
     
     public int obtenerEstado(){
-        return this.estado; // Por ahora consideramos que el estado 0 es el de inicialización correcta y muestreo hecho.
+        return this.estado; // Por ahora consideramos que el estado 1 es el muestreo hecho.
     }
 
     public int obtenerId(){
@@ -40,6 +40,7 @@ public class Canal implements Observer{
         for (i=0;i<argumento.length;i++){
             this.señal[i] = (char)((argumento[i]>>this.id)&1);
         }
+        estado = 1;
     }
 
 }
