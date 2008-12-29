@@ -147,8 +147,8 @@ public class ControlMonitor extends Observable{
         i=(i<0)?0:((i>1023)?1023:i);
         f=(f<0)?0:((f>1023)?1023:f);
         
-        if (Math.abs(i-f) < 10){    
-        int valor = Math.abs(i-f);
+        if (Math.abs(i-f) < 3){    
+            int valor = 3-Math.abs(i-f);
             if (i!=0) i-=valor;
             if (f!=1023) f+=valor;
         }
