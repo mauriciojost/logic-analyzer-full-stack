@@ -57,9 +57,19 @@ public class ControlMonitor extends Observable{
             public void keyTyped(KeyEvent e) {}
 
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode()==e.VK_SHIFT) {
-                    shift_presionado = true;
+                switch (e.getKeyCode()){
+                    case (KeyEvent.VK_SHIFT):
+                        shift_presionado = true; break;
+                    case (KeyEvent.VK_UP):
+                        zoomTodo(1); break;
+                    case (KeyEvent.VK_DOWN):
+                        zoomTodo(-1); break;
+                    case (KeyEvent.VK_LEFT):
+                        desplazarTodo(-1); break;
+                    case (KeyEvent.VK_RIGHT):
+                        desplazarTodo(1); break;
                 }
+                
             }
 
             public void keyReleased(KeyEvent e) {
