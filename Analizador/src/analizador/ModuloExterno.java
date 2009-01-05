@@ -16,7 +16,6 @@ public class ModuloExterno extends Observable{
     public ModuloExterno(Comunicador comunicador){
         this.comunicador = comunicador;
         ModuloExterno.moduloExterno = this;
-        System.out.println("Escribió: " + comunicador.recibirComando());
     }
 
     public int obtenerEstado(){

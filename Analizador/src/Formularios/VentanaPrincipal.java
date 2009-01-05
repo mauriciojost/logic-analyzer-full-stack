@@ -1,11 +1,6 @@
 package Formularios;
 
-import analizador.Canal;
-import analizador.Comunicador;
-import analizador.ControlCanal;
-import analizador.ControlMonitor;
-import analizador.ModuloExterno;
-import analizador.Dibujo;
+import analizador.*;
 import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
 import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
