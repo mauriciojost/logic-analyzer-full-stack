@@ -7,7 +7,7 @@
 
 DCB OldConf;
 HANDLE fd;
-#define LARGO_BUFFER 10000
+#define LARGO_BUFFER 5000
 char buffer[LARGO_BUFFER];
 
 enum BUFF_ESTADO {LLENO=1, VACIO=0};
@@ -30,7 +30,7 @@ HANDLE inicializar_serie(char* puerto){
     fd=Open_Port(puerto);           // Abre el puerto serie.
     OldConf=Get_Configure_Port(fd); // Guarda la configuracion del puerto.
     Configure_Port(fd,B115200,"8N1"); // Configura el puerto serie.
-    
+
     return fd;
 }
 
@@ -38,7 +38,6 @@ void finalizar_serie(HANDLE fd){
   Set_Configure_Port(fd,OldConf); // Restituye la antigua configuracion.
   Close_Port(fd);                 // Cierra el puerto serie.
 }
-
 
 void capturar_trama(){
 	char array[3];
@@ -53,14 +52,11 @@ void capturar_trama(){
 	buffer[i-1]=0; // Finaliza el string.
 }
 
-
-
 JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar(JNIEnv *env, jobject obj, jbyte c){
     char array[3];
     char caracter='9';
     unsigned int i=0;
     
-
     
     array[0] = c;
     Write_Port(fd,array,1);    // Escribe en el puerto serie.
@@ -73,12 +69,7 @@ JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar(JNIEnv *env, jobject o
     }else{
         b_estado=VACIO;
     }
-
-
-
 }
-
-
 
 JNIEXPORT jstring JNICALL Java_analizador_Comunicador_recibir(JNIEnv *env, jobject obj){
     jbyte retorno;
@@ -109,8 +100,6 @@ JNIEXPORT void JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject 
 JNIEXPORT void JNICALL Java_analizador_Comunicador_finalizar(JNIEnv *env, jobject obj){
     finalizar_serie(fd);
 }
-
-
 
 
 
