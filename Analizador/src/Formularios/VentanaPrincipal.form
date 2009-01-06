@@ -9,48 +9,27 @@
             <Property name="text" type="java.lang.String" value="Archivo"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem55">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Nuevo"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem56">
+            <MenuItem class="javax.swing.JMenuItem" name="menuAbrir">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Abrir"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuAbrirActionPerformed"/>
+              </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem57">
+            <MenuItem class="javax.swing.JMenuItem" name="menuGuardar">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Guardar"/>
               </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem58">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Guardar como..."/>
-              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuGuardarActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JSeparator" name="jSeparator13">
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem59">
+            <MenuItem class="javax.swing.JMenuItem" name="menuSalir">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Salir"/>
-              </Properties>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="menuEditar">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Editar"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem60">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Opciones"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem61">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Preferencias"/>
               </Properties>
             </MenuItem>
           </SubComponents>
@@ -212,7 +191,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="comboBoxModo" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="21" max="32767" attributes="0"/>
+                  <EmptySpace pref="23" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -259,7 +238,7 @@
                       <Component id="comboBoxFrecuencia" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="21" max="32767" attributes="0"/>
+                  <EmptySpace pref="23" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -359,7 +338,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="611" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="623" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">

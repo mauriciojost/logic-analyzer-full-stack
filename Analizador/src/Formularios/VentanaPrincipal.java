@@ -16,6 +16,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private Dibujo dibujo[];
     private ControlCanal controlCanal[];
     private ControlMonitor controlMonitor;
+    private Comunicador comunicador;
     private ModuloExterno moduloExterno;
     
     public VentanaPrincipal() {
@@ -43,7 +44,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         panelDibujos.setLayout(gbl);
         controlMonitor = new ControlMonitor();
-        moduloExterno = new ModuloExterno(new Comunicador());
+        comunicador = new Comunicador();
+        moduloExterno = new ModuloExterno(comunicador);
         dibujo = new Dibujo[8];
         controlCanal = new ControlCanal[8];
         canal = new Canal[8];
@@ -87,15 +89,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelDibujos = new javax.swing.JPanel();
         menu = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
-        jMenuItem55 = new javax.swing.JMenuItem();
-        jMenuItem56 = new javax.swing.JMenuItem();
-        jMenuItem57 = new javax.swing.JMenuItem();
-        jMenuItem58 = new javax.swing.JMenuItem();
+        menuAbrir = new javax.swing.JMenuItem();
+        menuGuardar = new javax.swing.JMenuItem();
         jSeparator13 = new javax.swing.JSeparator();
-        jMenuItem59 = new javax.swing.JMenuItem();
-        menuEditar = new javax.swing.JMenu();
-        jMenuItem60 = new javax.swing.JMenuItem();
-        jMenuItem61 = new javax.swing.JMenuItem();
+        menuSalir = new javax.swing.JMenuItem();
         menuAyuda = new javax.swing.JMenu();
         jMenuItem62 = new javax.swing.JMenuItem();
         jSeparator14 = new javax.swing.JSeparator();
@@ -150,7 +147,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             panelModoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelModoLayout.createSequentialGroup()
                 .addComponent(comboBoxModo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         panelFrecuencia.setBorder(javax.swing.BorderFactory.createTitledBorder("Frecuencia de muestreo"));
@@ -177,7 +174,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addGroup(panelFrecuenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comboBoxFrecuencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         panelZoom.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Zoom"));
@@ -225,7 +222,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelDibujos.setLayout(panelDibujosLayout);
         panelDibujosLayout.setHorizontalGroup(
             panelDibujosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 611, Short.MAX_VALUE)
+            .addGap(0, 623, Short.MAX_VALUE)
         );
         panelDibujosLayout.setVerticalGroup(
             panelDibujosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,33 +231,27 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         menuArchivo.setText("Archivo");
 
-        jMenuItem55.setText("Nuevo");
-        menuArchivo.add(jMenuItem55);
+        menuAbrir.setText("Abrir");
+        menuAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAbrirActionPerformed(evt);
+            }
+        });
+        menuArchivo.add(menuAbrir);
 
-        jMenuItem56.setText("Abrir");
-        menuArchivo.add(jMenuItem56);
-
-        jMenuItem57.setText("Guardar");
-        menuArchivo.add(jMenuItem57);
-
-        jMenuItem58.setText("Guardar como...");
-        menuArchivo.add(jMenuItem58);
+        menuGuardar.setText("Guardar");
+        menuGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuGuardarActionPerformed(evt);
+            }
+        });
+        menuArchivo.add(menuGuardar);
         menuArchivo.add(jSeparator13);
 
-        jMenuItem59.setText("Salir");
-        menuArchivo.add(jMenuItem59);
+        menuSalir.setText("Salir");
+        menuArchivo.add(menuSalir);
 
         menu.add(menuArchivo);
-
-        menuEditar.setText("Editar");
-
-        jMenuItem60.setText("Opciones");
-        menuEditar.add(jMenuItem60);
-
-        jMenuItem61.setText("Preferencias");
-        menuEditar.add(jMenuItem61);
-
-        menu.add(menuEditar);
 
         menuAyuda.setText("Ayuda");
 
@@ -344,6 +335,14 @@ private void botonZoomOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     ControlMonitor.getControlMonitor().zoomTodo(-1);
 }//GEN-LAST:event_botonZoomOutMouseClicked
 
+private void menuAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAbrirActionPerformed
+    comunicador.abrirMuestras();
+}//GEN-LAST:event_menuAbrirActionPerformed
+
+private void menuGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGuardarActionPerformed
+    comunicador.guardarMuestras();
+}//GEN-LAST:event_menuGuardarActionPerformed
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -359,21 +358,16 @@ private void botonZoomOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     private javax.swing.JComboBox comboBoxFrecuencia;
     private javax.swing.JComboBox comboBoxModo;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenuItem jMenuItem55;
-    private javax.swing.JMenuItem jMenuItem56;
-    private javax.swing.JMenuItem jMenuItem57;
-    private javax.swing.JMenuItem jMenuItem58;
-    private javax.swing.JMenuItem jMenuItem59;
-    private javax.swing.JMenuItem jMenuItem60;
-    private javax.swing.JMenuItem jMenuItem61;
     private javax.swing.JMenuItem jMenuItem62;
     private javax.swing.JMenuItem jMenuItem63;
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator14;
     private javax.swing.JMenuBar menu;
+    private javax.swing.JMenuItem menuAbrir;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenu menuAyuda;
-    private javax.swing.JMenu menuEditar;
+    private javax.swing.JMenuItem menuGuardar;
+    private javax.swing.JMenuItem menuSalir;
     private javax.swing.JPanel panelCapturar;
     private javax.swing.JPanel panelDibujos;
     private javax.swing.JPanel panelFrecuencia;

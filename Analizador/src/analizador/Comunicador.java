@@ -1,8 +1,15 @@
 package analizador;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import javax.swing.JFileChooser;
 
 public class Comunicador {
     byte[] bufferEntrada;
+    private JFileChooser fc;
     
     public native void iniciar();
     public native void enviar(byte comando);
@@ -13,6 +20,7 @@ public class Comunicador {
     }
     
     public Comunicador(){
+        fc = new JFileChooser();
         this.iniciar();
     }
     
@@ -30,7 +38,51 @@ public class Comunicador {
     }
     
     public String recibirComando(){ /* Por el momento es la mentirosa... */
-        return this.recibir();
+        String retorno = this.recibir();
+        bufferEntrada = retorno.getBytes();
+        return retorno;
     }
-    
+
+    public void guardarMuestras(){
+        int returnVal = fc.showSaveDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            try {
+                FileOutputStream fos = new FileOutputStream(fc.getSelectedFile());
+                fos.write(bufferEntrada);
+                fos.close();
+            } catch (FileNotFoundException ex) {
+                System.out.println("FileNotFoundException : " + ex);
+            } catch (IOException ex) {
+                System.out.println("IOException : " + ex);
+            }
+            System.out.println("Saving: " + fc.getSelectedFile().getAbsolutePath());
+        } else {
+            System.out.println("Save command cancelled by user.");
+        }
+    }
+
+    public void abrirMuestras(){
+        int returnVal = fc.showOpenDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            try {
+                FileInputStream fis = new FileInputStream(fc.getSelectedFile());
+                BufferedInputStream buf = new BufferedInputStream(fis);
+                bufferEntrada = new byte[buf.available()];
+                fis.read(bufferEntrada);
+                fis.close();
+                  /* Es necesario hacer un metodo en ModuloExterno
+                 similar a iniciarMuestreo() que parsee bufferEntrada
+                 y que notifique las muestras para que se dibujen */
+                System.out.println("Opening: " + fc.getSelectedFile().getAbsolutePath());
+                String str = new String(bufferEntrada);
+                System.out.println(new String(bufferEntrada));
+            } catch (FileNotFoundException ex) {
+                System.out.println("FileNotFoundException : " + ex);
+            } catch (IOException ex) {
+                System.out.println("IOException : " + ex);
+            }
+        } else {
+            System.out.println("Open command cancelled by user.");
+        }
+    }    
 }
