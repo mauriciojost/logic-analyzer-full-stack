@@ -26,9 +26,9 @@ JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar
 /*
  * Class:     analizador_Comunicador
  * Method:    recibir
- * Signature: ()B
+ * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jbyte JNICALL Java_analizador_Comunicador_recibir
+JNIEXPORT jstring JNICALL Java_analizador_Comunicador_recibir
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

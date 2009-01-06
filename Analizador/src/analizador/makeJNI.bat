@@ -4,10 +4,10 @@ echo Esta puede ser por ejemplo:
 echo    C:\Archivos de programa\Java\jdk1.6.0_01
 echo 
 echo Compilando el .java...
-echo javac Comunicador.java
+javac Comunicador.java
 cd ..
 echo Generando el .h...
-echo javah -jni analizador.Comunicador
+javah -jni analizador.Comunicador
 move *.h .\analizador\
 cd analizador
 echo Compilando el .asm...

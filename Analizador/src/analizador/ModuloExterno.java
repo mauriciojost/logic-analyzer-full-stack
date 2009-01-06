@@ -30,17 +30,18 @@ public class ModuloExterno extends Observable{
         //comunicador.enviarComando("<iinicio nuevo=1 modo=1 velocidad=1000> </inicio>"); // Inválido.
         
         System.out.println("\nComando enviado...");
-        //xml = comunicador.recibirComando();
+        xml = comunicador.recibirComando();
+        System.out.println("Se recibio en JAVA: '" + xml + "'.");
         /* En esta parte viene el parseo para extraer los datos. -->> GUILLE!
          * Recordar que la extracción de datos, no sólo implica las muestras, 
          * sino todo un estado (modo, velocidad, etc.). 
          * En esta parte viene el CRC para verificar la validez de los datos obtenidos. 
          */
-        
-        //muestras = parseoMuestras(xml);
-        //crc = parseoCRC(xml);
-        //modo = parseoModo(xml);
-        //veloc = parseoVelocidad(xml);
+        String xml1 = "<inicio nuevo=1 modo=8 velocidad=1000> 01 01 01 01 01 01 01 01 <CRC> 8 </CRC> </inicio>";
+        muestras = parseoMuestras(xml);
+        crc = parseoCRC(xml);
+        modo = parseoModo(xml);
+        veloc = parseoVelocidad(xml);
         // inicio = parseo...
         
         
@@ -129,6 +130,7 @@ public class ModuloExterno extends Observable{
         while (indice!=-1){
             indice = muestrasTemp.indexOf(" ");     // Se fija el primer espacio ("11 22 33 44 ..."), que delimita el "11" (valor a analizar).
             if (indice!=-1){                        // Se ha encontrado espacio?
+                //int i= Integer.parseInt(str,16); EN HEXADECIMAL!!!
                 entero = Integer.valueOf(muestrasTemp.substring(0, indice));    // Pone en entero un 11.
                 muestrasTemp = muestrasTemp.substring(indice).trim();           // Descartar parte ya analizada.
             }else{   
