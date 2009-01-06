@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 public class ModuloExterno extends Observable{
     private static ModuloExterno moduloExterno;
     private int estado;
-    private boolean modo;
-    private int veloc;
+    private boolean modo=false;
+    private long freqHz;
     
     private char[] muestras;
     private Comunicador comunicador;
@@ -27,11 +27,20 @@ public class ModuloExterno extends Observable{
         boolean modo_xml;
         int veloc_xml;
         int crc_xml;
-       
-        comunicador.enviarComando("<inicio nuevo=1 modo="+ (modo?1:0) +" velocidad="+veloc+"> </inicio>"); // Correcto.
-        //comunicador.enviarComando("<iinicio nuevo=1 modo=1 velocidad=1000> </inicio>"); // Inválido.
+        long periodous;
+        double intermedioSEG;
         
-        System.out.println("\nComando enviado...");
+        
+        intermedioSEG = (double)(1.0/freqHz);
+        
+        
+        periodous = Math.round(intermedioSEG*1000000);
+        
+        
+        comunicador.enviarComando("<inicio nuevo=1 modo="+ (modo?1:0) +" velocidad="+periodous+"> </inicio>"); // Correcto.
+        
+        
+        System.out.println("Comando enviado.");
         xml = comunicador.recibirComando();
         System.out.println("Se recibio en JAVA: '" + xml + "'.");
         
@@ -54,8 +63,8 @@ public class ModuloExterno extends Observable{
         this.modo = modo;
     }
     
-    public void cambiarVelocidad(int veloc){
-        this.veloc = veloc;
+    public void cambiarVelocidad(int freqHz){
+        this.freqHz = freqHz;
     }
     private void notificarMuestras(char[] muestras){
         this.setChanged();
@@ -80,8 +89,6 @@ public class ModuloExterno extends Observable{
         Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d+ modo=(\\d+) velocidad=\\d+>");
         Matcher m = strMatch.matcher(s);
         while (m.find()){
-            //System.out.println( "string = " + m.group(0) );
-            System.out.println( "modo = " + m.group(1));
             mode = (m.group(1).equals("1"));
         }
         return mode;
@@ -92,8 +99,6 @@ public class ModuloExterno extends Observable{
         Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d+ modo=\\d+ velocidad=(\\d+)>");
         Matcher m = strMatch.matcher( s );
         while ( m.find() ){
-            //System.out.println( "string = " + m.group(0) );
-            System.out.println( "velocidad = " + m.group(1) );
             velo = Integer.valueOf(m.group(1));
         }
         return velo;
@@ -104,8 +109,6 @@ public class ModuloExterno extends Observable{
         Pattern strMatch = Pattern.compile( "<CRC> (\\w+) </CRC>");
         Matcher m = strMatch.matcher( s );
         while ( m.find() ){
-            //System.out.println( "string = " + m.group(0) );
-            System.out.println( "CRC = " + m.group(1) );
             CRC = Integer.valueOf(m.group(1));
         }
         return CRC;

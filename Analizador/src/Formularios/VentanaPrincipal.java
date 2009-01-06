@@ -323,11 +323,13 @@ private void jMenuItem63ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
 private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCapturarActionPerformed
     String modo = (String)this.comboBoxModo.getSelectedItem();
-    boolean bmodo = modo.equals("Síncrono");
+    boolean bmodo = modo.equals("Asíncrono");
     String velocidad = (String)this.comboBoxFrecuencia.getSelectedItem();
-    int iveloc = Integer.valueOf(velocidad) * 1000;
+    int iveloc = Integer.valueOf(velocidad)*1000; // Entrega en Herz.
     
     ModuloExterno.getModuloExterno().cambiarModo(bmodo);
+    
+    System.out.println("Velocidad en HZ es enviada: " + iveloc);
     ModuloExterno.getModuloExterno().cambiarVelocidad(iveloc);
     
     ModuloExterno.getModuloExterno().iniciarMuestreo();
