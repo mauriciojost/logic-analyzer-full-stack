@@ -22,7 +22,7 @@ HANDLE inicializar_serie(char* puerto){
     HANDLE fd;
     char array[3];
     int i;
-    
+
     for(i=0;i<LARGO_BUFFER;i++){
         buffer[i]=0;
     }
@@ -40,40 +40,43 @@ void finalizar_serie(HANDLE fd){
 }
 
 
-JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar(JNIEnv *env, jobject obj, jbyte c){
-    char array[3];
-    
-    // borrar de aca
-    
-    char caracter='9';
-    unsigned int i=0;
-    // hasta aca
-    
-    printf("-%c",(jbyte)c);
-    array[0] = c;							// enviarla por puerto serie.
-    Write_Port(fd,array,1);    // Escribe en el puerto serie.
-    
-    if (Kbhit_Port(fd)!=0){    // BLOQUEANTE O NO????
-        printf("Hay algo...\n");
-        while(caracter!='\n'){
-            Read_Port(fd,array,1);			// ARREGLAR!!! PUEDE QUE DEVUELVA BASURA!!!
-            caracter = (jbyte)array[0];
-            buffer[i++] = caracter;
-        }
-        buffer[i-1]=0; // Finaliza el string.
-        b_estado=LLENO;
-        printf("\nEsto fue recibido en C luego de enviar '%s'\n",buffer);
-    }else{
-        b_estado=VACIO;
-    }
-        
-    // hasta aca
-        
+void capturar_trama(){
+	char array[3];
+	char caracter;
+	unsigned int i = 0;
 
+	while(caracter!='\n'){
+		Read_Port(fd,array,1);			// ARREGLAR!!! PUEDE QUE DEVUELVA BASURA!!!
+		caracter = (jbyte)array[0];
+		buffer[i++] = caracter;
+	}
+	buffer[i-1]=0; // Finaliza el string.
 }
 
 
 
+JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar(JNIEnv *env, jobject obj, jbyte c){
+    char array[3];
+    char caracter='9';
+    unsigned int i=0;
+    
+
+    
+    array[0] = c;
+    Write_Port(fd,array,1);    // Escribe en el puerto serie.
+
+    if (Kbhit_Port(fd)!=0){
+        //printf("Hay algo...\n");
+        capturar_trama();
+        b_estado=LLENO;
+        //printf("\nEsto fue recibido en C luego de enviar '%s'\n",buffer);
+    }else{
+        b_estado=VACIO;
+    }
+
+
+
+}
 
 
 
@@ -89,13 +92,7 @@ JNIEXPORT jstring JNICALL Java_analizador_Comunicador_recibir(JNIEnv *env, jobje
         
     }else{
         printf("El buffer estaba vacio al leer.\n");
-        while(caracter!='\n'){
-            Read_Port(fd,array,1);			// ARREGLAR!!! PUEDE QUE DEVUELVA BASURA!!!
-            caracter = (jbyte)array[0];
-            buffer[i++] = caracter;
-            printf("'%c'",caracter);
-        }
-        buffer[i-1]=0;
+        capturar_trama();
     }
     printf("Retorno para la lectura (C): '%s'.\n",buffer);
     

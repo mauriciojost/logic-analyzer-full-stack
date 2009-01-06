@@ -9,7 +9,7 @@ public class ModuloExterno extends Observable{
     private int estado;
     private boolean modo;
     private int veloc;
-    private int crc;
+    
     private char[] muestras;
     private Comunicador comunicador;
     
@@ -24,25 +24,22 @@ public class ModuloExterno extends Observable{
     
     public void iniciarMuestreo(){
         String xml;
-        
-        comunicador.enviarComando("<inicio nuenicio>"); // Correcto.
-        //comunicador.enviarComando("<inicio nuevo=1 modo="+ (modo?1:0) +" velocidad="+veloc+"> </inicio>"); // Correcto.
+        boolean modo_xml;
+        int veloc_xml;
+        int crc_xml;
+       
+        comunicador.enviarComando("<inicio nuevo=1 modo="+ (modo?1:0) +" velocidad="+veloc+"> </inicio>"); // Correcto.
         //comunicador.enviarComando("<iinicio nuevo=1 modo=1 velocidad=1000> </inicio>"); // Inválido.
         
         System.out.println("\nComando enviado...");
         xml = comunicador.recibirComando();
         System.out.println("Se recibio en JAVA: '" + xml + "'.");
-        /* En esta parte viene el parseo para extraer los datos. -->> GUILLE!
-         * Recordar que la extracción de datos, no sólo implica las muestras, 
-         * sino todo un estado (modo, velocidad, etc.). 
-         * En esta parte viene el CRC para verificar la validez de los datos obtenidos. 
-         */
-        String xml1 = "<inicio nuevo=1 modo=8 velocidad=1000> 01 01 01 01 01 01 01 01 <CRC> 8 </CRC> </inicio>";
+        
         muestras = parseoMuestras(xml);
-        crc = parseoCRC(xml);
-        modo = parseoModo(xml);
-        veloc = parseoVelocidad(xml);
-        // inicio = parseo...
+        crc_xml = parseoCRC(xml);
+        modo_xml = parseoModo(xml);
+        veloc_xml = parseoVelocidad(xml);
+        
         
         
         
@@ -80,7 +77,7 @@ public class ModuloExterno extends Observable{
 
     public boolean parseoModo(String s){
         boolean mode = false;
-        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d modo=(\\d) velocidad=\\d+>");
+        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d+ modo=(\\d+) velocidad=\\d+>");
         Matcher m = strMatch.matcher(s);
         while (m.find()){
             //System.out.println( "string = " + m.group(0) );
@@ -92,7 +89,7 @@ public class ModuloExterno extends Observable{
 
     public int parseoVelocidad(String s){
         int velo = 0;
-        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d modo=\\d velocidad=(\\d+)>");
+        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d+ modo=\\d+ velocidad=(\\d+)>");
         Matcher m = strMatch.matcher( s );
         while ( m.find() ){
             //System.out.println( "string = " + m.group(0) );
@@ -120,7 +117,7 @@ public class ModuloExterno extends Observable{
         int indice=0, entero=0, i=0;
         char[] retorno = new char[1024];
         
-        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d modo=\\d velocidad=\\d+> (.*) <CRC> \\w+ </CRC> </inicio>");        
+        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d+ modo=\\d+ velocidad=\\d+> (.*) <CRC> \\w+ </CRC> </inicio>");
         Matcher m = strMatch.matcher(s);
         
         while ( m.find() ){

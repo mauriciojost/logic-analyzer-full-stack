@@ -19,14 +19,14 @@ public class Comunicador {
     public void enviarComando(String comando){
         int i;
         byte a;
-        System.out.println("Enviando... ");
+        System.out.println("Enviando comando: '"+ comando + "'...");
         for(i=0;i<comando.length();i++){
             
             a = (byte)comando.charAt(i);
             this.enviar(a);
             try {Thread.sleep(1);} catch (InterruptedException ex) {ex.printStackTrace();} // Espera para no atorar al PIC.
         }
-        this.enviar((byte)'\n');
+        this.enviar((byte)13);
     }
     
     public String recibirComando(){ /* Por el momento es la mentirosa... */
