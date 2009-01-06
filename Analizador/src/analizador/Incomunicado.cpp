@@ -10,9 +10,8 @@ char buffer[LARGO_BUFFER];
 char comando[LARGO_COMANDO];
 
 long int p_comando=0;
-enum BUFF_ESTADO {LLENO=1, VACIO=0};
-BUFF_ESTADO b_estado;
-
+int nuevo, modo;
+long velocidad;
 
 void generar_trama(int nuevo, int modo, long velocidad){
     unsigned int j=0;
@@ -20,7 +19,6 @@ void generar_trama(int nuevo, int modo, long velocidad){
 
     sprintf(buffer_aux,"<inicio nuevo=%u modo=%u velocidad=%lu> ",nuevo,modo,velocidad);
     strncpy(buffer, buffer_aux,60);
-
     //printf("Etapa 1: '%s'.\n",buffer);
     
     for(j=0;j<1024;j++){
@@ -36,7 +34,12 @@ void generar_trama(int nuevo, int modo, long velocidad){
 
 JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar(JNIEnv *env, jobject obj, jbyte c){
     if (c==13){
-        printf("Comando recibido (C): %s\n.",comando);
+        char buff_auxiliar[50];
+        
+        printf("Comando recibido (en C): %s\n.",comando);
+        sscanf( comando, "<inicio nuevo=%d modo=%d velocidad=%lu> %s", &nuevo,&modo,&velocidad,buff_auxiliar);
+        printf("Interpretado: nuevo=%d modo=%d velocidad=%lu.\nResto: '%s'.\n",nuevo,modo,velocidad,buff_auxiliar);
+        
         p_comando = 0;
     }else{
         comando[p_comando++]=c;
@@ -45,15 +48,12 @@ JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar(JNIEnv *env, jobject o
 }
 
 JNIEXPORT jstring JNICALL Java_analizador_Comunicador_recibir(JNIEnv *env, jobject obj){
-    int nuevo, modo;
-    long velocidad;
     
-    generar_trama(1,0,1000);
+    generar_trama(nuevo,modo,velocidad);
     
-    sscanf( buffer, "<inicio nuevo=%d modo=%d velocidad=%lu>", &nuevo,&modo,&velocidad);
     
-    printf("Retorno para la lectura (C): '%s'.\n",buffer);
-    printf("Interpretado: nuevo=%d modo=%d velocidad=%lu.\n",nuevo,modo,velocidad);
+    //printf("Retorno para la lectura (desde C): '%s'.\n",buffer);
+    
     return env->NewStringUTF(buffer);
 }
 
