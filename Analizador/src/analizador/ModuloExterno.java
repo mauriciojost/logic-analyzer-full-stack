@@ -25,26 +25,28 @@ public class ModuloExterno extends Observable{
     public void iniciarMuestreo(){
         String xml;
         
-        comunicador.enviarComando("<inicio nuevo=1 modo="+ (modo?1:0) +" velocidad="+veloc+"> </inicio>"); // Correcto.
+        comunicador.enviarComando("<inicio nuenicio>"); // Correcto.
+        //comunicador.enviarComando("<inicio nuevo=1 modo="+ (modo?1:0) +" velocidad="+veloc+"> </inicio>"); // Correcto.
         //comunicador.enviarComando("<iinicio nuevo=1 modo=1 velocidad=1000> </inicio>"); // Inválido.
         
-        xml = comunicador.recibirComando();
+        System.out.println("\nComando enviado...");
+        //xml = comunicador.recibirComando();
         /* En esta parte viene el parseo para extraer los datos. -->> GUILLE!
          * Recordar que la extracción de datos, no sólo implica las muestras, 
          * sino todo un estado (modo, velocidad, etc.). 
          * En esta parte viene el CRC para verificar la validez de los datos obtenidos. 
          */
         
-        muestras = parseoMuestras(xml);
-        crc = parseoCRC(xml);
-        modo = parseoModo(xml);
-        veloc = parseoVelocidad(xml);
+        //muestras = parseoMuestras(xml);
+        //crc = parseoCRC(xml);
+        //modo = parseoModo(xml);
+        //veloc = parseoVelocidad(xml);
         // inicio = parseo...
         
         
         
         // if crc valido, inicio=requerido, modo=requerido,velocidad=requerida    
-        this.notificarMuestras(muestras);
+        //this.notificarMuestras(muestras);
         // else
         //   mostrar error
         // end if

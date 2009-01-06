@@ -1,5 +1,8 @@
 package analizador;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Comunicador {
     byte[] bufferEntrada;
     
@@ -17,15 +20,23 @@ public class Comunicador {
     
     public void enviarComando(String comando){
         int i;
+        byte a;
         System.out.println("Enviando... ");
         for(i=0;i<comando.length();i++){
-            this.enviar((byte)comando.charAt(i));
+            
+            a = (byte)comando.charAt(i);
+            this.enviar(a);
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         this.enviar((byte)'\n');
     }
     
     public String recibirComando(){ /* Por el momento es la mentirosa... */
-        char[] retorno = new char[20000];
+        char[] retorno = new char[500];
         boolean fin=false;
         byte recibido;
         int i=0;
@@ -33,7 +44,6 @@ public class Comunicador {
         while(!fin){
             recibido = this.recibir();
             retorno[i++] = (char)recibido;
-            String.valueOf(recibido);
             if (recibido=='\n'){
                 fin = true;
             }
