@@ -7,7 +7,7 @@
 
 DCB OldConf;
 HANDLE fd;
-#define LARGO_BUFFER 5000
+#define LARGO_BUFFER 10000
 char buffer[LARGO_BUFFER];
 
 enum BUFF_ESTADO {LLENO=1, VACIO=0};
@@ -29,7 +29,7 @@ HANDLE inicializar_serie(char* puerto){
     b_estado = LLENO;
     fd=Open_Port(puerto);           // Abre el puerto serie.
     OldConf=Get_Configure_Port(fd); // Guarda la configuracion del puerto.
-    Configure_Port(fd,B9600,"8N1"); // Configura el puerto serie.
+    Configure_Port(fd,B115200,"8N1"); // Configura el puerto serie.
     
     return fd;
 }
@@ -53,12 +53,6 @@ JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar(JNIEnv *env, jobject o
     array[0] = c;							// enviarla por puerto serie.
     Write_Port(fd,array,1);    // Escribe en el puerto serie.
     
-    // y de aca
-    for(i=0;i<100000;i++){
-        array[0]=c;
-    }
-    
-        i=0;
     if (Kbhit_Port(fd)!=0){    // BLOQUEANTE O NO????
         printf("Hay algo...\n");
         while(caracter!='\n'){
@@ -69,7 +63,10 @@ JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar(JNIEnv *env, jobject o
         buffer[i-1]=0; // Finaliza el string.
         b_estado=LLENO;
         printf("\nEsto fue recibido en C luego de enviar '%s'\n",buffer);
+    }else{
+        b_estado=VACIO;
     }
+        
     // hasta aca
         
 

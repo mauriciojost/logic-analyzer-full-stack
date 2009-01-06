@@ -47,7 +47,7 @@ public class ModuloExterno extends Observable{
         
         
         // if crc valido, inicio=requerido, modo=requerido,velocidad=requerida    
-        //this.notificarMuestras(muestras);
+        this.notificarMuestras(muestras);
         // else
         //   mostrar error
         // end if
