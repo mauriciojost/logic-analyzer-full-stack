@@ -46,6 +46,11 @@ public class Comunicador {
         return retorno;
     }
 
+    public String obtenerComando(){
+        String retorno = new String(bufferEntrada);
+        return retorno;
+    }
+
     public void guardarMuestras(){
         File file = new File (fc.getCurrentDirectory()+"\\Signal.sgl");
         fc.setSelectedFile(file);

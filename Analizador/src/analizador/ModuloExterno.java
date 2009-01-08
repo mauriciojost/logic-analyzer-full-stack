@@ -58,7 +58,27 @@ public class ModuloExterno extends Observable{
         //   mostrar error
         // end if
     }
-    
+
+    public void cargarArchivo(){
+        String xml;
+        boolean modo_xml;
+        int veloc_xml;
+        int crc_xml;
+        long periodous;
+        double intermedioSEG;
+
+
+        comunicador.abrirMuestras();
+        xml = comunicador.obtenerComando();
+
+        muestras = parseoMuestras(xml);
+        crc_xml = parseoCRC(xml);
+        modo_xml = parseoModo(xml);
+        veloc_xml = parseoVelocidad(xml);
+
+        this.notificarMuestras(muestras);
+    }
+
     public void cambiarModo(boolean modo){
         this.modo = modo;
     }

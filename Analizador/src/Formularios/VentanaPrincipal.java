@@ -336,7 +336,7 @@ private void botonZoomOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
 }//GEN-LAST:event_botonZoomOutMouseClicked
 
 private void menuAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAbrirActionPerformed
-    comunicador.abrirMuestras();
+    moduloExterno.cargarArchivo();
 }//GEN-LAST:event_menuAbrirActionPerformed
 
 private void menuGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGuardarActionPerformed
