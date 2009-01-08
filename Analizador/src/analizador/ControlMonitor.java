@@ -1,16 +1,7 @@
 package analizador;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.Observable;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
@@ -68,6 +59,10 @@ public class ControlMonitor extends Observable{
                         desplazarTodo(-1); break;
                     case (KeyEvent.VK_RIGHT):
                         desplazarTodo(1); break;
+                    case (KeyEvent.VK_PAGE_DOWN):
+                        desplazarTodo(10); break;
+                    case (KeyEvent.VK_PAGE_UP):
+                        desplazarTodo(-10); break;
                 }
                 
             }
@@ -175,10 +170,7 @@ public class ControlMonitor extends Observable{
     }
     
     public void desplazarTodo(int desp){
-        if (f+desp>1023){}
-        else{
-            if (i+desp<0){}
-            else
+        if ((!((f+desp)>1023)) && (!(i+desp<0))){
             {nuevoRango(i+desp,f+desp);}
         }
     }

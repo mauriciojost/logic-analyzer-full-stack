@@ -6,6 +6,10 @@ import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
+import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -34,11 +38,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
         initComponents();
         initComponentsPropio();
-        
+        this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width-this.getSize().width)/2, (Toolkit.getDefaultToolkit().getScreenSize().height-this.getSize().height)/2);
         
     }
     
     private void initComponentsPropio() {
+        URL b = getClass().getResource("/Recursos/icono.gif");
+        System.out.println(b);
+        Image a = new ImageIcon(b).getImage();
+        System.out.println(a);
+        this.setIconImage(a);
+        System.out.println(this.getIconImage());
         
         GridBagLayout gbl = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
@@ -72,6 +82,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         this.getContentPane().setBackground(menu.getBackground());
         
         
+        
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -100,6 +111,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Analizador Lógico");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
 
         panelCapturar.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Muestras"));
@@ -126,7 +138,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             panelCapturarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCapturarLayout.createSequentialGroup()
                 .addComponent(botonCapturar)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         panelModo.setBorder(javax.swing.BorderFactory.createTitledBorder("Modo"));
@@ -166,7 +178,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(comboBoxFrecuencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
         panelFrecuenciaLayout.setVerticalGroup(
             panelFrecuenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -337,6 +349,7 @@ private void botonZoomOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
 
 private void menuAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAbrirActionPerformed
     moduloExterno.cargarArchivo();
+    ControlMonitor.getControlMonitor().inicializar();
 }//GEN-LAST:event_menuAbrirActionPerformed
 
 private void menuGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGuardarActionPerformed
