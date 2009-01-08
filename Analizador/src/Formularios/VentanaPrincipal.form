@@ -107,16 +107,12 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="panelZoom" min="0" max="32767" attributes="1"/>
-                  </Group>
-                  <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="panelFrecuencia" alignment="1" max="32767" attributes="1"/>
-                      <Component id="panelModo" alignment="0" max="32767" attributes="1"/>
-                      <Component id="panelCapturar" alignment="0" min="0" max="32767" attributes="1"/>
-                  </Group>
+              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="panelZoom" max="32767" attributes="1"/>
+                  <Component id="panelModo" alignment="0" max="32767" attributes="1"/>
+                  <Component id="panelCapturar" alignment="0" min="0" max="32767" attributes="1"/>
+                  <Component id="panelFrecuencia" alignment="1" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="panelDibujos" min="-2" max="-2" attributes="0"/>
@@ -295,12 +291,12 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="botonZoomIn" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="botonZoomOut" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="12" max="32767" attributes="0"/>
+                  <EmptySpace pref="14" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

@@ -17,7 +17,6 @@ BUFF_ESTADO b_estado;
 //extern "C" char __stdcall lee(); // Linea extra�a...
 //extern "C" void __stdcall escribe(char); // Linea extra�a...
 
-
 HANDLE inicializar_serie(char* puerto){
     HANDLE fd;
     char array[3];
