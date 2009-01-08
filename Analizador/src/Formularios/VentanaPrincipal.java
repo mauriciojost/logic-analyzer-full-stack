@@ -44,11 +44,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     
     private void initComponentsPropio() {
         URL b = getClass().getResource("/Recursos/icono.gif");
-        System.out.println(b);
         Image a = new ImageIcon(b).getImage();
-        System.out.println(a);
         this.setIconImage(a);
-        System.out.println(this.getIconImage());
+        
         
         GridBagLayout gbl = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();

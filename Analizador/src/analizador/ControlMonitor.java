@@ -77,7 +77,8 @@ public class ControlMonitor extends Observable{
         
         panel.addKeyListener(myListener_teclado);
         panel.setFocusable(true);
-        
+        panel.setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+        panel.setToolTipText("Seleccione la zona deseada para hacer ZOOM.");
         panel.setBorder(new LineBorder(colorBorde,1));
         
         MouseAdapter myListener = new MouseAdapter(){
@@ -134,7 +135,7 @@ public class ControlMonitor extends Observable{
 		}
             }
 	);
-
+        
     }
     public JPanel getPanel(){
         return panel;

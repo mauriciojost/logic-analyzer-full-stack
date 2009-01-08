@@ -2,6 +2,7 @@
 package analizador;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -24,6 +25,8 @@ public class ControlCanal extends JPanel implements Observer, MouseListener{
     private Font fuente = new Font("Arial", 1 , 12);
      
     public ControlCanal(Canal canal,Dibujo dibujo){
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        this.setToolTipText("Haga clic con el botón DERECHO para cambiar de nombre del canal, y con el botón IZQUIERDO para cambiar el color del canal.");
         this.setBackground(colorFondo);
         this.canal = canal;
         this.dibujo = dibujo;
