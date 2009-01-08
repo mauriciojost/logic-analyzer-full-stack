@@ -1,11 +1,14 @@
 package analizador;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 
 public class Comunicador {
     byte[] bufferEntrada;
@@ -20,7 +23,7 @@ public class Comunicador {
     }
     
     public Comunicador(){
-        fc = new JFileChooser();
+        crearJFileChooser();
         this.iniciar();
     }
     
@@ -44,6 +47,8 @@ public class Comunicador {
     }
 
     public void guardarMuestras(){
+        File file = new File (fc.getCurrentDirectory()+"\\Signal.sgl");
+        fc.setSelectedFile(file);
         int returnVal = fc.showSaveDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             try {
@@ -62,6 +67,7 @@ public class Comunicador {
     }
 
     public void abrirMuestras(){
+        fc.setCurrentDirectory(null);
         int returnVal = fc.showOpenDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             try {
@@ -84,5 +90,45 @@ public class Comunicador {
         } else {
             System.out.println("Open command cancelled by user.");
         }
-    }    
+    }
+
+    public void crearJFileChooser(){
+        fc = new JFileChooser(){
+            @Override
+            public void approveSelection() {
+                File f = getSelectedFile();
+                if(f.exists() && getDialogType() == SAVE_DIALOG) {
+                    int result = JOptionPane.showConfirmDialog(getTopLevelAncestor(),
+                            "El archivo seleccionado ya existe. " +
+                            "¿Desea sobreescribirlo?",
+                            "El archivo ya existe",
+                            JOptionPane.YES_NO_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                    switch(result)  {
+                    case JOptionPane.YES_OPTION:
+                        super.approveSelection();
+                        return;
+                    case JOptionPane.NO_OPTION:
+                        return;
+                    case JOptionPane.CANCEL_OPTION:
+                        cancelSelection();
+                        return;
+                    }
+                }
+                super.approveSelection();
+            }
+        };
+
+        FileFilter filter = new FileFilter(){
+            public boolean accept(File f) {
+                if (f.isDirectory()) return true;
+                return f.getAbsolutePath().endsWith("sgl");
+            }
+            @Override
+            public String getDescription() {
+                 return "Señales";
+            }
+        };
+        fc.setFileFilter(filter);
+    }
 }
