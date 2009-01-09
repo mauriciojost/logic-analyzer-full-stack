@@ -13,7 +13,7 @@ public class Dibujo extends JPanel{
     private Color colorFondo = Color.black;
     private Color colorBorde = new Color(100,100,100);
     private Color colorNombre = new Color(204,204,204);
-    private Color colorEjesRef = new Color(105,105,105);
+    private Color colorEjesRef = new Color(70,70,70);
     private Font fuente = new Font("Arial", 0, 12);
     private String nombre;
     private float ancho_bit; 
