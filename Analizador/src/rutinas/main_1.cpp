@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "com/serial.h"
 
-extern "C" char __stdcall lee(); // Linea extra�a...
-extern "C" void __stdcall escribe(char); // Linea extra�a...
+extern "C" char __stdcall lee(HANDLE); // Linea extra�a...
+extern "C" void __stdcall escribe(HANDLE, char); // Linea extra�a...
 
     DCB OldConf;
     HANDLE fd;
@@ -15,8 +15,8 @@ int main(int argc, char* argv[])
 {
     inicializar_serie();
     char letra;
-    escribe('a');
-    letra = lee();
+    escribe(fd,'a');
+    letra = lee(fd);
     printf("Lee: %c.\n",letra);
     finalizar_serie(fd);
     return 0;

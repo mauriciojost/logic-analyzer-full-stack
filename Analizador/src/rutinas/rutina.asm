@@ -7,33 +7,18 @@ option casemap :none
 .code
 
 ; ***************** FIN DE ENCABEZADO.
-lee PROC, fd:WORD
-    mov ah, 3fh                 ; Leer el archivo o dispositivo
-    mov bx, fd                  ; usar el manejar del archivo
-    mov cx, 1                   ; leer de a un caracter
-    mov edx, OFFSET BUFFER       ; Lugar donde se almacena el caracter leido (DS:DX)
-    int 21h                     ;
-;   jc FIN_LECTURA              ; saltar si hay error
-;   or ax, ax                   ; saltar si se llegó al final del archivo
-;   jz FIN_LECTURA
-;FIN_LECTURA:
-    mov al, BUFFER
+lee PROC
+    mov ah, 02h                 ; Leer el puerto serie
+    mov dx, 00h                 ; numero de puerto COM 1
+    int 14h                     ; caracter recibido en AL
     RET
 lee ENDP
 
-escribe PROC, fd:WORD, caracter:BYTE
-    mov bx, fd                  ; escribimos la información leída
-    mov cx, 1                   ; escribir de a un caracter
-    mov al, caracter
-		mov BUFFER, al
-    mov edx, OFFSET BUFFER      ; Lugar donde se almacena el caracter a escribir (DS:DX)
-    mov ah, 40h
-    int 21h
-;    jc FIN_ESCRITURA            ; saltar si hay error
-;    or ax, ax                   ; saltar si se llegó al final del archivo
-;    jz FIN_ESCRITURA
-;FIN_ESCRITURA:
-    mov al, BUFFER
+escribe PROC caracter:BYTE
+    mov ah, 01h                 ; Escribir el puerto serie
+    mov dx, 00h                 ; numero de puerto COM 1
+    mov al, caracter            ; Caracter a enviar
+    int 14h                     ; devuelve Status en AL
     RET
 escribe ENDP
 END
