@@ -5,3 +5,4 @@ del *.obj
 pause
 main.exe
 pause
+cmd
