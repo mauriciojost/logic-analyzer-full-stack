@@ -20,7 +20,14 @@ public class Comunicador {
     public native String recibir();
     
     static {
-        System.loadLibrary("Comunicado");
+        //System.setProperty("java.library.path", "/home/mauri/misdoc/javaw/analiz/trunk/Analizador/src/analizador/");
+         // /home/mauri/misdoc/javaw/analiz/trunk/Analizador/src/analizador/
+        System.out.println(System.getProperty("java.library.path"));
+        //System.loadLibrary("Comunicado");
+        System.loadLibrary("libnativelib.so");
+        //LD_LIBRARY_PATH=`pwd`
+        //export LD_LIBRARY_PATH
+
     }
     
     public Comunicador(){

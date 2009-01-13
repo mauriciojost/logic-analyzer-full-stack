@@ -4,19 +4,22 @@
 #define __LINUX_COM__ 
 #include "com/serial.h"
 
-
+#define LARGO_BUFFER 5000
+enum BUFF_ESTADO {LLENO=1, VACIO=0};
 
 DCB OldConf;
 HANDLE fd;
-#define LARGO_BUFFER 5000
+
+
+enum BUFF_ESTADO b_estado;
+
 char buffer[LARGO_BUFFER];
 
-enum BUFF_ESTADO {LLENO=1, VACIO=0};
-BUFF_ESTADO b_estado;
 
-//extern "C" void __stdcall inicia(); // Linea extra�a...
-//extern "C" char __stdcall lee(); // Linea extra�a...
-//extern "C" void __stdcall escribe(char); // Linea extra�a...
+
+//extern "C" void __stdcall inicia(); //
+//extern "C" char __stdcall lee(); // 
+//extern "C" void __stdcall escribe(char); //
 
 HANDLE inicializar_serie(char* puerto){
     HANDLE fd;
@@ -104,7 +107,7 @@ JNIEXPORT jstring JNICALL Java_analizador_Comunicador_recibir(JNIEnv *env, jobje
     }
     //printf("Retorno para la lectura (C): '%s'.\n",buffer);
 
-    return env->NewStringUTF(buffer);
+    return (*env)->NewStringUTF(env, buffer);
 }
 
 

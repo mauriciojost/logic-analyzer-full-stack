@@ -32,7 +32,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BasicLookAndFeel mot = new MotifLookAndFeel();
         BasicLookAndFeel win = new WindowsLookAndFeel();
         try{
-            UIManager.setLookAndFeel(winC);
+            UIManager.setLookAndFeel(met);
         } catch (Exception ex){
             ex.printStackTrace();
         }
