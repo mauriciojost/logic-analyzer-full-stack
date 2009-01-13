@@ -48,11 +48,11 @@ JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar(JNIEnv *env, jobject o
 }
 
 JNIEXPORT jstring JNICALL Java_analizador_Comunicador_recibir(JNIEnv *env, jobject obj){
-    
+    int entero, a=10, b=20;
     generar_trama(nuevo,modo,velocidad);
+    entero = _funcion(a,b);
     
-    
-    //printf("Retorno para la lectura (desde C): '%s'.\n",buffer);
+    printf("Retorno para la lectura (desde C (%d)): '%s'.\n",entero,buffer);
     
     return (*env)->NewStringUTF(env,buffer);
 }

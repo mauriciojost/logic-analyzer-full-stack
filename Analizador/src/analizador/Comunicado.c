@@ -17,10 +17,6 @@ char buffer[LARGO_BUFFER];
 
 
 
-//extern "C" void __stdcall inicia(); //
-//extern "C" char __stdcall lee(); // 
-//extern "C" void __stdcall escribe(char); //
-
 HANDLE inicializar_serie(char* puerto){
     HANDLE fd;
     char array[3];
@@ -113,9 +109,9 @@ JNIEXPORT jstring JNICALL Java_analizador_Comunicador_recibir(JNIEnv *env, jobje
 
 
 JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject obj){
-		int retorno;
-		fd = inicializar_serie("COM1");
-		retorno = (int)fd;
+    int retorno;
+    fd = inicializar_serie("/dev/usb/ttyUSB0");
+    retorno = (int)fd;
     return retorno;
 }
 

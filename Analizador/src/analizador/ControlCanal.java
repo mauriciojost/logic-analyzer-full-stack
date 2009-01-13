@@ -1,19 +1,10 @@
 
 package analizador;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Observable;
-import java.util.Observer;
-import javax.swing.JColorChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
 
 public class ControlCanal extends JPanel implements Observer, MouseListener{
 
