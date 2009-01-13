@@ -72,7 +72,7 @@ public class ControlCanal extends JPanel implements Observer, MouseListener{
                 null,"Elija un color",
                 this.getBackground());
             if (newColor != null) {
-                this.setBackground(newColor);
+                //this.setBackground(newColor);
                 this.cambiarColor(newColor);
             }
         }
