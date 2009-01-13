@@ -3,8 +3,10 @@ package analizador;
 import java.util.Observable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 public class ModuloExterno extends Observable{
+    private int CANTIDAD_DE_INTENTOS_MAXIMA = 3;
     private static ModuloExterno moduloExterno;
     private int estado;
     private boolean modo=false;
@@ -30,33 +32,49 @@ public class ModuloExterno extends Observable{
         long periodous;
         double intermedioSEG;
         
-        
         intermedioSEG = (double)(1.0/freqHz);
         
         
         periodous = Math.round(intermedioSEG*1000000);
         
         
-        comunicador.enviarComando("<inicio nuevo=1 modo="+ (modo?1:0) +" velocidad="+periodous+"> </inicio>"); // Correcto.
         
+        boolean exitoso=false;
+        int intento=0;
+        do{
+            try{
+                intento++;
+                System.out.println("Intento de conexión nro. " + intento + ".");
+                comunicador.enviarComando("<inicio nuevo=1 modo="+ (modo?1:0) +" velocidad="+periodous+"> </inicio>"); // Correcto.
         
-        System.out.println("Comando enviado.");
-        xml = comunicador.recibirComando();
-        System.out.println("Se recibio en JAVA: '" + xml + "'.");
+                System.out.println("Comando enviado.");
+                xml = comunicador.recibirComando();
         
-        muestras = parseoMuestras(xml);
-        crc_xml = parseoCRC(xml);
-        modo_xml = parseoModo(xml);
-        veloc_xml = parseoVelocidad(xml);
+                System.out.println("Se recibio en JAVA: '" + xml + "'.");
         
-        
-        
-        
-        // if crc valido, inicio=requerido, modo=requerido,velocidad=requerida    
-        this.notificarMuestras(muestras);
-        // else
-        //   mostrar error
-        // end if
+                muestras = parseoMuestras(xml);
+                crc_xml = parseoCRC(xml);
+                modo_xml = parseoModo(xml);
+                veloc_xml = parseoVelocidad(xml);
+
+                // if crc valido, inicio=requerido, modo=requerido,velocidad=requerida    
+                this.notificarMuestras(muestras);
+                exitoso=true;
+                // else
+                //   mostrar error
+                //   exitoso=false;
+                // end if
+                
+                
+            }catch(Exception e){
+                System.out.println("Error al intentar conexión con el Módulo Externo de Hardware. No se han actualizado las muestras.");
+                e.printStackTrace();
+                exitoso=false;
+            }
+        }while((exitoso==false)&& (intento<CANTIDAD_DE_INTENTOS_MAXIMA));
+        if (exitoso==false){
+            JOptionPane.showMessageDialog(null, "No se ha podido establecer conexión serie.","Error",JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void cargarArchivo(){

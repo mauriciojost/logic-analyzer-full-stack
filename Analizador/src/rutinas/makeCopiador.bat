@@ -1,5 +1,5 @@
 ml /c /coff rutina.asm
-cl copiador.c
+cl copiador.cpp rutina.obj
 
 pause
 copiador

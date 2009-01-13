@@ -2,6 +2,9 @@
 #include <conio.h>
 #include <stdlib.h>
 
+extern "C" char __stdcall lee(HANDLE); // Linea extra�a...
+extern "C" void __stdcall escribe(HANDLE, char); // Linea extra�a...
+
 int main(){
   FILE *fp_destino;
   FILE *pf;

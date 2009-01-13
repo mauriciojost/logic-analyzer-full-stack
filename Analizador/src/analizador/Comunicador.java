@@ -13,8 +13,9 @@ import javax.swing.filechooser.FileFilter;
 public class Comunicador {
     byte[] bufferEntrada;
     private JFileChooser fc;
+    private boolean conectado=false;
     
-    public native void iniciar();
+    public native int iniciar();
     public native void enviar(byte comando);
     public native String recibir();
     
@@ -23,26 +24,44 @@ public class Comunicador {
     }
     
     public Comunicador(){
+        int fd;
         crearJFileChooser();
-        this.iniciar();
+        fd = this.iniciar();
+        if (fd==-1){
+            System.out.println("No se ha podido abrir COM1. ");
+            conectado=false;
+        }else{
+            conectado=true;
+        }
     }
     
     public void enviarComando(String comando){
         int i;
         byte a;
-        System.out.println("Enviando comando: '"+ comando + "'...");
-        for(i=0;i<comando.length();i++){
-            
-            a = (byte)comando.charAt(i);
-            this.enviar(a);
-            try {Thread.sleep(1);} catch (InterruptedException ex) {ex.printStackTrace();} // Espera para no atorar al PIC.
+        if (conectado){
+            System.out.println("Enviando comando: '"+ comando + "'...");
+            for(i=0;i<comando.length();i++){
+
+                a = (byte)comando.charAt(i);
+                this.enviar(a);
+                try {Thread.sleep(1);} catch (InterruptedException ex) {ex.printStackTrace();} // Espera para no atorar al PIC.
+            }
+            this.enviar((byte)13);
+        }else{
+            System.out.println("No se ha establecido conexión aún.");
         }
-        this.enviar((byte)13);
     }
     
-    public String recibirComando(){ /* Por el momento es la mentirosa... */
-        String retorno = this.recibir();
-        bufferEntrada = retorno.getBytes();
+    public String recibirComando(){
+        String retorno;
+        
+        if (conectado) {
+            System.out.println("Recibiendo...");
+            retorno = this.recibir();
+            bufferEntrada = retorno.getBytes();
+        }else{
+           retorno = "";
+        }
         return retorno;
     }
 

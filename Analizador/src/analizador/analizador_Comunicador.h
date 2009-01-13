@@ -10,9 +10,9 @@ extern "C" {
 /*
  * Class:     analizador_Comunicador
  * Method:    iniciar
- * Signature: ()V
+ * Signature: ()I
  */
-JNIEXPORT void JNICALL Java_analizador_Comunicador_iniciar
+JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar
   (JNIEnv *, jobject);
 
 /*
