@@ -68,7 +68,7 @@ public class Dibujo extends JPanel{
         try{
             super.paintComponent (g);
             Graphics2D g2 = (Graphics2D)g;
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+            //g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
             configurarReferencias();
 
             g2.setColor(colorNombre);

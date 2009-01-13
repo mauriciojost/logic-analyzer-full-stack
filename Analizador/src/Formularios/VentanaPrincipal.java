@@ -4,6 +4,7 @@ import analizador.*;
 import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
 import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -31,11 +32,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BasicLookAndFeel syn = new SynthLookAndFeel();
         BasicLookAndFeel mot = new MotifLookAndFeel();
         BasicLookAndFeel win = new WindowsLookAndFeel();
-        try{
-            UIManager.setLookAndFeel(met);
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+        //try{
+        //    UIManager.setLookAndFeel(syn);
+        //} catch (Exception ex){
+        //    ex.printStackTrace();
+        //}
         initComponents();
         initComponentsPropio();
         this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width-this.getSize().width)/2, (Toolkit.getDefaultToolkit().getScreenSize().height-this.getSize().height)/2);
@@ -57,7 +58,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         dibujo = new Dibujo[8];
         controlCanal = new ControlCanal[8];
         canal = new Canal[8];
+        
         gbc.gridx=0;gbc.gridy=0;gbc.ipadx = 100;gbc.ipady = 30;
+        
         for (int i=0;i<8;i++){
             canal[i] = new Canal(i);
             dibujo[i] = new Dibujo(i);
@@ -69,7 +72,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             gbc.gridy=i+1;
         }
         
-        gbc.ipadx= 450;gbc.ipady= 30;gbc.gridx=1;gbc.gridy=0;
+        gbc.ipadx= 610;gbc.ipady= 30;gbc.gridx=1;gbc.gridy=0;
         for (int i=0;i<8;i++){
             gbl.setConstraints(dibujo[i],gbc);
             panelDibujos.add(dibujo[i]);
@@ -114,6 +117,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         panelCapturar.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Muestras"));
 
+        botonCapturar.setFont(new java.awt.Font("Dialog", 1, 10));
         botonCapturar.setText("Capturar");
         botonCapturar.setFocusable(false);
         botonCapturar.setRequestFocusEnabled(false);
@@ -141,6 +145,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         panelModo.setBorder(javax.swing.BorderFactory.createTitledBorder("Modo"));
 
+        comboBoxModo.setFont(new java.awt.Font("Dialog", 1, 10));
         comboBoxModo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Síncrono", "Asíncrono" }));
         comboBoxModo.setFocusable(false);
         comboBoxModo.addActionListener(new java.awt.event.ActionListener() {
@@ -162,11 +167,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             panelModoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelModoLayout.createSequentialGroup()
                 .addComponent(comboBoxModo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         panelFrecuencia.setBorder(javax.swing.BorderFactory.createTitledBorder("Frecuencia de muestreo"));
 
+        comboBoxFrecuencia.setFont(new java.awt.Font("Dialog", 1, 10));
         comboBoxFrecuencia.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "5", "10", "25", "50", "100", "250", "500", "1000" }));
         comboBoxFrecuencia.setFocusable(false);
         comboBoxFrecuencia.addActionListener(new java.awt.event.ActionListener() {
@@ -175,6 +181,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 8)); // NOI18N
         jLabel1.setText("KHz ( 1000 uSeg/muestra )");
 
         javax.swing.GroupLayout panelFrecuenciaLayout = new javax.swing.GroupLayout(panelFrecuencia);
@@ -185,8 +192,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(comboBoxFrecuencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         panelFrecuenciaLayout.setVerticalGroup(
             panelFrecuenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,11 +201,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addGroup(panelFrecuenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comboBoxFrecuencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         panelZoom.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Zoom"));
 
+        botonZoomIn.setFont(new java.awt.Font("Dialog", 1, 10));
         botonZoomIn.setText("In");
         botonZoomIn.setFocusable(false);
         botonZoomIn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -207,6 +215,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        botonZoomOut.setFont(new java.awt.Font("Dialog", 1, 10));
         botonZoomOut.setText("Out");
         botonZoomOut.setFocusable(false);
         botonZoomOut.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -242,7 +251,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelDibujos.setLayout(panelDibujosLayout);
         panelDibujosLayout.setHorizontalGroup(
             panelDibujosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 641, Short.MAX_VALUE)
+            .addGap(0, 720, Short.MAX_VALUE)
         );
         panelDibujosLayout.setVerticalGroup(
             panelDibujosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -298,29 +307,29 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelDibujos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(panelCapturar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelModo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelFrecuencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                        .addComponent(panelZoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(panelFrecuencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelZoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panelDibujos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelFrecuencia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelModo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelCapturar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(panelFrecuencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelCapturar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelModo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelZoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelDibujos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52))
+                .addContainerGap())
         );
 
         pack();

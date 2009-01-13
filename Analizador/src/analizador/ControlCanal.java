@@ -22,7 +22,7 @@ public class ControlCanal extends JPanel implements Observer, MouseListener{
     private Dibujo dibujo;
     private Color colorFondo = new Color(90,90,90);
     private Color colorNombre = new Color(204,204,204);
-    private Font fuente = new Font("Arial", 1 , 12);
+    private Font fuente = new Font("Arial", 1 , 10);
      
     public ControlCanal(Canal canal,Dibujo dibujo){
         this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

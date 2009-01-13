@@ -9,7 +9,7 @@ import javax.swing.border.LineBorder;
 public class ControlMonitor extends Observable{
     private int i=0; // Valores actuales de representación de muestras.
     private int f=1023;
-    private Font fuenteEjes = new Font("Arial", Font.BOLD,9);
+    private Font fuenteEjes = new Font("Arial", Font.BOLD,8);
     private Color colorEjes = new Color(110,110,110);
     private Color colorFlechas = new Color(150,255,150);
     private Color colorFondo = new Color(90,90,90);
@@ -26,7 +26,7 @@ public class ControlMonitor extends Observable{
             public void paintComponent(Graphics g1){
                 int cant=Math.abs(f-i+1);
                 Graphics2D g = (Graphics2D) g1;
-                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+                //g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
                 float espaciamiento = (float)panel.getWidth()/cant;
                 g.setColor(colorFondo);
                 g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
