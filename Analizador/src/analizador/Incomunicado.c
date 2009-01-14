@@ -27,7 +27,7 @@ void generar_trama(int nuevo, int modo, long velocidad){
         //printf("Etapa %d: '%s'.\n",2+j,buffer);
     }
     
-    sprintf(buffer_aux , "<CRC> %d </CRC> </inicio>",123);
+    sprintf(buffer_aux , "<CRC> %d </CRC> </inicio>",0);
     strncat(buffer, buffer_aux,60);
     //printf("Etapa ultima: '%s'.\n",buffer);
 }

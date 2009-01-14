@@ -1,23 +1,16 @@
 package Formularios;
 
 import analizador.*;
-import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
-import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
-import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.net.URL;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.synth.SynthLookAndFeel;
+import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
+import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
+import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 
 public class VentanaPrincipal extends javax.swing.JFrame {
     private Canal muestras[];                   /* Conjunto de muestras (arreglo de canales).           */
@@ -26,6 +19,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private ControlMonitor controlMonitor;      /* Control general.                                     */
     private Comunicador comunicador;            /* Objeto comunicador.                                  */
     private ModuloExterno moduloExterno;        /* Objeto moduloExterno.                                */
+    private ControlValidador controlValidador;  /* Objeto controlValidador.                             */
     
     /* Contructor. */
     public VentanaPrincipal() {
@@ -67,6 +61,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         controlMonitor = new ControlMonitor();                  /* Creacion de objetos.                     */
         comunicador = new Comunicador();
         moduloExterno = new ModuloExterno(comunicador);
+        controlValidador = new ControlValidador(moduloExterno);
         dibujo = new Dibujo[8];
         controlCanal = new ControlCanal[8];
         muestras = new Canal[8];
@@ -391,12 +386,15 @@ private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     boolean bmodo = modo.equals("Asíncrono");
     int freqHz = Integer.valueOf(velocidad)*1000;
     
-    /* Indican al objeto ModuloExterno los parametros seleccionados.            */
-    ModuloExterno.getModuloExterno().cambiarModo(bmodo);
-    ModuloExterno.getModuloExterno().cambiarFreqHz(freqHz);
-
-    /* Inicializa a ModuloExterno.                                              */
-    ModuloExterno.getModuloExterno().iniciarMuestreo();
+    try{
+        /* Indican al objeto ModuloExterno los parametros seleccionados.            */
+        controlValidador.solicitarCambioModo(bmodo);
+        controlValidador.solicitarCambioFreqHz(freqHz);
+        /* Inicializa a ModuloExterno.                                              */
+        controlValidador.solicitarInicioMuestreo();
+    }catch(Exception e){
+        e.printStackTrace();
+    }
     
 }//GEN-LAST:event_botonCapturarActionPerformed
 

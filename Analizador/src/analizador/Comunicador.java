@@ -51,29 +51,31 @@ public class Comunicador {
         }
     }
     
+    /* Envia comando hacia el HW externo. */
     public void enviarComando(String comando){
         int i;
         byte a;
         if (conectado){
             System.out.println("Enviando comando: '"+ comando + "'...");
-            for(i=0;i<comando.length();i++){
-
+            for(i=0;i<comando.length();i++){    /*Envio byte por byte.                  */
                 a = (byte)comando.charAt(i);
                 this.enviar(a);
-                try {Thread.sleep(1);} catch (InterruptedException ex) {ex.printStackTrace();} // Espera para no atorar al PIC.
+                try {                           /* Espera para el HW externo.           */
+                    Thread.sleep(1);
+                } catch (InterruptedException ex) {ex.printStackTrace();} 
             }
-            this.enviar((byte)13);
+            this.enviar((byte)13);              /* Indicador de nueva trama.            */
         }else{
             System.out.println("No se ha establecido conexión aún.");
         }
     }
     
+    /* Recibe comando del HW externo. */
     public String recibirComando(){
-        String retorno;
-        
+        String retorno;   
         if (conectado) {
             System.out.println("Recibiendo...");
-            retorno = this.recibir();
+            retorno = this.recibir();           /* Llamada JNI.                         */
             ultimaTramaRecibida = retorno.getBytes();
         }else{
            throw new NullPointerException("Hardware externo no conectado...");
@@ -81,11 +83,13 @@ public class Comunicador {
         return retorno;
     }
 
-    public String obtenerUltimoComando(){
+    /* Retorna la ultima trama obtenida. */
+    public String obtenerUltimaTrama(){
         String retorno = new String(ultimaTramaRecibida);
         return retorno;
     }
 
+    /* Salva la ultima trama recibida. */
     public void guardarMuestras(){
         File file = new File (fc.getCurrentDirectory()+"\\Signal.sgl");
         fc.setSelectedFile(file);
@@ -96,16 +100,17 @@ public class Comunicador {
                 fos.write(ultimaTramaRecibida);
                 fos.close();
             } catch (FileNotFoundException ex) {
-                System.out.println("FileNotFoundException : " + ex);
+                System.out.println("Archivo no encontrado: " + ex);
             } catch (IOException ex) {
-                System.out.println("IOException : " + ex);
+                System.out.println("Error IO: " + ex);
             }
-            System.out.println("Saving: " + fc.getSelectedFile().getAbsolutePath());
+            System.out.println("Salvando: " + fc.getSelectedFile().getAbsolutePath());
         } else {
-            System.out.println("Save command cancelled by user.");
+            System.out.println("Cancelado por el usuario.");
         }
     }
 
+    /* Carga un archivo de trama previamente guardado. */
     public void abrirMuestras(){
         fc.setCurrentDirectory(null);
         int returnVal = fc.showOpenDialog(null);
@@ -119,19 +124,20 @@ public class Comunicador {
                   /* Es necesario hacer un metodo en ModuloExterno
                  similar a iniciarMuestreo() que parsee bufferEntrada
                  y que notifique las muestras para que se dibujen */
-                System.out.println("Opening: " + fc.getSelectedFile().getAbsolutePath());
+                System.out.println("Abriendo: " + fc.getSelectedFile().getAbsolutePath());
                 String str = new String(ultimaTramaRecibida);
                 System.out.println(new String(ultimaTramaRecibida));
             } catch (FileNotFoundException ex) {
-                System.out.println("FileNotFoundException : " + ex);
+                System.out.println("Archivo no encontrado: " + ex);
             } catch (IOException ex) {
-                System.out.println("IOException : " + ex);
+                System.out.println("Error IO: " + ex);
             }
         } else {
-            System.out.println("Open command cancelled by user.");
+            System.out.println("Cancelado por el usuario.");
         }
     }
 
+    /* Crea un objeto de seleccion de archivos. */
     public void crearJFileChooser(){
         fc = new JFileChooser(){
             @Override

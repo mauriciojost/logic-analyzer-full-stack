@@ -95,7 +95,7 @@ public class ModuloExterno extends Observable{
 
 
         comunicador.abrirMuestras();
-        xml = comunicador.obtenerComando();
+        xml = comunicador.obtenerUltimaTrama();
 
         muestras = parseoMuestras(xml);
         crc_xml = parseoCRC(xml);
@@ -109,16 +109,12 @@ public class ModuloExterno extends Observable{
         this.modo = modo;
     }
     
-    public void cambiarFreqHz(int freqHz){
+    public void cambiarFreqHz(long freqHz){
         this.freqHz = freqHz;
     }
     private void notificarMuestras(char[] muestras){
         this.setChanged();
         this.notifyObservers(muestras);
-    }
-
-    public static ModuloExterno getModuloExterno(){
-        return moduloExterno;
     }
     
     private char getCRC(){
