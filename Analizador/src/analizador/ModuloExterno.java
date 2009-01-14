@@ -46,7 +46,9 @@ public class ModuloExterno extends Observable{
                 intento++;
                 System.out.println("Intento de conexión nro. " + intento + ".");
                 comunicador.enviarComando("<inicio nuevo=1 modo="+ (modo?1:0) +" velocidad="+periodous+"> </inicio>"); // Correcto.
-        
+                
+                //comunicador.enviarComando("<>"); // Cambiar!!!!!!!!!
+                
                 System.out.println("Comando enviado.");
                 xml = comunicador.recibirComando();
         

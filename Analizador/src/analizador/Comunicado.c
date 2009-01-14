@@ -117,7 +117,7 @@ JNIEXPORT void JNICALL Java_analizador_Comunicador_finalizar(JNIEnv *env, jobjec
 }
 
 /*
- JNIEXPORT void JNICALL Java_Comunicador_enviarComando(JNIEnv *env, jobject obj, jstring comando){
+ ********** NO ANDA!! JNIEXPORT void JNICALL Java_Comunicador_enviarComando(JNIEnv *env, jobject obj, jstring comando){
     int suma;
     const char *str = env->GetStringUTFChars(comando, 0);
     printf("Estamos en C...\n");
@@ -127,7 +127,7 @@ JNIEXPORT void JNICALL Java_analizador_Comunicador_finalizar(JNIEnv *env, jobjec
 }
 
 
-JNIEXPORT jstring JNICALL Java_Comunicador_recibirComando(JNIEnv *env, jobject obj){
+********* NO ANDA!!! JNIEXPORT jstring JNICALL Java_Comunicador_recibirComando(JNIEnv *env, jobject obj){
     const char retorno[] = "Enviado desde el PIC...";
     return env->NewStringUTF(retorno);
 }

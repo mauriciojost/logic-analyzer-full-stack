@@ -222,9 +222,12 @@
    *          indica que no se ha escrito nada). En caso de error, se devuelve -1 
    *  \ingroup HeaderLinux
    */
+  
+/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX                      FUNCION A REEMPLAZAR */
     long Write_Port(HANDLE fd,char Data[],int SizeData)
     {
-	return  write(fd,Data,SizeData);
+	//return  write(fd,Data,SizeData);
+  return _write_asm(fd,Data);
     }
     
     
@@ -336,6 +339,7 @@
    *          indica que no se ha recibido nada). En caso de error, se devuelve -1 
    *  \ingroup HeaderLinux    
    */    
+  /*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX                      FUNCION A REEMPLAZAR */
     long Getc_Port(HANDLE fd,char *Data)
     {
 	struct termios newtio;

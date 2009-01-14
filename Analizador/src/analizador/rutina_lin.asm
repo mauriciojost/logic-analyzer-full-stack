@@ -4,10 +4,11 @@ global _funcion, _read_asm, _write_asm
 segment .data
 caracter1 db 1
 caracterlen1 equ $-caracter1
-caracter db 1
+caracter db 20
 caracterlen equ $-caracter
 
 segment .text
+
 _funcion:
 enter 0,0
 ;mov eax, [ebp] ; Valor de la dirección de retorno.
@@ -41,11 +42,18 @@ enter 0,0
 
 mov eax, 4 ; sys_write
 mov ebx, [ebp+8] ; Primer parametro = FileDescriptor
-mov ecx, [ebp+12] ; Segundo parámetro = Caracter a escribir
-mov [caracter], cl ; uso el Byte y no el DWord (ecx)
-
-mov ecx, caracter ; puntero al buffer
-mov edx, caracterlen ; largo del buffer (calculado por ensamblador)
+mov ecx, [ebp+12] ; Segundo parámetro = Puntero del caracter a escribir
+mov edx, 0x01     ; Cantidad de caracteres a escribir.
 int 0x80
 
 leave 
+ret
+
+
+imprimir_buffer:
+  mov eax, 0x04
+  mov ecx, caracter;
+  mov edx, 0x10;
+  mov ebx, 0x02;
+  int 0x80
+  ret
