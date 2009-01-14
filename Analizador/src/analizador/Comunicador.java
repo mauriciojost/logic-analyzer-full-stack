@@ -20,7 +20,17 @@ public class Comunicador {
     public native String recibir();
     
     static {
-        System.load("/usr/lib/comunicado.so");
+        try{
+            System.load("/usr/lib/comunicado.so");
+        }catch(java.lang.UnsatisfiedLinkError e){
+            try{
+                System.loadLibrary("Comunicado");
+            }catch(Exception b){
+                //b.printStackTrace();
+            }
+            //e.printStackTrace();
+        }
+        
     }
     
     public Comunicador(){
