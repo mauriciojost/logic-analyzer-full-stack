@@ -1,4 +1,6 @@
 @echo off
+cd ..
+cd analizador
 echo Recuerde definir la variable de entorno JDK.
 echo Esta puede ser por ejemplo:
 echo    C:\Archivos de programa\Java\jdk1.6.0_01
