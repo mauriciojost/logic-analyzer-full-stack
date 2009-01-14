@@ -1,0 +1,6 @@
+#device PIC16F877A
+void main(){
+	int a;
+	a=5;
+	a++;	
+}
