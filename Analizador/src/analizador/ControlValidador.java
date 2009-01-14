@@ -2,9 +2,7 @@
 package analizador;
 
 public class ControlValidador {
-    private boolean parametros_validos=true;
-    private boolean modo;
-    private int veloc;
+    private boolean parametros_validos=false;
     private ModuloExterno moduloExterno;
     
     public ControlValidador(ModuloExterno moduloExterno){
@@ -20,14 +18,24 @@ public class ControlValidador {
         }
     }
     
+    public void inicializarModuloExterno(boolean modo, long freqHz){
+        try {
+            this.solicitarCambioFreqHz(freqHz);
+            this.solicitarCambioModo(modo);
+            parametros_validos=true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }   
+    }
+    
     public void solicitarCambioModo(boolean modo){
         this.moduloExterno.cambiarModo(modo);
     }
     
     public void solicitarCambioFreqHz(long freqHz) throws Exception{
         if ((freqHz>500) && (freqHz<= 1000000)){
-            this.moduloExterno.cambiarFreqHz(freqHz);
             parametros_validos=true;
+            this.moduloExterno.cambiarFreqHz(freqHz);
         }else{
             parametros_validos=false;
             throw new Exception("Frecuencia no valida. ");

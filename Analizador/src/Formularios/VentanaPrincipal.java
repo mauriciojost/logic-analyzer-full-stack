@@ -62,6 +62,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         comunicador = new Comunicador();
         moduloExterno = new ModuloExterno(comunicador);
         controlValidador = new ControlValidador(moduloExterno);
+        controlValidador.inicializarModuloExterno(false,1000);  /* Inicializar en modo sincrono, a 1000 Hz. */
         dibujo = new Dibujo[8];
         controlCanal = new ControlCanal[8];
         muestras = new Canal[8];
@@ -378,19 +379,9 @@ private void menuAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 
 /* Acciones para un click en boton Capturar. */
 private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCapturarActionPerformed
-    /* Obtienen objetos para el analisis de la solicitud del usuario.           */
-    String modo = (String)this.comboBoxModo.getSelectedItem();
-    String velocidad = (String)this.comboBoxFrecuencia.getSelectedItem();
-    
-    /* Establecen los valores (ya analizados) para la solicitud de muestreo.    */
-    boolean bmodo = modo.equals("Asíncrono");
-    int freqHz = Integer.valueOf(velocidad)*1000;
     
     try{
-        /* Indican al objeto ModuloExterno los parametros seleccionados.            */
-        controlValidador.solicitarCambioModo(bmodo);
-        controlValidador.solicitarCambioFreqHz(freqHz);
-        /* Inicializa a ModuloExterno.                                              */
+        /* Solicita inicio de muestreo.                                             */
         controlValidador.solicitarInicioMuestreo();
     }catch(Exception e){
         e.printStackTrace();
@@ -416,15 +407,28 @@ private void menuGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 }//GEN-LAST:event_menuGuardarActionPerformed
 
 private void comboBoxFrecuenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxFrecuenciaActionPerformed
+    /* Obtienen objetos para el analisis de la solicitud del usuario.           */
     String velocidad = (String)this.comboBoxFrecuencia.getSelectedItem();
     this.jLabel1.setText("KHz (" + Integer.toString(1000/(Integer.valueOf(velocidad))) +" uSeg/muestra )" );
+    
+    /* Establecen los valores (ya analizados) para la solicitud de muestreo.    */
+    int freqHz = Integer.valueOf(velocidad)*1000;
+    /* Solicitan el cambio de parametros seleccionados.                         */
+    try{
+        controlValidador.solicitarCambioFreqHz(freqHz);
+    }catch(Exception e){
+        JOptionPane.showMessageDialog(this, "Frecuencia no valida.","Error",JOptionPane.WARNING_MESSAGE);
+        e.printStackTrace();
+    }
+    
 }//GEN-LAST:event_comboBoxFrecuenciaActionPerformed
 
 private void comboBoxModoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxModoActionPerformed
     String modo = (String)this.comboBoxModo.getSelectedItem();
-    boolean essincrono = modo.equals("Síncrono");
-    this.comboBoxFrecuencia.setEnabled(essincrono);
-    this.jLabel1.setEnabled(essincrono);
+    boolean es_asincrono = modo.equals("Asíncrono");
+    this.comboBoxFrecuencia.setEnabled(!es_asincrono);
+    this.jLabel1.setEnabled(!es_asincrono);
+    controlValidador.solicitarCambioModo(es_asincrono);
 }//GEN-LAST:event_comboBoxModoActionPerformed
 
 private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
