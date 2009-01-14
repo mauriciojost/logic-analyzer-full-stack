@@ -26,8 +26,8 @@ enter 0,0
 
 mov eax, 3 ; Sys_write
 mov ebx, [ebp+8] ; Primer parametro es FileDescriptor
-mov ecx, caracter1 ; puntero al buffer
-mov edx, caracterlen1 ; largo del buffer (calculado por ensamblador)
+mov ecx, [ebp+12] ; puntero al buffer
+mov edx, 0x01 ; largo del buffer (calculado por ensamblador)
 int 0x80
 
 mov eax, 0h

@@ -318,7 +318,10 @@
 		}while( (t<tiempo) && (Kbhit_Port(fd)==0) );
 
 		Data[i]=0;
-		if( (Kbhit_Port(fd)!=0)||(tiempo==0) ) read(fd,&Data[i],1);
+		if( (Kbhit_Port(fd)!=0)||(tiempo==0) ) {
+      //read(fd,&Data[i],1);
+      _read_asm(fd,&Data[i]);
+    }
 
 		if( ((Data[i]==13)||(Data[i]==10)||(Data[i]==0))&&(i!=0) )
 		{
