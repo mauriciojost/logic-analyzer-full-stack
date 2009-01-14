@@ -14,6 +14,7 @@ import java.awt.event.WindowEvent;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -122,7 +123,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         menuAyuda = new javax.swing.JMenu();
         jMenuItem62 = new javax.swing.JMenuItem();
         jSeparator14 = new javax.swing.JSeparator();
-        jMenuItem63 = new javax.swing.JMenuItem();
+        menuAcercaDe = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Analizador Lógico");
@@ -307,13 +308,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         menuAyuda.add(jMenuItem62);
         menuAyuda.add(jSeparator14);
 
-        jMenuItem63.setText("Acerca de Analizardor");
-        jMenuItem63.addActionListener(new java.awt.event.ActionListener() {
+        menuAcercaDe.setText("Acerca de Analizardor");
+        menuAcercaDe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem63ActionPerformed(evt);
+                menuAcercaDeActionPerformed(evt);
             }
         });
-        menuAyuda.add(jMenuItem63);
+        menuAyuda.add(menuAcercaDe);
 
         menu.add(menuAyuda);
 
@@ -348,15 +349,25 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(panelZoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelDibujos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-private void jMenuItem63ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem63ActionPerformed
-
-}//GEN-LAST:event_jMenuItem63ActionPerformed
+private void menuAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAcercaDeActionPerformed
+     JOptionPane.showMessageDialog(this, 
+     "Alumnos\n" +   
+     "Veneranda, Guillermo Federico\n" +
+     "Jost, Mauricio Gastón\n\n" +    
+     "Materia\n" +        
+     "Sistemas de Computación\n" +
+     "Ingeniería en Computación\n" +
+     "FCEFyN - UNC\n\n" +
+     "Año\n" +
+     "2008\n"        
+   , "Acerca de", JOptionPane.INFORMATION_MESSAGE);  
+}//GEN-LAST:event_menuAcercaDeActionPerformed
 
 private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCapturarActionPerformed
     String modo = (String)this.comboBoxModo.getSelectedItem();
@@ -422,11 +433,11 @@ private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private javax.swing.JComboBox comboBoxModo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuItem jMenuItem62;
-    private javax.swing.JMenuItem jMenuItem63;
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator14;
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenuItem menuAbrir;
+    private javax.swing.JMenuItem menuAcercaDe;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenu menuAyuda;
     private javax.swing.JMenuItem menuGuardar;
