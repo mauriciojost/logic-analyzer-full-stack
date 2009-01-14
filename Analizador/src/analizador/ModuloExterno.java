@@ -27,8 +27,9 @@ public class ModuloExterno extends Observable{
     public void iniciarMuestreo(){
         String xml;
         boolean modo_xml;
-        int veloc_xml;
-        int crc_xml;
+        int periodous_xml;
+        char crc_xml;
+        char crc_muestras;
         long periodous;
         double intermedioSEG;
         
@@ -54,17 +55,21 @@ public class ModuloExterno extends Observable{
         
                 muestras = parseoMuestras(xml);
                 crc_xml = parseoCRC(xml);
+                crc_muestras = getCRC();
                 modo_xml = parseoModo(xml);
-                veloc_xml = parseoVelocidad(xml);
-
-                // if crc valido, inicio=requerido, modo=requerido,velocidad=requerida    
-                this.notificarMuestras(muestras);
-                exitoso=true;
-                // else
-                //   mostrar error
-                //   exitoso=false;
-                // end if
+                periodous_xml = parseoPeriodo(xml);
                 
+                System.out.println("         Solicitado\t\t\tObtenido");
+                System.out.println("Modo:   " + this.modo + "\t\t\t" + modo_xml);
+                System.out.println("CRC:    " + (int)crc_muestras + "\t\t\t" + (int)crc_xml);
+                System.out.println("Periodo:" + (int)periodous + "\t\t\t" + (int)periodous_xml);
+
+                if ((crc_muestras==crc_xml) && (modo==modo_xml) && (periodous==periodous_xml)){
+                    this.notificarMuestras(muestras);
+                    exitoso=true;
+                }else{
+                   throw new Exception("Datos recibidos no validos.");
+                }
                 
             }catch(Exception e){
                 System.out.println("Error al intentar conexión con el Módulo Externo de Hardware. No se han actualizado las muestras.");
@@ -92,7 +97,7 @@ public class ModuloExterno extends Observable{
         muestras = parseoMuestras(xml);
         crc_xml = parseoCRC(xml);
         modo_xml = parseoModo(xml);
-        veloc_xml = parseoVelocidad(xml);
+        veloc_xml = parseoPeriodo(xml);
 
         this.notificarMuestras(muestras);
     }
@@ -113,11 +118,11 @@ public class ModuloExterno extends Observable{
         return moduloExterno;
     }
     
-    private char getCRC(char[] muestras){
+    private char getCRC(){
         char crc=0;
         int i;
         for (i=0;i<muestras.length;i++){
-            crc = muestras[i];
+            crc = (char)((crc + muestras[i]) % 256);
         }
         return crc;
     }
@@ -132,7 +137,7 @@ public class ModuloExterno extends Observable{
         return mode;
     }
 
-    public int parseoVelocidad(String s){
+    public int parseoPeriodo(String s){
         int velo = 0;
         Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d+ modo=\\d+ velocidad=(\\d+)>");
         Matcher m = strMatch.matcher( s );
@@ -142,14 +147,14 @@ public class ModuloExterno extends Observable{
         return velo;
     }
 
-    public int parseoCRC(String s){
+    public char parseoCRC(String s){
         int CRC = 0;
         Pattern strMatch = Pattern.compile( "<CRC> (\\w+) </CRC>");
         Matcher m = strMatch.matcher( s );
         while ( m.find() ){
             CRC = Integer.valueOf(m.group(1));
         }
-        return CRC;
+        return (char)CRC;
     }
 
     
