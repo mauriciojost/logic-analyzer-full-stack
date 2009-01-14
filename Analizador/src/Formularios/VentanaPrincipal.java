@@ -105,6 +105,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
     
     public void Salir(){
+        this.comunicador.cerrarSerie();
         System.exit(0);
     }
     
@@ -365,28 +366,27 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
 private void menuAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAcercaDeActionPerformed
      JOptionPane.showMessageDialog(this, 
-     "Alumnos\n" +   
-     "Veneranda, Guillermo Federico\n" +
-     "Jost, Mauricio Gastón\n\n" +    
-     "Materia\n" +        
-     "Sistemas de Computación\n" +
-     "Ingeniería en Computación\n" +
-     "FCEFyN - UNC\n\n" +
-     "Año\n" +
-     "2008\n"        
-   , "Acerca de", JOptionPane.INFORMATION_MESSAGE);  
+     "Alumnos:\n" +   
+     "* Veneranda, Guillermo Federico\n" +
+     "* Jost, Mauricio Gastón\n\n" +    
+     "Materia:\n" +        
+     "* Sistemas de Computación\n" +
+     "Carrera:\n"+
+     "* Ingeniería en Computación\n" +
+     "* FCEFyN - UNC\n\n" +
+     "Año:\n" +
+     "* 2008\n"        
+   , "Acerca de...", JOptionPane.INFORMATION_MESSAGE);  
 }//GEN-LAST:event_menuAcercaDeActionPerformed
 
 /* Acciones para un click en boton Capturar. */
 private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCapturarActionPerformed
-    
     try{
         /* Solicita inicio de muestreo.                                             */
         controlValidador.solicitarInicioMuestreo();
     }catch(Exception e){
         e.printStackTrace();
     }
-    
 }//GEN-LAST:event_botonCapturarActionPerformed
 
 private void botonZoomInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonZoomInMouseClicked
@@ -424,11 +424,11 @@ private void comboBoxFrecuenciaActionPerformed(java.awt.event.ActionEvent evt) {
 }//GEN-LAST:event_comboBoxFrecuenciaActionPerformed
 
 private void comboBoxModoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxModoActionPerformed
-    String modo = (String)this.comboBoxModo.getSelectedItem();
-    boolean es_asincrono = modo.equals("Asíncrono");
-    this.comboBoxFrecuencia.setEnabled(!es_asincrono);
-    this.jLabel1.setEnabled(!es_asincrono);
-    controlValidador.solicitarCambioModo(es_asincrono);
+    String modo = (String)this.comboBoxModo.getSelectedItem();  /* Obtiene el item del ComboBox.                                        */
+    boolean es_asincrono = modo.equals("Asíncrono");            
+    this.comboBoxFrecuencia.setEnabled(!es_asincrono);          /* Habilita o deshabilita la seleccion de frecuencias (modo sincrono).  */
+    this.jLabel1.setEnabled(!es_asincrono);                     /* Idem.                                                                */
+    controlValidador.solicitarCambioModo(es_asincrono);         /* Solicita el cambio de modo.                                          */
 }//GEN-LAST:event_comboBoxModoActionPerformed
 
 private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed

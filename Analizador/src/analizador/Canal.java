@@ -13,11 +13,11 @@ public class Canal implements Observer{
         this.id = i;
     }
 
-    public int[] obtenerRango(int i, int f){
+    public char[] obtenerRango(int i, int f){
         i = ((i<0)?0:i);
         f = ((f>señal.length-1)?señal.length-1:f);
         int cant = f-i+1;
-        int bits[] = new int[Math.abs(cant)];
+        char bits[] = new char[Math.abs(cant)];
         for (int k=0;k<cant;k++){
             bits[k]=señal[k+i];
         }

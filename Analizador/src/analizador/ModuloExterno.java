@@ -43,25 +43,16 @@ public class ModuloExterno extends Observable{
         int intento=0;                          /* Numero de intento.                                           */
         do{
             try{
-                intento++;
-                System.out.println("Intento de conexión nro. " + intento + ".");
-                comunicador.enviarComando("<inicio nuevo=1 modo="+ (modo?1:0) +" velocidad="+periodous+"> </inicio>"); // Correcto.
+                intento++; System.out.println("Intento de conexión nro. " + intento + ".");
                 
-                System.out.println("Comando enviado.");
-                xml = comunicador.recibirComando();
+                /* Envio del comando segun la solicitud del usuario. */
+                comunicador.enviarComando("<inicio nuevo=1 modo="+ (modo?1:0) +" velocidad="+periodous+"> </inicio>"); System.out.println("Comando enviado.");
+                xml = comunicador.recibirComando(); System.out.println("Se recibio en JAVA: '" + xml + "'.");
         
-                System.out.println("Se recibio en JAVA: '" + xml + "'.");
-        
-                muestras = parseador.parseoMuestras(xml);
-                crc_xml = parseador.parseoCRC(xml);
-                crc_muestras = getCRC();
-                modo_xml = parseador.parseoModo(xml);
-                periodous_xml = parseador.parseoPeriodo(xml);
+                /* Parseo del XML recibido. */
+                muestras = parseador.parseoMuestras(xml); crc_xml = parseador.parseoCRC(xml); crc_muestras = getCRC(); modo_xml = parseador.parseoModo(xml); periodous_xml = parseador.parseoPeriodo(xml);
                 
-                System.out.println("         Solicitado\t\tObtenido");
-                System.out.println("Modo:   " + this.modo + "\t\t" + modo_xml);
-                System.out.println("CRC:    " + (int)crc_muestras + "\t\t" + (int)crc_xml);
-                System.out.println("Periodo:" + (int)periodous + "\t\t" + (int)periodous_xml);
+                System.out.println("         Solicitado\t\tObtenido"); System.out.println("Modo:   " + this.modo + "\t\t" + modo_xml); System.out.println("CRC:    " + (int)crc_muestras + "\t\t" + (int)crc_xml); System.out.println("Periodo:" + (int)periodous + "\t\t" + (int)periodous_xml);
 
                 if ((crc_muestras==crc_xml) && (modo==modo_xml) && (periodous==periodous_xml)){
                     this.notificarMuestras(muestras);
@@ -70,14 +61,12 @@ public class ModuloExterno extends Observable{
                    throw new NullPointerException("Datos recibidos no validos.");
                 }
                 
-                ControlMonitor.getControlMonitor().inicializar();
+                ControlMonitor.getControlMonitor().inicializar(); /* Inicializa al Control Monitor segun trama recibida. */
                 
             }catch(NullPointerException e){
-                System.out.println("Error al intentar conexión con el Módulo Externo de Hardware. No se ha reconocido la trama recibida.");
-                exitoso=false;
+                System.out.println("Error al intentar conexión con el Módulo Externo de Hardware. No se ha reconocido la trama recibida."); exitoso=false;
             }catch(Exception e){
-                e.printStackTrace();
-                exitoso=false;
+                e.printStackTrace(); exitoso=false;
             }
         }while((exitoso==false)&& (intento<CANTIDAD_DE_INTENTOS_MAXIMA));
         if (exitoso==false){
@@ -87,21 +76,9 @@ public class ModuloExterno extends Observable{
 
     public void cargarArchivo(){
         String xml;
-        boolean modo_xml;
-        int veloc_xml;
-        int crc_xml;
-        long periodous;
-        double intermedioSEG;
-
-
         comunicador.abrirMuestras();
         xml = comunicador.obtenerUltimaTrama();
-
         muestras = parseador.parseoMuestras(xml);
-        crc_xml = parseador.parseoCRC(xml);
-        modo_xml = parseador.parseoModo(xml);
-        veloc_xml = parseador.parseoPeriodo(xml);
-
         this.notificarMuestras(muestras);
     }
 
@@ -118,11 +95,9 @@ public class ModuloExterno extends Observable{
     }
     
     private char getCRC(){
-        char crc=0;
-        int i;
-        for (i=0;i<muestras.length;i++){
+        char crc=0; int i;
+        for (i=0;i<muestras.length;i++)
             crc = (char)((crc + muestras[i]) % 256);
-        }
         return crc;
     }
 }

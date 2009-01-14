@@ -1,3 +1,4 @@
+/* INCOMUNICADO DE LINUX */
 #define __WINDOWS_COM__
 #include <jni.h>
 #include <stdio.h>
@@ -67,6 +68,6 @@ JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject 
 }
 
 JNIEXPORT void JNICALL Java_analizador_Comunicador_finalizar(JNIEnv *env, jobject obj){
-    
+    printf("Solicitud de cierre del puerto serie (en C).\n");
 }
 

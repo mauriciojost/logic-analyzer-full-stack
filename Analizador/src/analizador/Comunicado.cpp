@@ -1,3 +1,4 @@
+/* COMUNICADO DE WINDOWS */
 #include <jni.h>
 #include <stdio.h>
 #include "analizador_Comunicador.h"

@@ -8,7 +8,7 @@ import javax.swing.border.LineBorder;
 public class Dibujo extends JPanel{
     
     private int canalID;
-    private int[] señal;// = {1,0,1};
+    private char[] señal;
     private Color colorSeñal = new Color(255,120,120);
     private Color colorFondo = Color.black;
     private Color colorBorde = new Color(100,100,100);
@@ -31,7 +31,7 @@ public class Dibujo extends JPanel{
         this.nombre = "Canal "+ canal;
     }
         
-    public void cambiarRango(int[] señal){
+    public void cambiarRango(char[] señal){
         this.señal = señal;
         actualizarDibujo();
     }

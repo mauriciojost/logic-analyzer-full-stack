@@ -1,3 +1,4 @@
+/* INCOMUNICADO DE WINDOWS */
 #define __WINDOWS_COM__
 #include <jni.h>
 #include <stdio.h>

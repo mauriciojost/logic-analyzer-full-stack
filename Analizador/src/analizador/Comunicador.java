@@ -20,9 +20,10 @@ public class Comunicador {
     private boolean conectado=false;
     
     /* Metodos de nivel inferior. JNI. */
-    public native int iniciar();
-    public native void enviar(byte comando);
-    public native String recibir();
+    private native int iniciar();
+    private native void enviar(byte comando);
+    private native String recibir();
+    private native void finalizar();
     
     /* Carga de la libreria: JNI. */
     static {
@@ -89,6 +90,10 @@ public class Comunicador {
         return retorno;
     }
 
+    public void cerrarSerie(){
+        this.finalizar();
+    }
+    
     /* Salva la ultima trama recibida. */
     public void guardarMuestras(){
         File file = new File (fc.getCurrentDirectory()+"\\Signal.sgl");

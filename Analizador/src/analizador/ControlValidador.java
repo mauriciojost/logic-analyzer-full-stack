@@ -1,6 +1,10 @@
 
 package analizador;
 
+/* Clase Control Validador
+ * Verifica que los datos entregados por el usuario sean validos.
+ * Es el nexo entre ModuloExterno y el usuario.
+ */
 public class ControlValidador {
     private boolean parametros_validos=false;
     private ModuloExterno moduloExterno;
