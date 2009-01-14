@@ -42,26 +42,26 @@ void finalizar_serie(HANDLE fd){
 }
 
 int capturar_trama(){
-	char array[3];
-	char caracter;
-  unsigned int k = 0;
-	unsigned int i = 0;
-  int n=0;
+    char array[3];
+    char caracter;
+    unsigned int k = 0;
+    unsigned int i = 0;
+    int n=0;
 
-  n=1;
-	while(caracter!='\n'){
-                k = Getc_Port(fd,&caracter);
-                if (k==0){
-                    n=0;
-                    break;
-                }
-                //Gets_Port(fd,array,1);
-		//Read_Port(fd,array,1);			// ARREGLAR!!! PUEDE QUE DEVUELVA BASURA!!!
-		//caracter = (jbyte)array[0];
-		buffer[i++] = caracter;
-	}
-	buffer[i-1]=0; // Finaliza el string.
-        return n;
+    n=1;
+    while(caracter!='\n'){
+        k = Getc_Port(fd,&caracter);
+        if (k==0){
+            n=0;
+            break;
+        }
+        //Gets_Port(fd,array,1);
+        //Read_Port(fd,array,1);			// ARREGLAR!!! PUEDE QUE DEVUELVA BASURA!!!
+        //caracter = (jbyte)array[0];
+        buffer[i++] = caracter;
+    }
+    buffer[i-1]=0; // Finaliza el string.
+    return n;
 }
 
 JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar(JNIEnv *env, jobject obj, jbyte c){
@@ -69,7 +69,6 @@ JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar(JNIEnv *env, jobject o
     char caracter='9';
     unsigned int i=0;
     int n=0;
-
 
     array[0] = c;
     Write_Port(fd,array,1);    // Escribe en el puerto serie.
@@ -106,8 +105,6 @@ JNIEXPORT jstring JNICALL Java_analizador_Comunicador_recibir(JNIEnv *env, jobje
     return (*env)->NewStringUTF(env, buffer);
 }
 
-
-
 JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject obj){
     int retorno;
     fd = inicializar_serie("/dev/usb/ttyUSB0");
@@ -115,20 +112,16 @@ JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject 
     return retorno;
 }
 
-
 JNIEXPORT void JNICALL Java_analizador_Comunicador_finalizar(JNIEnv *env, jobject obj){
     finalizar_serie(fd);
 }
 
-
-
-
 /*
  JNIEXPORT void JNICALL Java_Comunicador_enviarComando(JNIEnv *env, jobject obj, jstring comando){
-		int suma;
+    int suma;
     const char *str = env->GetStringUTFChars(comando, 0);
     printf("Estamos en C...\n");
- 		suma = Addup (1, 1, 1);
+    suma = Addup (1, 1, 1);
     printf("Comando para el PIC: %s (suma %d)\n", str,suma);
 
 }
@@ -138,6 +131,5 @@ JNIEXPORT jstring JNICALL Java_Comunicador_recibirComando(JNIEnv *env, jobject o
     const char retorno[] = "Enviado desde el PIC...";
     return env->NewStringUTF(retorno);
 }
-
 
  */
