@@ -5,43 +5,42 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
+/* Clase ModuloExterno.
+ * Representacion de alto nivel del Hardware externo.
+ * Es objeto observado (patron Observer).
+ */
 public class ModuloExterno extends Observable{
     private int CANTIDAD_DE_INTENTOS_MAXIMA = 3;
-    private static ModuloExterno moduloExterno;
-    private int estado;
-    private boolean modo=false;
-    private long freqHz;
     
-    private char[] muestras;
-    private Comunicador comunicador;
+    private static ModuloExterno moduloExterno;             
+    private int estado;                                 /* Estado del ModuloExterno.                        */
+    private boolean modo=false;                         /* Modo de muestreo solicitado: False -> Sincrono.  */
+    private long freqHz;                                /* Frecuencia (en Hz) solicitada.                   */
+    private char[] muestras;                            /* Conjunto de muestras obtenidas.                  */
+    private Comunicador comunicador;                    
     
+    /* Constructor. */
     public ModuloExterno(Comunicador comunicador){
         this.comunicador = comunicador;
         ModuloExterno.moduloExterno = this;
     }
 
+    /* Retorna el estado del ModuloExterno. */
     public int obtenerEstado(){
         return 0;
     }
     
+    /* Inicia un muestreo. */
     public void iniciarMuestreo(){
-        String xml;
-        boolean modo_xml;
-        int periodous_xml;
-        char crc_xml;
-        char crc_muestras;
-        long periodous;
-        double intermedioSEG;
+        String xml;                             /* XML retornado por el HW externo: respuesta a la solicitud.   */
+        boolean modo_xml;                       /* Modo obtenido a partir del xml retornado por el HW externo.  */
+        long periodous, periodous_xml;          /* Periodos de usuario, y retornado por el HW externo.          */
+        char crc_muestras, crc_xml;             /* Suma de verificacion de usuario (solicitada) y de HW externo.*/
         
-        intermedioSEG = (double)(1.0/freqHz);
+        periodous = Math.round(((double)(1000000.0/freqHz)));
         
-        
-        periodous = Math.round(intermedioSEG*1000000);
-        
-        
-        
-        boolean exitoso=false;
-        int intento=0;
+        boolean exitoso=false;                  /* Indicador de conexion exitosa.                               */
+        int intento=0;                          /* Numero de intento.                                           */
         do{
             try{
                 intento++;
@@ -59,26 +58,30 @@ public class ModuloExterno extends Observable{
                 modo_xml = parseoModo(xml);
                 periodous_xml = parseoPeriodo(xml);
                 
-                System.out.println("         Solicitado\t\t\tObtenido");
-                System.out.println("Modo:   " + this.modo + "\t\t\t" + modo_xml);
-                System.out.println("CRC:    " + (int)crc_muestras + "\t\t\t" + (int)crc_xml);
-                System.out.println("Periodo:" + (int)periodous + "\t\t\t" + (int)periodous_xml);
+                System.out.println("         Solicitado\t\tObtenido");
+                System.out.println("Modo:   " + this.modo + "\t\t" + modo_xml);
+                System.out.println("CRC:    " + (int)crc_muestras + "\t\t" + (int)crc_xml);
+                System.out.println("Periodo:" + (int)periodous + "\t\t" + (int)periodous_xml);
 
                 if ((crc_muestras==crc_xml) && (modo==modo_xml) && (periodous==periodous_xml)){
                     this.notificarMuestras(muestras);
                     exitoso=true;
                 }else{
-                   throw new Exception("Datos recibidos no validos.");
+                   throw new NullPointerException("Datos recibidos no validos.");
                 }
                 
+                ControlMonitor.getControlMonitor().inicializar();
+                
+            }catch(NullPointerException e){
+                System.out.println("Error al intentar conexión con el Módulo Externo de Hardware. No se ha reconocido la trama recibida.");
+                exitoso=false;
             }catch(Exception e){
-                System.out.println("Error al intentar conexión con el Módulo Externo de Hardware. No se han actualizado las muestras.");
                 e.printStackTrace();
                 exitoso=false;
             }
         }while((exitoso==false)&& (intento<CANTIDAD_DE_INTENTOS_MAXIMA));
         if (exitoso==false){
-            JOptionPane.showMessageDialog(null, "No se ha podido establecer conexión serie.","Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No se ha podido establecer conexión con el puerto serie.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -106,7 +109,7 @@ public class ModuloExterno extends Observable{
         this.modo = modo;
     }
     
-    public void cambiarVelocidad(int freqHz){
+    public void cambiarFreqHz(int freqHz){
         this.freqHz = freqHz;
     }
     private void notificarMuestras(char[] muestras){

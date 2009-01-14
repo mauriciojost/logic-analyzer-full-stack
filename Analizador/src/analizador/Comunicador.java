@@ -10,15 +10,21 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
+/*
+ * Clase Comunicador. 
+ * Enlace entre la abstraccion ModuloExterno y el HW externo.
+ */
 public class Comunicador {
-    byte[] bufferEntrada;
+    byte[] ultimaTramaRecibida;
     private JFileChooser fc;
     private boolean conectado=false;
     
+    /* Metodos de nivel inferior. JNI. */
     public native int iniciar();
     public native void enviar(byte comando);
     public native String recibir();
     
+    /* Carga de la libreria: JNI. */
     static {
         try{
             System.load("/usr/lib/comunicado.so");
@@ -26,19 +32,19 @@ public class Comunicador {
             try{
                 System.loadLibrary("Comunicado");
             }catch(Exception b){
-                //b.printStackTrace();
+                b.printStackTrace();
             }
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         
     }
     
+    /* Metodo constructor. */
     public Comunicador(){
-        int fd;
         crearJFileChooser();
-        fd = this.iniciar();
+        int fd = this.iniciar();
         if (fd==-1){
-            System.out.println("No se ha podido abrir COM1. ");
+            System.out.println("No se ha podido abrir el puerto serie.");
             conectado=false;
         }else{
             conectado=true;
@@ -68,15 +74,15 @@ public class Comunicador {
         if (conectado) {
             System.out.println("Recibiendo...");
             retorno = this.recibir();
-            bufferEntrada = retorno.getBytes();
+            ultimaTramaRecibida = retorno.getBytes();
         }else{
-           retorno = "";
+           throw new NullPointerException("Hardware externo no conectado...");
         }
         return retorno;
     }
 
-    public String obtenerComando(){
-        String retorno = new String(bufferEntrada);
+    public String obtenerUltimoComando(){
+        String retorno = new String(ultimaTramaRecibida);
         return retorno;
     }
 
@@ -87,7 +93,7 @@ public class Comunicador {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             try {
                 FileOutputStream fos = new FileOutputStream(fc.getSelectedFile());
-                fos.write(bufferEntrada);
+                fos.write(ultimaTramaRecibida);
                 fos.close();
             } catch (FileNotFoundException ex) {
                 System.out.println("FileNotFoundException : " + ex);
@@ -107,15 +113,15 @@ public class Comunicador {
             try {
                 FileInputStream fis = new FileInputStream(fc.getSelectedFile());
                 BufferedInputStream buf = new BufferedInputStream(fis);
-                bufferEntrada = new byte[buf.available()];
-                fis.read(bufferEntrada);
+                ultimaTramaRecibida = new byte[buf.available()];
+                fis.read(ultimaTramaRecibida);
                 fis.close();
                   /* Es necesario hacer un metodo en ModuloExterno
                  similar a iniciarMuestreo() que parsee bufferEntrada
                  y que notifique las muestras para que se dibujen */
                 System.out.println("Opening: " + fc.getSelectedFile().getAbsolutePath());
-                String str = new String(bufferEntrada);
-                System.out.println(new String(bufferEntrada));
+                String str = new String(ultimaTramaRecibida);
+                System.out.println(new String(ultimaTramaRecibida));
             } catch (FileNotFoundException ex) {
                 System.out.println("FileNotFoundException : " + ex);
             } catch (IOException ex) {

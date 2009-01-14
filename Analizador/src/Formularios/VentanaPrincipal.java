@@ -4,7 +4,6 @@ import analizador.*;
 import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
 import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -21,71 +20,83 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.synth.SynthLookAndFeel;
 
 public class VentanaPrincipal extends javax.swing.JFrame {
-    private Canal canal[];
-    private Dibujo dibujo[];
-    private ControlCanal controlCanal[];
-    private ControlMonitor controlMonitor;
-    private Comunicador comunicador;
-    private ModuloExterno moduloExterno;
+    private Canal muestras[];                   /* Conjunto de muestras (arreglo de canales).           */
+    private Dibujo dibujo[];                    /* Conjunto de dibujos.                                 */
+    private ControlCanal controlCanal[];        /* Conjunto de controles para cada canal.               */
+    private ControlMonitor controlMonitor;      /* Control general.                                     */
+    private Comunicador comunicador;            /* Objeto comunicador.                                  */
+    private ModuloExterno moduloExterno;        /* Objeto moduloExterno.                                */
     
+    /* Contructor. */
     public VentanaPrincipal() {
-        //Todo esto es para borrar, la idea es que decidamos cómo queda mejor la cosa...
-        
+        /* Look & Feels. */
         BasicLookAndFeel met = new MetalLookAndFeel();
         BasicLookAndFeel winC = new WindowsClassicLookAndFeel();
         BasicLookAndFeel syn = new SynthLookAndFeel();
         BasicLookAndFeel mot = new MotifLookAndFeel();
         BasicLookAndFeel win = new WindowsLookAndFeel();
+        
+        /* Cambio de Look & Feel. */
         //try{
         //    UIManager.setLookAndFeel(syn);
         //} catch (Exception ex){
         //    ex.printStackTrace();
         //}
-        initComponents();
-        initComponentsPropio();
-        this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width-this.getSize().width)/2, (Toolkit.getDefaultToolkit().getScreenSize().height-this.getSize().height)/2);
+        
+        initComponents();                       /* Inicializa componentes de la ventana (generada). */
+        initComponentsPropio();                 /* Inicializa los componentes manualmente.          */
+        this.setLocation((                      /* Ubica de la ventana en el centro de pantalla.    */
+        Toolkit.getDefaultToolkit().getScreenSize().
+         width-this.getSize().width)/2, 
+         (Toolkit.getDefaultToolkit().getScreenSize().
+         height-this.getSize().height)/2);
         
     }
     
+    /* Inicializacion manual de componentes. */
     private void initComponentsPropio() {
-        URL b = getClass().getResource("/Recursos/icono.gif");
+        
+        URL b = getClass().getResource("/Recursos/icono.gif");  /* Establece un nuevo icono.                */
         Image a = new ImageIcon(b).getImage();
         this.setIconImage(a);
         
         
-        GridBagLayout gbl = new GridBagLayout();
-        GridBagConstraints gbc = new GridBagConstraints();
-        panelDibujos.setLayout(gbl);
-        controlMonitor = new ControlMonitor();
+        GridBagLayout gbl = new GridBagLayout();                /* Establece Layouts para los canales.      */
+        GridBagConstraints gbc = new GridBagConstraints();      /* Establece restricciones para ese Layout. */
+        panelDibujos.setLayout(gbl);                            /* Cambio de Layout (panel de Dibujos).     */
+        controlMonitor = new ControlMonitor();                  /* Creacion de objetos.                     */
         comunicador = new Comunicador();
         moduloExterno = new ModuloExterno(comunicador);
         dibujo = new Dibujo[8];
         controlCanal = new ControlCanal[8];
-        canal = new Canal[8];
+        muestras = new Canal[8];
         
-        gbc.gridx=0;gbc.gridy=0;gbc.ipadx = 100;gbc.ipady = 30;
+        gbc.gridx=0;gbc.gridy=0;gbc.ipadx = 100;gbc.ipady = 30; /* Ubicacion de objetos ControlCanal.       */
         
-        for (int i=0;i<8;i++){
-            canal[i] = new Canal(i);
+        for (int i=0;i<8;i++){                                  /* Crea mas objetos y los asocia.           */
+            muestras[i] = new Canal(i);
             dibujo[i] = new Dibujo(i);
-            controlCanal[i] = new ControlCanal(canal[i],dibujo[i]);
+            controlCanal[i] = new ControlCanal(muestras[i],dibujo[i]);
             controlMonitor.addObserver(controlCanal[i]);
-            moduloExterno.addObserver(canal[i]);
-            gbl.setConstraints(controlCanal[i],gbc);
+            moduloExterno.addObserver(muestras[i]);
+            gbl.setConstraints(controlCanal[i],gbc);            /* Establece ubicacion de los ControlCanal. */
             panelDibujos.add(controlCanal[i]);
             gbc.gridy=i+1;
         }
         
-        gbc.ipadx= 610;gbc.ipady= 30;gbc.gridx=1;gbc.gridy=0;
+        gbc.ipadx= 610;gbc.ipady= 30;gbc.gridx=1;gbc.gridy=0;   /* Ubicacion de objetos Dibujo.             */
         for (int i=0;i<8;i++){
             gbl.setConstraints(dibujo[i],gbc);
             panelDibujos.add(dibujo[i]);
             gbc.gridy=i+1;
         }
-        gbl.setConstraints(controlMonitor.getPanel(),gbc);
-        panelDibujos.add(controlMonitor.getPanel());
+        
+        gbl.setConstraints(controlMonitor.getPanel(),gbc);      /* Ubicacion del objeto de ControlMonitor.  */
+        panelDibujos.add(controlMonitor.getPanel());            /* Ubicacion del objeto controlMonitor.     */
         this.getContentPane().setBackground(menu.getBackground());
         
+
+
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -94,6 +105,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }           
         });
     
+
     }
     
     public void Salir(){
@@ -369,19 +381,23 @@ private void menuAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
    , "Acerca de", JOptionPane.INFORMATION_MESSAGE);  
 }//GEN-LAST:event_menuAcercaDeActionPerformed
 
+/* Acciones para un click en boton Capturar. */
 private void botonCapturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCapturarActionPerformed
+    /* Obtienen objetos para el analisis de la solicitud del usuario.           */
     String modo = (String)this.comboBoxModo.getSelectedItem();
-    boolean bmodo = modo.equals("Asíncrono");
     String velocidad = (String)this.comboBoxFrecuencia.getSelectedItem();
-    int iveloc = Integer.valueOf(velocidad)*1000; // Entrega en Herz.
     
+    /* Establecen los valores (ya analizados) para la solicitud de muestreo.    */
+    boolean bmodo = modo.equals("Asíncrono");
+    int freqHz = Integer.valueOf(velocidad)*1000;
+    
+    /* Indican al objeto ModuloExterno los parametros seleccionados.            */
     ModuloExterno.getModuloExterno().cambiarModo(bmodo);
-    
-    System.out.println("Velocidad en HZ es enviada: " + iveloc);
-    ModuloExterno.getModuloExterno().cambiarVelocidad(iveloc);
-    
+    ModuloExterno.getModuloExterno().cambiarFreqHz(freqHz);
+
+    /* Inicializa a ModuloExterno.                                              */
     ModuloExterno.getModuloExterno().iniciarMuestreo();
-    ControlMonitor.getControlMonitor().inicializar();
+    
 }//GEN-LAST:event_botonCapturarActionPerformed
 
 private void botonZoomInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonZoomInMouseClicked
@@ -402,7 +418,7 @@ private void menuGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 }//GEN-LAST:event_menuGuardarActionPerformed
 
 private void comboBoxFrecuenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxFrecuenciaActionPerformed
-String velocidad = (String)this.comboBoxFrecuencia.getSelectedItem();
+    String velocidad = (String)this.comboBoxFrecuencia.getSelectedItem();
     this.jLabel1.setText("KHz (" + Integer.toString(1000/(Integer.valueOf(velocidad))) +" uSeg/muestra )" );
 }//GEN-LAST:event_comboBoxFrecuenciaActionPerformed
 
