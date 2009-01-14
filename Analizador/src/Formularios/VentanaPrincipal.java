@@ -9,8 +9,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.net.URL;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -82,9 +85,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelDibujos.add(controlMonitor.getPanel());
         this.getContentPane().setBackground(menu.getBackground());
         
-        
-        
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Salir();
+            }           
+        });
+    
     }
+    
+    public void Salir(){
+        System.exit(0);
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -278,6 +292,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         menuArchivo.add(jSeparator13);
 
         menuSalir.setText("Salir");
+        menuSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSalirActionPerformed(evt);
+            }
+        });
         menuArchivo.add(menuSalir);
 
         menu.add(menuArchivo);
@@ -329,7 +348,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(panelZoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelDibujos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
 
         pack();
@@ -382,6 +401,10 @@ private void comboBoxModoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     this.comboBoxFrecuencia.setEnabled(essincrono);
     this.jLabel1.setEnabled(essincrono);
 }//GEN-LAST:event_comboBoxModoActionPerformed
+
+private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
+    Salir();
+}//GEN-LAST:event_menuSalirActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
