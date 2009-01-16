@@ -3,24 +3,20 @@
 
 // Retorna true si es valido, o 0 si es no valido.
 int parseo(char* orden){
-	
 	char pat_inicio[] = "<inicio";
 	char pat_final[] = "> </inicio>";
 	char pat_nuevo[] = "nuevo=";
 	char pat_modo[] = "modo=";
 	char pat_velocidad[] = "velocidad=";
-	
+
 	char nuevo[6], modo[6], velocidad[6];
-	int k;
 	unsigned long cantidad;
-	
-	int nuevo_int;
-	
+	int nuevo_int, k;
 	char* p_inicio, *p_final, *p_nuevo, *p_modo, *p_velocidad;
 	
 	//printf("Parseo... Orden:'%s' (en %d).\n\r",orden,(int)orden);
 
-	p_inicio    = strstr(orden, pat_inicio);  // Al vicio.
+	p_inicio    = strstr(orden, pat_inicio);
 	p_nuevo     = strstr(orden, pat_nuevo);	
 	p_final     = strstr(orden, pat_final);
 	p_modo      = strstr(orden, pat_modo);
@@ -28,30 +24,29 @@ int parseo(char* orden){
 
 	//printf("\n\rPunteros p_inicio=%lu p_nuevo=%lu p_final=%lu p_modo=%lu p_veloc=%lu.\n\r",(long)p_inicio, (long)p_nuevo, (long)p_final, (long)p_modo, (long)p_velocidad);	
 
-	if (((long)p_inicio==0)||((long)p_nuevo==0)||((long)p_final==0)||((long)p_modo==0)||((long)p_velocidad==0)){
+	if (((long)p_inicio==0)||((long)p_nuevo==0)||((long)p_final==0)||((long)p_modo==0)||((long)p_velocidad==0)){ // Cada una de las partes debe estar presente.
 		return 0;
 	}
 
-	for(k=0;k<6;k++){
-		nuevo[k]    = 0;
-		modo[k]     = 0;
-		velocidad[k]= 0;
-	}
+	for(k=0;k<6;k++){ nuevo[k]    = 0; modo[k]     = 0; velocidad[k]= 0; }
 
-	cantidad = (unsigned long)(p_modo  - (p_nuevo+6+1));
+	// <inicio nuevo=1 modo=1 velocidad=100> </inicio>
+	// Busqueda de nuevo. Entr
+	cantidad = (unsigned long)(p_modo  - (p_nuevo+strlen(pat_nuevo)+1));
 	//printf("Cantidad: '%lu'.\n\r",cantidad);
-	strncpy(nuevo     , p_nuevo+6     , cantidad);
-	cantidad = (int)(p_velocidad  - (p_modo+5+1));
-	//printf("Cantidad: '%lu'.\n\r",cantidad);
-	strncpy(modo      , p_modo+5      , cantidad);
-	cantidad = (int)(p_final - (p_velocidad+10));
-	//printf("Cantidad: '%lu'.\n\r",cantidad);
-	strncpy(velocidad , p_velocidad+10, cantidad);
+	strncpy(nuevo     , p_nuevo+strlen(pat_nuevo)     , cantidad);
 	
+	// Busqueda de modo.
+	cantidad = (int)(p_velocidad  - (p_modo+strlen(pat_modo)+1));
+	//printf("Cantidad: '%lu'.\n\r",cantidad);
+	strncpy(modo      , p_modo+strlen(pat_modo)      , cantidad);
+
+	// Busqueda de periodo.
+	cantidad = (int)(p_final - (p_velocidad+strlen(pat_velocidad)));
+	//printf("Cantidad: '%lu'.\n\r",cantidad);
+	strncpy(velocidad , p_velocidad+strlen(pat_velocidad), cantidad);
 
 	//printf("\n\rCadenas nuevo='%s' modo='%s' veloc='%s'.\n\r",nuevo, modo, velocidad);
-	
-	
 
 	nuevo_int = atoi(nuevo);
 	modo_actual = atoi(modo);
@@ -81,7 +76,7 @@ void responder_trama(){
 		printf("%u ",(unsigned)datos[k]);
 	}
 	printf("<CRC> %u </CRC> </inicio>\n",(unsigned)get_crc());
-	printf(lcd_putc,"\n       Listo.");
+	printf(lcd_putc,"\fListo.");
 }
 
 
@@ -89,8 +84,6 @@ void rutina_ya_conectado(){
 	char caracter;
 	char orden[100];
 	unsigned int p_orden=0;
-
-
 
 	do{
 		caracter = getc(); // Obtención del caracter presionado.
