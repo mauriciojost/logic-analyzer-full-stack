@@ -164,7 +164,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             panelCapturarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCapturarLayout.createSequentialGroup()
                 .addComponent(botonCapturar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         panelModo.setBorder(javax.swing.BorderFactory.createTitledBorder("Modo"));
@@ -196,8 +196,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         panelFrecuencia.setBorder(javax.swing.BorderFactory.createTitledBorder("Frecuencia de muestreo"));
 
-        comboBoxFrecuencia.setFont(new java.awt.Font("Dialog", 1, 10));
-        comboBoxFrecuencia.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "5", "10", "25", "50", "100", "250", "500", "1000" }));
+        comboBoxFrecuencia.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        comboBoxFrecuencia.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "5", "10", "25", "50", "100", "500", "1000" }));
         comboBoxFrecuencia.setFocusable(false);
         comboBoxFrecuencia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -217,7 +217,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(comboBoxFrecuencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addContainerGap(116, Short.MAX_VALUE))
         );
         panelFrecuenciaLayout.setVerticalGroup(
             panelFrecuenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,7 +265,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addGroup(panelZoomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonZoomOut)
                     .addComponent(botonZoomIn))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         panelDibujos.setBackground(new java.awt.Color(0, 0, 0));
@@ -275,7 +275,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelDibujos.setLayout(panelDibujosLayout);
         panelDibujosLayout.setHorizontalGroup(
             panelDibujosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 720, Short.MAX_VALUE)
+            .addGap(0, 753, Short.MAX_VALUE)
         );
         panelDibujosLayout.setVerticalGroup(
             panelDibujosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -358,7 +358,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(panelZoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelDibujos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         pack();
