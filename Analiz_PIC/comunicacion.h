@@ -74,12 +74,14 @@ int8 get_crc(){
 // Función que realiza una representación de las muestras realizadas.
 void responder_trama(){
 	unsigned long int k;
+	printf(lcd_putc,"\fTransmitiendo...");
 	printf("<inicio nuevo=1 modo=%d velocidad=%lu> ",modo_actual,periodous_actual);
 	for(k=0;k<QMUESTRAS;k++){
 		//printf("%x ",datos[k]);
 		printf("%u ",(unsigned)datos[k]);
 	}
 	printf("<CRC> %u </CRC> </inicio>\n",(unsigned)get_crc());
+	printf(lcd_putc,"\n       Listo.");
 }
 
 
@@ -101,9 +103,15 @@ void rutina_ya_conectado(){
 				if (parseo(orden)){
 					borrar_buffer_muestras();
 					switch(modo_actual){
-						case 0: iniciar_muestreo_sincrono(); break;
-						case 1: iniciar_muestreo_asincrono(); break;
+						case 0: printf(lcd_putc,"\fMuestreando...\nM. Sinc. %luuS",(unsigned long)periodous_actual);
+								iniciar_muestreo_sincrono(); 
+								break;
+						case 1: printf(lcd_putc,"\fMuestreando...\nM. Asinc.");
+								iniciar_muestreo_asincrono(); 
+								break;
 					}
+					lcd_gotoxy(0,0);
+					printf(lcd_putc,"Listo.          ");
 				}
 			}else{
 				orden[p_orden++]=caracter;

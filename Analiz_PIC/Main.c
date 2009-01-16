@@ -17,7 +17,7 @@
 #use rs232 (BAUD=460800,XMIT=PIN_C6,RCV=PIN_C7,BITS=8) 	// Inicialización del módulo rs232.
 #use fast_io(B)											// Lectura rápida de puerto B.
 
-// #include <LCD.C> // Inclusión del driver del lcd. 
+#include "LCD.C" // Inclusión del driver del lcd. 
 
 #include <stdio.h>
 #define FASTER_BUT_MORE_ROM // Para String.h.
@@ -39,6 +39,8 @@ void responder_trama();
 #include "muestreo.h"
 #include "comunicacion.h"
 #include "control.h"
+
+
 
 
 
