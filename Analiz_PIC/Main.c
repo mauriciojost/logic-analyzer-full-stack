@@ -38,10 +38,12 @@ int nuevo_actual;
 
 void responder_trama();
 
+#include "consola.h"
 #include "pantalla.h"
 #include "muestreo.h"
 #include "comunicacion.h"
 #include "control.h"
+
 
 
 

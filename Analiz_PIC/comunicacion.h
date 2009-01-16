@@ -1,5 +1,6 @@
 #define CARACTER_FIN_TRAMA '\r'
 #define CARACTER_FLUSH '\n'
+#define CARACTER_DE_ID '*'
 
 #define RCSTA 0x0FAB
 #define CREN 0x0004
@@ -70,6 +71,10 @@ int8 get_crc(){
 }
 
 
+void transmitir_device_id(){
+	printf("%c",CARACTER_DE_ID);
+}
+
 // Función que realiza una representación de las muestras realizadas.
 void responder_trama(){
 	unsigned long int k;
@@ -113,6 +118,7 @@ void responder_trama(){
 
 void rutina_ya_conectado(){
 	char caracter;
+	int8 cuenta_para_modo_consola=0;
 	char orden[100];
 	unsigned int p_orden=0;
 	do{
@@ -123,11 +129,13 @@ void rutina_ya_conectado(){
 		#endasm		
 
 		caracter = getc(); // Obtención del caracter presionado.
-		if (caracter==CARACTER_FLUSH){
-			p_orden=0;
-		}else{
-			// Caracter de control. Inicio del parseo.
-			if (caracter == CARACTER_FIN_TRAMA){ 
+		
+		switch (caracter){
+			case CARACTER_FLUSH:
+				p_orden=0;
+				cuenta_para_modo_consola=0;
+				break;
+			case CARACTER_FIN_TRAMA:
 				p_orden=0;
 				if (parseo(orden)){
 					borrar_buffer_muestras();
@@ -140,11 +148,19 @@ void rutina_ya_conectado(){
 					}
 					lcd_listo();
 				}
-			}else{
+				break;
+			case CARACTER_DE_ID:	
+				transmitir_device_id();
+				cuenta_para_modo_consola++;
+				if (cuenta_para_modo_consola>=10){
+					printf("\n\rModo consola!\n\r");
+					modo_consola();
+					cuenta_para_modo_consola=0;
+				}
+				break;
+			default:
 				orden[p_orden++]=caracter;
 				orden[p_orden]=0;
-				//printf("Orden: '%s' (%d).\n\r",orden,(int)caracter);
-			}
 		}
 	}while(1);
 }
