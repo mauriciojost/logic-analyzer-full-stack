@@ -31,8 +31,10 @@
 int8* datos = BASE_MUESTRAS;
 
 char modo_actual=0; // 0 -> síncrono (clock interno). 1 -> RB(4:7).
+
 unsigned long int periodous_actual=0;
 unsigned long int p_datos=0;
+int nuevo_actual;
 
 void responder_trama();
 

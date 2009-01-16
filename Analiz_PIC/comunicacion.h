@@ -3,15 +3,15 @@
 
 // Retorna true si es valido, o 0 si es no valido.
 int parseo(char* orden){
-	char pat_inicio[] = "<inicio";
-	char pat_final[] = "> </inicio>";
-	char pat_nuevo[] = "nuevo=";
-	char pat_modo[] = "modo=";
-	char pat_velocidad[] = "velocidad=";
+	char pat_inicio[] = "<i";
+	char pat_final[] = "> </i>";
+	char pat_nuevo[] = "n=";
+	char pat_modo[] = "m=";
+	char pat_velocidad[] = "p=";
 
 	char nuevo[6], modo[6], velocidad[6];
 	unsigned long cantidad;
-	int nuevo_int, k;
+	int k;
 	char* p_inicio, *p_final, *p_nuevo, *p_modo, *p_velocidad;
 	
 	//printf("Parseo... Orden:'%s' (en %d).\n\r",orden,(int)orden);
@@ -48,7 +48,7 @@ int parseo(char* orden){
 
 	//printf("\n\rCadenas nuevo='%s' modo='%s' veloc='%s'.\n\r",nuevo, modo, velocidad);
 
-	nuevo_int = atoi(nuevo);
+	nuevo_actual = atoi(nuevo);
 	modo_actual = atoi(modo);
 	periodous_actual = atol(velocidad);
 
@@ -70,13 +70,46 @@ int8 get_crc(){
 void responder_trama(){
 	unsigned long int k;
 	printf(lcd_putc,"\fTransmitiendo...");
-	printf("<inicio nuevo=1 modo=%d velocidad=%lu> ",modo_actual,periodous_actual);
-	for(k=0;k<QMUESTRAS;k++){
-		//printf("%x ",datos[k]);
-		printf("%u ",(unsigned)datos[k]);
+
+	if (nuevo_actual==1){ /* Tradicional. */
+		printf("<inicio nuevo=1 modo=%d velocidad=%lu> ",modo_actual,periodous_actual);
+		for(k=0;k<QMUESTRAS;k++){
+			printf("%u ",(unsigned)datos[k]);
+		}
+		printf("<CRC> %u </CRC> </inicio>\n",(unsigned)get_crc());
 	}
-	printf("<CRC> %u </CRC> </inicio>\n",(unsigned)get_crc());
-	printf(lcd_putc,"\fListo.");
+
+	if (nuevo_actual==2){ /* Largo, en hexa. */
+		printf("<inicio nuevo=1 modo=%d velocidad=%lu> ",modo_actual,periodous_actual);
+		for(k=0;k<QMUESTRAS;k++){
+			printf("%x ",(unsigned)datos[k]);
+		}
+		printf("<CRC> %u </CRC> </inicio>\n",(unsigned)get_crc());
+	}
+
+	if (nuevo_actual==3){ /* Corto, en decimal. */
+		printf("<i n=1 m=%d p=%lu> ",modo_actual,periodous_actual);
+		for(k=0;k<QMUESTRAS;k++){
+			//printf("%x ",datos[k]);
+			printf("%u ",(unsigned)datos[k]);
+		}
+		printf("<v> %u </v> </i>\n",(unsigned)get_crc());
+	}
+
+	if (nuevo_actual==4){ /* Corto, en hexa. */
+		printf("<i n=1 m=%d p=%lu> ",modo_actual,periodous_actual);
+		for(k=0;k<QMUESTRAS;k++){
+			printf("%x ",(unsigned)datos[k]);
+		}
+		printf("<v> %u </v> </i>\n",(unsigned)get_crc());
+	}
+
+	printf(lcd_putc,"\fListo.\n");
+	
+	//printf(lcd_putc,"Muestreando...\nM. Sinc. %luuS",(unsigned long)periodous_actual);
+	//printf(lcd_putc,"\fMuestreando...\nM. Asinc.");
+	
+	
 }
 
 
