@@ -59,7 +59,7 @@ public class Dibujo extends JPanel{
             altura_bit = this.getHeight()-10;
             ancho_bit = (float)(this.getWidth()-desplazamientoHorizontal)/señal.length; 
         }catch(NullPointerException e){
-            System.out.println("Este objeto Dibujo ("+this.canalID+") se encuentra vacío.");
+            System.out.print("Dibujo ("+this.canalID+") vacío.");
         }
     }
     
@@ -75,18 +75,19 @@ public class Dibujo extends JPanel{
             g2.setFont(fuente);
             //g2.drawString(nombre,3,referenciaY-15);
 
+            g2.setColor(colorEjesRef);
+            for (int i = 0; i<señal.length;i++){                
+                g2.drawLine(desplazamientoHorizontal + (int)(ancho_bit*i), referenciaY - altura_bit ,desplazamientoHorizontal+(int)(ancho_bit*i), referenciaY); // dibujo una linea vertical antes de..
+            }
             g2.setColor(colorSeñal);
             for (int i = 0; i<señal.length;i++){
-                g2.setColor(colorEjesRef);
-                g2.drawLine(desplazamientoHorizontal + (int)(ancho_bit*i), referenciaY - altura_bit ,desplazamientoHorizontal+(int)(ancho_bit*i), referenciaY); // dibujo una linea vertical antes de..
-                g2.setColor(colorSeñal);
                 if (i>0 && señal[i]!=señal[i-1]){ // Si hay un cambio de valor..   
                     g2.drawLine(desplazamientoHorizontal + (int)(ancho_bit*i), referenciaY - altura_bit ,desplazamientoHorizontal+(int)(ancho_bit*i), referenciaY); // dibujo una linea vertical antes de..
                 }
                 g2.drawLine(desplazamientoHorizontal+(int)(ancho_bit*i),referenciaY - señal[i]*altura_bit ,desplazamientoHorizontal+(int)(ancho_bit*(i+1)), referenciaY - señal[i]*altura_bit); // dibujar la proxima linea horizontal
             }
         }catch(NullPointerException e){
-            System.out.println("Este objeto Dibujo ("+this.canalID+") se encuentra vacío.");
+            System.out.print("Dibujo ("+this.canalID+") vacío.");
         }
     }
     
