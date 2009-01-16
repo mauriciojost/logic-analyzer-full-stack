@@ -52,11 +52,11 @@ public class Parseador {
         while (indice!=-1){
             indice = muestrasTemp.indexOf(" ");     // Se fija el primer espacio ("11 22 33 44 ..."), que delimita el "11" (valor a analizar).
             if (indice!=-1){                        // Se ha encontrado espacio?
-                //int i= Integer.parseInt(str,16); EN HEXADECIMAL!!!
-                entero = Integer.valueOf(muestrasTemp.substring(0, indice));    // Pone en entero un 11.
+                entero = Integer.valueOf(muestrasTemp.substring(0,indice).trim(),16).intValue(); //EN HEXADECIMAL!!!
+                //entero = Integer.valueOf(muestrasTemp.substring(0, indice));    // Pone en entero un 11.
                 muestrasTemp = muestrasTemp.substring(indice).trim();           // Descartar parte ya analizada.
             }else{   
-                entero = Integer.valueOf(muestrasTemp);                         // Último valor (no termina con espacio).
+                entero = Integer.valueOf(muestrasTemp.trim(),16).intValue();                         // Último valor (no termina con espacio).
             }
             retorno[i++] = (char)entero;            // Asignar valor obtenido al vector.
         }

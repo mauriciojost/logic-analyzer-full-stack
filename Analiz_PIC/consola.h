@@ -9,5 +9,4 @@ void modo_consola(){
 	}else{
 		printf("\n\r        Hecho! (modo asincronico)."); // Mensaje en pantalla de PC.
 	}
-	
 }

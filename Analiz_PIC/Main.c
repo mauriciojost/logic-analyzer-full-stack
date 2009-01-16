@@ -11,9 +11,9 @@
 
 #include <18f4550.h> // Pic a utilizar.
 
-#fuses HS,NOWDT,NOPROTECT,PUT,NOLVP 					// Fuses, tipo de oscilador, WDT off, sin protección de código...
+#fuses HS,NOWDT,NOPROTECT,PUT,NOLVP 						// Fuses, tipo de oscilador, WDT off, sin protección de código...
 #use delay(clock=20000000) 								// Clock de 20 MHz.
-//#use rs232 (BAUD=115200,XMIT=PIN_C6,RCV=PIN_C7,BITS=8) 	// Inicialización del módulo rs232.
+//#use rs232 (BAUD=115200,XMIT=PIN_C6,RCV=PIN_C7,BITS=8)// Inicialización del módulo rs232.
 #use rs232 (BAUD=460800,XMIT=PIN_C6,RCV=PIN_C7,BITS=8) 	// Inicialización del módulo rs232.
 #use fast_io(B)											// Lectura rápida de puerto B.
 
@@ -38,6 +38,7 @@ int nuevo_actual;
 
 void responder_trama();
 
+#include "pantalla.h"
 #include "muestreo.h"
 #include "comunicacion.h"
 #include "control.h"

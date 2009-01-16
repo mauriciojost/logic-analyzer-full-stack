@@ -1,6 +1,10 @@
 #define CARACTER_FIN_TRAMA '\r'
 #define CARACTER_FLUSH '\n'
 
+#define RCSTA 0x0FAB
+#define CREN 0x0004
+
+
 // Retorna true si es valido, o 0 si es no valido.
 int parseo(char* orden){
 	char pat_inicio[] = "<i";
@@ -69,7 +73,7 @@ int8 get_crc(){
 // Función que realiza una representación de las muestras realizadas.
 void responder_trama(){
 	unsigned long int k;
-	printf(lcd_putc,"\fTransmitiendo...");
+	lcd_transmitiendo();
 
 	if (nuevo_actual==1){ /* Tradicional. */
 		printf("<inicio nuevo=1 modo=%d velocidad=%lu> ",modo_actual,periodous_actual);
@@ -104,12 +108,6 @@ void responder_trama(){
 		printf("<v> %u </v> </i>\n",(unsigned)get_crc());
 	}
 
-	printf(lcd_putc,"\fListo.\n");
-	
-	//printf(lcd_putc,"Muestreando...\nM. Sinc. %luuS",(unsigned long)periodous_actual);
-	//printf(lcd_putc,"\fMuestreando...\nM. Asinc.");
-	
-	
 }
 
 
@@ -117,8 +115,13 @@ void rutina_ya_conectado(){
 	char caracter;
 	char orden[100];
 	unsigned int p_orden=0;
-
 	do{
+		// Reseteo de errores (principalmente OERR) del receptor USART.
+		#asm
+			bcf RCSTA, CREN
+			bsf RCSTA, CREN
+		#endasm		
+
 		caracter = getc(); // Obtención del caracter presionado.
 		if (caracter==CARACTER_FLUSH){
 			p_orden=0;
@@ -128,16 +131,14 @@ void rutina_ya_conectado(){
 				p_orden=0;
 				if (parseo(orden)){
 					borrar_buffer_muestras();
+					lcd_muestreando();
 					switch(modo_actual){
-						case 0: printf(lcd_putc,"\fMuestreando...\nM. Sinc. %luuS",(unsigned long)periodous_actual);
-								iniciar_muestreo_sincrono(); 
+						case 0: iniciar_muestreo_sincrono(); 
 								break;
-						case 1: printf(lcd_putc,"\fMuestreando...\nM. Asinc.");
-								iniciar_muestreo_asincrono(); 
+						case 1: iniciar_muestreo_asincrono(); 
 								break;
 					}
-					lcd_gotoxy(0,0);
-					printf(lcd_putc,"Listo.          ");
+					lcd_listo();
 				}
 			}else{
 				orden[p_orden++]=caracter;
