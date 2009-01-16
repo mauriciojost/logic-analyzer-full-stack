@@ -29,7 +29,7 @@ JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject 
         fd = inicializar_serie(nombre_puerto); if (fd!=-1){break;}else{printf("El puerto '%s' no es valido. \n",nombre_puerto);}
         sprintf(nombre_puerto, "/dev/usb/ttyUSB%1d",i);
         fd = inicializar_serie(nombre_puerto); if (fd!=-1){break;}else{printf("El puerto '%s' no es valido. \n",nombre_puerto);}
-    
+
     }
     printf("Falta verificar que sea realmente el PIC!!!\n");
     retorno = (int)fd;
@@ -95,7 +95,8 @@ HANDLE inicializar_serie(char* puerto){
 
     if ((int)fd != -1){
         OldConf=Get_Configure_Port(fd);   // Guarda la configuracion del puerto.
-        Configure_Port(fd,B115200,"8N1"); // Configura el puerto serie.
+        //Configure_Port(fd,B115200,"8N1"); // Configura el puerto serie.
+        Configure_Port(fd,B460800,"8N1"); // Configura el puerto serie.
         Set_Time(fd,50);                   // time-out entre caracteres es TIME*0.1
     }
     return fd;

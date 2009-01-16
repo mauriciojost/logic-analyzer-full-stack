@@ -2,10 +2,8 @@
 #include <jni.h>
 #include <stdio.h>
 #include "analizador_Comunicador.h"
-#define __LINUX_COM__ 
+#define __WINDOWS_COM__ 
 #include "com/serial.h"
-
-
 
 DCB OldConf;
 HANDLE fd;
@@ -14,10 +12,6 @@ char buffer[LARGO_BUFFER];
 
 enum BUFF_ESTADO {LLENO=1, VACIO=0};
 BUFF_ESTADO b_estado;
-
-//extern "C" void __stdcall inicia(); // Linea extra�a...
-//extern "C" char __stdcall lee(); // Linea extra�a...
-//extern "C" void __stdcall escribe(char); // Linea extra�a...
 
 HANDLE inicializar_serie(char* puerto){
     HANDLE fd;
@@ -32,7 +26,8 @@ HANDLE inicializar_serie(char* puerto){
 
     if ((int)fd != -1){
         OldConf=Get_Configure_Port(fd);   // Guarda la configuracion del puerto.
-        Configure_Port(fd,B115200,"8N1"); // Configura el puerto serie.
+        //Configure_Port(fd,B115200,"8N1"); // Configura el puerto serie.
+        Configure_Port(fd,B460800,"8N1"); // Configura el puerto serie.
         Set_Time(fd,50);                   // time-out entre caracteres es TIME*0.1
     }
     return fd;
@@ -51,6 +46,7 @@ int capturar_trama(){
   int n=0;
 
   n=1;
+  printf("Capturando trama en C: ");
 	while(caracter!='\n'){
                 k = Getc_Port(fd,&caracter);
                 if (k==0){
@@ -61,6 +57,7 @@ int capturar_trama(){
 		//Read_Port(fd,array,1);			// ARREGLAR!!! PUEDE QUE DEVUELVA BASURA!!!
 		//caracter = (jbyte)array[0];
 		buffer[i++] = caracter;
+                printf("%c",caracter);
 	}
 	buffer[i-1]=0; // Finaliza el string.
         return n;
@@ -80,7 +77,7 @@ JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar(JNIEnv *env, jobject o
         //printf("Hay algo...\n");
         n=capturar_trama();
         if (n==0){b_estado=VACIO;buffer[0]=0;}else{b_estado=LLENO;}
-        //printf("\nEsto fue recibido en C luego de enviar '%s'\n",buffer);
+        printf("\nEsto fue recibido en C luego de enviar '%s'\n",buffer);
     }else{
         b_estado=VACIO;
     }
@@ -103,7 +100,7 @@ JNIEXPORT jstring JNICALL Java_analizador_Comunicador_recibir(JNIEnv *env, jobje
         n=capturar_trama();
         if (n==0){b_estado=VACIO;buffer[0]=0;}else{b_estado=LLENO;}
     }
-    //printf("Retorno para la lectura (C): '%s'.\n",buffer);
+    printf("Retorno para la lectura (C): '%s'.\n",buffer);
 
     return env->NewStringUTF(buffer);
 }
@@ -121,25 +118,3 @@ JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject 
 JNIEXPORT void JNICALL Java_analizador_Comunicador_finalizar(JNIEnv *env, jobject obj){
     finalizar_serie(fd);
 }
-
-
-
-
-/*
- JNIEXPORT void JNICALL Java_Comunicador_enviarComando(JNIEnv *env, jobject obj, jstring comando){
-		int suma;
-    const char *str = env->GetStringUTFChars(comando, 0);
-    printf("Estamos en C...\n");
- 		suma = Addup (1, 1, 1);
-    printf("Comando para el PIC: %s (suma %d)\n", str,suma);
-
-}
-
-
-JNIEXPORT jstring JNICALL Java_Comunicador_recibirComando(JNIEnv *env, jobject obj){
-    const char retorno[] = "Enviado desde el PIC...";
-    return env->NewStringUTF(retorno);
-}
-
-
- */
