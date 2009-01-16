@@ -8,7 +8,7 @@ public class Parseador {
 
     public boolean parseoModo(String s){
         boolean mode = false;
-        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d+ modo=(\\d+) velocidad=\\d+>");
+        Pattern strMatch = Pattern.compile( "\\<i n=\\d+ m=(\\d+) p=\\d+>");
         Matcher m = strMatch.matcher(s);
         while (m.find()){
             mode = (m.group(1).equals("1"));
@@ -18,7 +18,7 @@ public class Parseador {
 
     public int parseoPeriodo(String s){
         int velo = 0;
-        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d+ modo=\\d+ velocidad=(\\d+)>");
+        Pattern strMatch = Pattern.compile( "\\<i n=\\d+ m=\\d+ p=(\\d+)>");
         Matcher m = strMatch.matcher( s );
         while ( m.find() ){
             velo = Integer.valueOf(m.group(1));
@@ -28,7 +28,7 @@ public class Parseador {
 
     public char parseoCRC(String s){
         int CRC = 0;
-        Pattern strMatch = Pattern.compile( "<CRC> (\\w+) </CRC>");
+        Pattern strMatch = Pattern.compile( "<v> (\\w+) </v>");
         Matcher m = strMatch.matcher( s );
         while ( m.find() ){
             CRC = Integer.valueOf(m.group(1));
@@ -42,7 +42,7 @@ public class Parseador {
         int indice=0, entero=0, i=0;
         char[] retorno = new char[1024];
         
-        Pattern strMatch = Pattern.compile( "\\<inicio nuevo=\\d+ modo=\\d+ velocidad=\\d+> (.*) <CRC> \\w+ </CRC> </inicio>");
+        Pattern strMatch = Pattern.compile( "\\<i n=\\d+ m=\\d+ p=\\d+> (.*) <v> \\w+ </v> </i>");
         Matcher m = strMatch.matcher(s);
         
         while ( m.find() ){

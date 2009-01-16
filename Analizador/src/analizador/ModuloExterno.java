@@ -46,7 +46,7 @@ public class ModuloExterno extends Observable{
                 intento++; System.out.println("Intento de conexión nro. " + intento + ".");
                 
                 /* Envio del comando segun la solicitud del usuario. */
-                comunicador.enviarComando("<i n=1 m="+ (modo?1:0) +" p="+periodous+"> </i>"); System.out.println("Comando enviado.");
+                comunicador.enviarComando("<i n=3 m="+ (modo?1:0) +" p="+periodous+"> </i>"); System.out.println("Comando enviado.");
                 xml = comunicador.recibirComando(); System.out.println("Se recibio en JAVA: '" + xml + "'.");
         
                 /* Parseo del XML recibido. */
