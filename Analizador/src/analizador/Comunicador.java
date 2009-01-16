@@ -29,13 +29,18 @@ public class Comunicador {
     static {
         try{
             System.load("/usr/lib/comunicado.so");
+            System.out.println("Libraría de Linux cargada correctamente.");
         }catch(java.lang.UnsatisfiedLinkError e){
+            System.out.println("Error al cargar la librería en Linux.");
+            //e.printStackTrace();
             try{
                 System.loadLibrary("Comunicado");
+                System.out.println("Libraría de Windows cargada correctamente.");
             }catch(Exception b){
-                b.printStackTrace();
+                System.out.println("Error al cargar la librería en Windows.");
+                //b.printStackTrace();
             }
-            e.printStackTrace();
+            
         }
         
     }
@@ -58,14 +63,17 @@ public class Comunicador {
         byte a;
         if (conectado){
             System.out.println("Enviando comando: '"+ comando + "'...");
+            this.enviar((byte)'\n');              /* Indicador de flush. */
+            try {                           /* Espera para el HW externo.           */
+                    Thread.sleep(5);} catch (InterruptedException ex) {ex.printStackTrace();} 
+            
             for(i=0;i<comando.length();i++){    /*Envio byte por byte.                  */
                 a = (byte)comando.charAt(i);
                 this.enviar(a);
                 try {                           /* Espera para el HW externo.           */
-                    Thread.sleep(1);
-                } catch (InterruptedException ex) {ex.printStackTrace();} 
+                    Thread.sleep(2);} catch (InterruptedException ex) {ex.printStackTrace();} 
             }
-            this.enviar((byte)13);              /* Indicador de nueva trama.            */
+            this.enviar((byte)'\r');              /* Indicador de nueva trama.            */
         }else{
             System.out.println("No se ha establecido conexión aún.");
         }
