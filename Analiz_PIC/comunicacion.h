@@ -1,0 +1,115 @@
+#define CARACTER_FIN_TRAMA '\r'
+#define CARACTER_FLUSH '\n'
+
+// Retorna true si es valido, o 0 si es no valido.
+int parseo(char* orden){
+	
+	char pat_inicio[] = "<inicio";
+	char pat_final[] = "> </inicio>";
+	char pat_nuevo[] = "nuevo=";
+	char pat_modo[] = "modo=";
+	char pat_velocidad[] = "velocidad=";
+	
+	char nuevo[6], modo[6], velocidad[6];
+	int k;
+	unsigned long cantidad;
+	
+	int nuevo_int;
+	
+	char* p_inicio, *p_final, *p_nuevo, *p_modo, *p_velocidad;
+	
+	//printf("Parseo... Orden:'%s' (en %d).\n\r",orden,(int)orden);
+
+	p_inicio    = strstr(orden, pat_inicio);  // Al vicio.
+	p_nuevo     = strstr(orden, pat_nuevo);	
+	p_final     = strstr(orden, pat_final);
+	p_modo      = strstr(orden, pat_modo);
+	p_velocidad = strstr(orden, pat_velocidad);
+
+	//printf("\n\rPunteros p_inicio=%lu p_nuevo=%lu p_final=%lu p_modo=%lu p_veloc=%lu.\n\r",(long)p_inicio, (long)p_nuevo, (long)p_final, (long)p_modo, (long)p_velocidad);	
+
+	if (((long)p_inicio==0)||((long)p_nuevo==0)||((long)p_final==0)||((long)p_modo==0)||((long)p_velocidad==0)){
+		return 0;
+	}
+
+	for(k=0;k<6;k++){
+		nuevo[k]    = 0;
+		modo[k]     = 0;
+		velocidad[k]= 0;
+	}
+
+	cantidad = (unsigned long)(p_modo  - (p_nuevo+6+1));
+	//printf("Cantidad: '%lu'.\n\r",cantidad);
+	strncpy(nuevo     , p_nuevo+6     , cantidad);
+	cantidad = (int)(p_velocidad  - (p_modo+5+1));
+	//printf("Cantidad: '%lu'.\n\r",cantidad);
+	strncpy(modo      , p_modo+5      , cantidad);
+	cantidad = (int)(p_final - (p_velocidad+10));
+	//printf("Cantidad: '%lu'.\n\r",cantidad);
+	strncpy(velocidad , p_velocidad+10, cantidad);
+	
+
+	//printf("\n\rCadenas nuevo='%s' modo='%s' veloc='%s'.\n\r",nuevo, modo, velocidad);
+	
+	
+
+	nuevo_int = atoi(nuevo);
+	modo_actual = atoi(modo);
+	periodous_actual = atol(velocidad);
+
+	//printf("\n\rValores nuevo=%d modo=%d veloc=%lu.\n\r", nuevo_int, modo_actual, periodous_actual);
+	return 1;
+}
+
+int8 get_crc(){
+	int8 sum = 0;
+	unsigned long int k;
+	for(k=0;k<QMUESTRAS;k++){
+		sum += datos[k];
+	}
+	return sum;
+}
+
+
+// Función que realiza una representación de las muestras realizadas.
+void responder_trama(){
+	unsigned long int k;
+	printf("<inicio nuevo=1 modo=%d velocidad=%lu> ",modo_actual,periodous_actual);
+	for(k=0;k<QMUESTRAS;k++){
+		//printf("%x ",datos[k]);
+		printf("%u ",(unsigned)datos[k]);
+	}
+	printf("<CRC> %u </CRC> </inicio>\n",(unsigned)get_crc());
+}
+
+
+void rutina_ya_conectado(){
+	char caracter;
+	char orden[100];
+	unsigned int p_orden=0;
+
+
+
+	do{
+		caracter = getc(); // Obtención del caracter presionado.
+		if (caracter==CARACTER_FLUSH){
+			p_orden=0;
+		}else{
+			// Caracter de control. Inicio del parseo.
+			if (caracter == CARACTER_FIN_TRAMA){ 
+				p_orden=0;
+				if (parseo(orden)){
+					borrar_buffer_muestras();
+					switch(modo_actual){
+						case 0: iniciar_muestreo_sincrono(); break;
+						case 1: iniciar_muestreo_asincrono(); break;
+					}
+				}
+			}else{
+				orden[p_orden++]=caracter;
+				orden[p_orden]=0;
+				//printf("Orden: '%s' (%d).\n\r",orden,(int)caracter);
+			}
+		}
+	}while(1);
+}

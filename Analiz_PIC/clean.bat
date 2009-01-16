@@ -1,0 +1,9 @@
+del *.sta
+del *.sym
+del *.hex
+del *.lst
+del *.err
+del *.cof
+del *.osym
+del *.esym
+del *.tre
