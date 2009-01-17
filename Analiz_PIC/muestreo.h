@@ -50,6 +50,30 @@ void muestrear_periodico(){
 	}
 }
 
+void iniciar_muestreo_sincrono(){
+	set_tris_b(0xFF);
+	disable_interrupts(GLOBAL);
+	if (periodous_actual>6){
+		muestrear_periodico();
+	}else if(periodous_actual>1){
+		periodous_actual = 2;
+		muestrear500kHz();	
+	}else{
+		periodous_actual = 1;
+		muestrear1MHz();
+	}
+	responder_trama();
+	disable_interrupts(GLOBAL);
+}
+
+
+
+// Función que trata a la interrupción producida por un cambio en RB.
+#INT_RB
+void interrupcion_rb(){
+	datos[p_datos++]=input_b();
+	clear_interrupt(INT_RB);	
+}
 
 void iniciar_muestreo_asincrono(){
 	set_tris_b(0xFF);
@@ -65,26 +89,11 @@ void iniciar_muestreo_asincrono(){
 	responder_trama();
 }
 
-// Función que trata a la interrupción producida por un cambio en RB.
-#INT_RB
-void interrupcion_rb(){
-	datos[p_datos++]=input_b();
-	clear_interrupt(INT_RB);	
-}
-
-
-void iniciar_muestreo_sincrono(){
-	set_tris_b(0xFF);
-	disable_interrupts(GLOBAL);
-	if (periodous_actual>6){
-		muestrear_periodico();
-	}else if(periodous_actual>1){
-		periodous_actual = 2;
-		muestrear500kHz();	
-	}else{
-		periodous_actual = 1;
-		muestrear1MHz();
+void iniciar_muestreo(){
+	switch(modo_actual){
+		case 0: iniciar_muestreo_sincrono(); 
+				break;
+		case 1: iniciar_muestreo_asincrono(); 
+				break;
 	}
-	responder_trama();
-	disable_interrupts(GLOBAL);
 }

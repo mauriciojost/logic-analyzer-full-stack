@@ -1,6 +1,8 @@
 #define CARACTER_FIN_TRAMA '\r'
 #define CARACTER_FLUSH '\n'
-#define CARACTER_DE_ID '*'
+#define CARACTER_DE_ID_SOLIC '*'
+#define CARACTER_DE_ID_RESP '#'
+
 
 #define RCSTA 0x0FAB
 #define CREN 0x0004
@@ -72,13 +74,21 @@ int8 get_crc(){
 
 
 void transmitir_device_id(){
-	printf("%c",CARACTER_DE_ID);
+	printf("%c",CARACTER_DE_ID_RESP);
 }
 
 // Función que realiza una representación de las muestras realizadas.
 void responder_trama(){
 	unsigned long int k;
 	lcd_transmitiendo();
+
+	if (nuevo_actual==0){ /* Modo consola. */
+		printf("\n\r\n\rRESUMEN DE MUESTREO\n\rModo=%d\n\rPeriodo de muestreo=%luuS\n\rMuestras:\n\r\n\r",modo_actual,periodous_actual);
+		for(k=0;k<QMUESTRAS;k++){
+			printf("%x ",(unsigned)datos[k]);
+		}
+		printf("\n\r\n\rFin de muestras.\n\r\n\r");
+	}
 
 	if (nuevo_actual==1){ /* Tradicional. */
 		printf("<inicio nuevo=1 modo=%d velocidad=%lu> ",modo_actual,periodous_actual);
@@ -112,7 +122,7 @@ void responder_trama(){
 		}
 		printf("<v> %u </v> </i>\n",(unsigned)get_crc());
 	}
-
+	
 }
 
 
@@ -140,20 +150,14 @@ void rutina_ya_conectado(){
 				if (parseo(orden)){
 					borrar_buffer_muestras();
 					lcd_muestreando();
-					switch(modo_actual){
-						case 0: iniciar_muestreo_sincrono(); 
-								break;
-						case 1: iniciar_muestreo_asincrono(); 
-								break;
-					}
+					iniciar_muestreo();
 					lcd_listo();
 				}
 				break;
-			case CARACTER_DE_ID:	
+			case CARACTER_DE_ID_SOLIC:	
 				transmitir_device_id();
 				cuenta_para_modo_consola++;
 				if (cuenta_para_modo_consola>=10){
-					printf("\n\rModo consola!\n\r");
 					modo_consola();
 					cuenta_para_modo_consola=0;
 				}
