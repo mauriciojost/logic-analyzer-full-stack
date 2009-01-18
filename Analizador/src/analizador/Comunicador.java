@@ -21,18 +21,19 @@ public class Comunicador {
     
     /* Carga de la libreria: JNI. */
     static {
+        System.out.println("Buscando librerias en:" + System.getProperty("java.library.path"));
         try{
             System.load("/usr/lib/comunicado.so");
             System.out.println("Libraría de Linux cargada correctamente.");
         }catch(java.lang.UnsatisfiedLinkError e){
             System.out.println("Error al cargar la librería en Linux.");
-            //e.printStackTrace();
+            e.printStackTrace();
             try{
                 System.loadLibrary("Comunicado");
                 System.out.println("Libraría de Windows cargada correctamente.");
             }catch(Exception b){
                 System.out.println("Error al cargar la librería en Windows.");
-                //b.printStackTrace();
+                b.printStackTrace();
             }
             
         }

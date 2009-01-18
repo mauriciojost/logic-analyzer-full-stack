@@ -17,6 +17,7 @@ echo "Compilando el .c..."
 gcc Comunicado.c rutina_lin.o -ocomunicado.so -Wl,-soname,libnative.so -I$JDK_ACTUAL -I$JDK_ACTUAL/linux -shared
 echo "Copiando .so al directorio /usr/lib/..."
 cp comunicado.so /usr/lib/comunicado.so
+chmod 777 /usr/lib/comunicado.so
 echo "Borrando los archivos generados..."
 rm *.class
 rm *.h
