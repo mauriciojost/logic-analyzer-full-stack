@@ -20,7 +20,7 @@ cp comunicado.so /usr/lib/comunicado.so
 chmod 777 /usr/lib/comunicado.so
 echo "Borrando los archivos generados..."
 rm *.class
-rm *.h
+rm a*.h
 rm *.so
 rm *.o
 echo "Listo."
