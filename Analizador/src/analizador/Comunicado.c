@@ -11,6 +11,7 @@ enum BUFF_ESTADO {LLENO=1, VACIO=0};
 void cerrar_serie();
 HANDLE inicializar_serie(char* puerto);
 int capturar_trama();
+int es_analizador();
 
 DCB OldConf;
 HANDLE fd;
@@ -22,16 +23,37 @@ char buffer[LARGO_BUFFER];
 
 JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject obj){
     int retorno;
+    int retorno;
     int i;
     char nombre_puerto[25];
     for(i=0;i<5;i++){
         sprintf(nombre_puerto, "COM%d",i+1);
-        fd = inicializar_serie(nombre_puerto); if (fd!=-1){break;}else{printf("El puerto '%s' no es valido. \n",nombre_puerto);}
+        fd = inicializar_serie(nombre_puerto); 
+        if (fd!=-1){
+            if (es_analizador()){
+                printf("Analizador encontrado! (%s).\n",nombre_puerto);
+                break;
+            }else{
+                prinft("No se trata del analizador (%s).\n",nombre_puerto);
+            }
+        }else{
+            printf("El puerto '%s' no es valido. \n",nombre_puerto);
+        }
+        
         sprintf(nombre_puerto, "/dev/usb/ttyUSB%1d",i);
-        fd = inicializar_serie(nombre_puerto); if (fd!=-1){break;}else{printf("El puerto '%s' no es valido. \n",nombre_puerto);}
+        fd = inicializar_serie(nombre_puerto); 
+        if (fd!=-1){
+            if (es_analizador()){
+                printf("Analizador encontrado! (%s).\n",nombre_puerto);
+                break;
+            }else{
+                prinft("No se trata del analizador (%s).\n",nombre_puerto);
+            }
+        }else{
+            printf("El puerto '%s' no es valido. \n",nombre_puerto);
+        }
 
     }
-    printf("Falta verificar que sea realmente el PIC!!!\n");
     retorno = (int)fd;
     return retorno;
 }
@@ -130,6 +152,26 @@ int capturar_trama(){
     return n;
 }
 
+
+int es_analizador(){
+    char array[3];
+    char caracter;
+    char caracter_id_solic='*';
+    char caracter_id_resp='#';
+    
+    unsigned int n_carac_leidos = 0;
+    
+    
+    array[0]=caracter_id_solic;
+    Write_Port(fd,array,1);             // Escribe en el puerto serie el caracter de solicitud de ID.
+    n_carac_leidos = Getc_Port(fd,&caracter);        // Recibe y compara.
+    printf("Verificando ID. Enviado '%c' y recibido '%c' (%d caracteres, '%c' esperado).\n",caracter_id_solic, caracter, n_carac_leidos, caracter_id_resp);
+    if ((n_carac_leidos==1) && (caracter==caracter_id_resp)){
+        return 1;
+    }else{
+        return 0;
+    }
+}
 
 /*
  ********** NO ANDA!! JNIEXPORT void JNICALL Java_Comunicador_enviarComando(JNIEnv *env, jobject obj, jstring comando){

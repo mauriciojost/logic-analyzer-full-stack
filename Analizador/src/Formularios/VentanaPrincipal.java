@@ -130,7 +130,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jSeparator13 = new javax.swing.JSeparator();
         menuSalir = new javax.swing.JMenuItem();
         menuAyuda = new javax.swing.JMenu();
-        jMenuItem62 = new javax.swing.JMenuItem();
         jSeparator14 = new javax.swing.JSeparator();
         menuAcercaDe = new javax.swing.JMenuItem();
 
@@ -196,7 +195,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         panelFrecuencia.setBorder(javax.swing.BorderFactory.createTitledBorder("Frecuencia de muestreo"));
 
-        comboBoxFrecuencia.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        comboBoxFrecuencia.setFont(new java.awt.Font("Dialog", 1, 10));
         comboBoxFrecuencia.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "5", "10", "25", "50", "100", "500", "1000" }));
         comboBoxFrecuencia.setFocusable(false);
         comboBoxFrecuencia.addActionListener(new java.awt.event.ActionListener() {
@@ -205,7 +204,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 8));
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 9)); // NOI18N
         jLabel1.setText("KHz ( 1000 uSeg/muestra )");
 
         javax.swing.GroupLayout panelFrecuenciaLayout = new javax.swing.GroupLayout(panelFrecuencia);
@@ -312,9 +311,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         menu.add(menuArchivo);
 
         menuAyuda.setText("Ayuda");
-
-        jMenuItem62.setText("Ayuda");
-        menuAyuda.add(jMenuItem62);
         menuAyuda.add(jSeparator14);
 
         menuAcercaDe.setText("Acerca de Analizardor");
@@ -450,7 +446,6 @@ private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private javax.swing.JComboBox comboBoxFrecuencia;
     private javax.swing.JComboBox comboBoxModo;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenuItem jMenuItem62;
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator14;
     private javax.swing.JMenuBar menu;
