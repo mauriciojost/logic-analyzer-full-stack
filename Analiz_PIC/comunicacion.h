@@ -75,6 +75,7 @@ int8 get_crc(){
 
 void transmitir_device_id(){
 	printf("%c",CARACTER_DE_ID_RESP);
+	lcd_identificado();
 }
 
 // Función que realiza una representación de las muestras realizadas.

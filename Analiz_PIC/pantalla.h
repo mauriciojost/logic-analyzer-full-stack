@@ -23,3 +23,7 @@ void lcd_transmitiendo(){
 	lcd_gotoxy(1,2);
 	printf(lcd_putc,"Transmitiendo...");
 }
+
+void lcd_identificado(){
+	printf(lcd_putc,"\fModo especial.\nID Correcto.");
+}
