@@ -1,4 +1,4 @@
-/*
+
 void lcd_iniciar(){
 	lcd_init(); // Inicialización del módulo de LCD.
 }
@@ -32,7 +32,7 @@ void lcd_identificado(){
 	printf(lcd_putc,"\fModo especial.\nID Correcto.");
 }
 
-*/
+/*
 
 void lcd_iniciar(){}
 void lcd_muestreando(){}
@@ -40,3 +40,5 @@ void lcd_listo(){}
 void lcd_presentacion(){}
 void lcd_transmitiendo(){}
 void lcd_identificado(){}
+
+*/

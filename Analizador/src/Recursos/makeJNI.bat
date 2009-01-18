@@ -20,6 +20,7 @@ echo rutina.obj
 echo Incluir al final rutina.obj. Está excluida de la compilacion del C por ahora.
 copy Comunicado.dll c:\windows\system32\
 @echo off
+del a*.h
 del *.class
 del *.obj
 del *.dll

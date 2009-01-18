@@ -1,7 +1,9 @@
 /******* FUNCIONES JNI COMPARTIDAS ********/
 
+HANDLE inicializar_serie(char* puerto);
 int es_analizador();
 void cerrar_serie();
+int capturar_trama();
 
 DCB OldConf;
 HANDLE fd;
@@ -19,10 +21,11 @@ JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject 
     char nombre_puerto[25];
     for(i=0;i<5;i++){
         sprintf(nombre_puerto, "COM%d",i+1);
-        fd = inicializar_serie(nombre_puerto); 
+        fd = inicializar_serie(nombre_puerto);
         if (((int)fd)!=-1){
             if (es_analizador()){
                 printf("Analizador encontrado! (%s).\n",nombre_puerto);
+                Set_Time(fd,50);                   // time-out entre caracteres es TIME*0.1
                 break;
             }else{
                 printf("No se trata del analizador (%s).\n",nombre_puerto);
@@ -30,12 +33,13 @@ JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject 
         }else{
             printf("El puerto '%s' no es valido. \n",nombre_puerto);
         }
-        
+
         sprintf(nombre_puerto, "/dev/usb/ttyUSB%1d",i);
-        fd = inicializar_serie(nombre_puerto); 
+        fd = inicializar_serie(nombre_puerto);
         if (((int)fd)!=-1){
             if (es_analizador()){
                 printf("Analizador encontrado! (%s).\n",nombre_puerto);
+                Set_Time(fd,50);                   // time-out entre caracteres es TIME*0.1
                 break;
             }else{
                 printf("No se trata del analizador (%s).\n",nombre_puerto);
@@ -92,7 +96,7 @@ HANDLE inicializar_serie(char* puerto){
         OldConf=Get_Configure_Port(fd);   // Guarda la configuracion del puerto.
         //Configure_Port(fd,B115200,"8N1"); // Configura el puerto serie.
         Configure_Port(fd,B460800,"8N1"); // Configura el puerto serie.
-        Set_Time(fd,50);                   // time-out entre caracteres es TIME*0.1
+        Set_Time(fd,5);                   // time-out entre caracteres es TIME*0.1
     }
     return fd;
 }
