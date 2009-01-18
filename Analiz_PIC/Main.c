@@ -9,8 +9,9 @@
 		Algún programa como Hyperterminal configurado de la siguiente manera: XXX baudios, 8 bits, sin control de flujo.
 */
 
-#include <18f4550.h> // Pic a utilizar.
 
+#include <18f4550.h> // Pic a utilizar.
+#DEVICE HIGH_INTS=TRUE
 #fuses HS,NOWDT,NOPROTECT,PUT,NOLVP 						// Fuses, tipo de oscilador, WDT off, sin protección de código...
 #use delay(clock=20000000) 								// Clock de 20 MHz.
 #use rs232 (BAUD=460800,XMIT=PIN_C6,RCV=PIN_C7,BITS=8) 	// Inicialización del módulo rs232.
@@ -51,8 +52,12 @@ void modo_consola();
 
 
 void main(){
-	inicializacion(); // Inicialización de los elementos del programa.
+
 	/**************** ZONA DE PRUEBAS. ******************/
+	iniciar_muestreo_asincrono();
 	/************** FIN DE ZONA DE PRUEBAS. *************/
+
+	inicializacion(); // Inicialización de los elementos del programa.
+	
 	rutina_ya_conectado();						// Ante la conexión, se llama a esta rutina.
 }

@@ -1,5 +1,5 @@
 void inicializacion(){
-	lcd_init(); // Inicialización del módulo de LCD.
+	lcd_iniciar();
 	set_tris_b(0xFF); // original
 	lcd_presentacion();
 	disable_interrupts(INT_EXT); // Configuración de las interrupciones.

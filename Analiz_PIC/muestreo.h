@@ -1,8 +1,13 @@
 #define POSTINC0 0x0FEE
+#define POSTINC2 0x0FDE
 #define FSR0     0x0000
+#define FSR2     0x0002
 #define PORTB    0x0F81
 #define FSR0L    0x0FE9
 #define FSR0H    0x0FEA
+#define FSR2L    0x0FD9
+#define FSR2H    0x0FDA
+
 
 
 void borrar_buffer_muestras(){
@@ -69,10 +74,20 @@ void iniciar_muestreo_sincrono(){
 
 
 // Función que trata a la interrupción producida por un cambio en RB.
+/*
 #INT_RB
 void interrupcion_rb(){
 	datos[p_datos++]=input_b();
 	clear_interrupt(INT_RB);	
+}
+*/
+
+#INT_RB	fast
+void interrupcion_rb(){
+	#asm
+		MOVFF PORTB, POSTINC2
+	#endasm
+	clear_interrupt(INT_RB);
 }
 
 void iniciar_muestreo_asincrono(){
@@ -83,7 +98,13 @@ void iniciar_muestreo_asincrono(){
 	enable_interrupts(INT_RB); // Configuración de las interrupciones.
 	disable_interrupts(INT_EXT); // Configuración de las interrupciones.
 
-	while(p_datos<QMUESTRAS){}
+	/*while(p_datos<QMUESTRAS){}*/
+	#asm
+		LFSR FSR2, BASE_MUESTRAS		
+	BUCLE_ASINC:
+		BTFSS FSR2H, 3
+		BRA BUCLE_ASINC
+	#endasm
 
 	disable_interrupts(INT_RB); // Configuración de las interrupciones.	
 	responder_trama();
