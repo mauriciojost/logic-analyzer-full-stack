@@ -27,12 +27,36 @@ public class ControlCanalSimulador extends JPanel{
         return bits;
     }
     
-    public void inicializar_señal(int n){
-        señal = new char[n];
-        for (int i=0; i<n; i++){
+    public void inicializar_señal(){
+        señal = new char[1024];
+        for (int i=0; i<1024; i++){
             señal[i] = ((new Random()).nextBoolean())?(char)1:(char)0;
         }
     }
+    
+    
+    public void inicializar_señal_tipo(){
+        señal = new char[1024];
+        
+        señal[0] = 1;
+        señal[1] = 1;
+        señal[2] = 1;
+        señal[3] = 0;
+        señal[4] = 0;
+        señal[5] = 1;
+        señal[6] = 0;
+        señal[7] = 1;
+        señal[8] = 1;
+        señal[9] = 1;
+        
+        for (int i=10; i<1024; i++){
+            señal[i] = 0;
+        }
+    }
+    
+    
+    
+    
     
     public static void main(String args[]){
         
@@ -51,7 +75,7 @@ public class ControlCanalSimulador extends JPanel{
         simulador.setBackground(simulador.getBackground().darker());
         
         
-        simulador.inicializar_señal(1024);
+        simulador.inicializar_señal();
         ventana.add(simulador);
         dibujo.setBounds(50,50,700,100);
         for(int j=1023;j>100;j=j-1){

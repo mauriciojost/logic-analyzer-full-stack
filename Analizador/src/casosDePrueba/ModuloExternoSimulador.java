@@ -25,7 +25,7 @@ public class ModuloExternoSimulador {
     }
 
     private void pruebaDeEnvioDeComando(){
-        comunicador.enviarComando("ESTADO");
+        comunicador.enviarComando("<i n=4 m=1 p=100> </i>");
         System.out.println("Comando enviado.");
     }
 }
