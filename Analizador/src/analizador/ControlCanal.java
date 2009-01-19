@@ -37,9 +37,9 @@ public class ControlCanal extends JPanel implements Observer, MouseListener{
         dibujo.cambiarColor(color);
     }
     
-    /*public void cambiarNombre(String nombre){
-        dibujo.cambiarNombre(nombre);
-    }*/
+    public void cambiarNombre(String str){
+        this.nombre = str;
+    }
     
     private void actualizarDibujo(){
         dibujo.actualizarDibujo();
@@ -54,7 +54,7 @@ public class ControlCanal extends JPanel implements Observer, MouseListener{
         if (e.getButton()==e.BUTTON1){
             String str = JOptionPane.showInputDialog(null, "Nombre de Canal", nombre);
             if (str != null) {
-                this.nombre = str;
+                this.cambiarNombre(str);
                 this.repaint();
             }            
         }
