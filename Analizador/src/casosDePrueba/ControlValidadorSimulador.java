@@ -7,6 +7,9 @@ import analizador.*;
  * Verifica que los datos entregados por el usuario sean validos.
  * Es el nexo entre ModuloExterno y el usuario.
  */
+import java.util.Observable;
+import java.util.Observer;
+
 public class ControlValidadorSimulador {
     private boolean parametros_validos=false;
     private ModuloExterno moduloExterno;
@@ -14,7 +17,10 @@ public class ControlValidadorSimulador {
     public static void main(String[] args) {
         ControlMonitor contr = new ControlMonitor(); 
         /* ^ nenesario para evitar NullPointerException en ModuloExterno*/
-        new ControlValidadorSimulador(new ModuloExterno(Comunicador.newComunicador()));
+        ModuloExterno moduEx = new ModuloExterno(Comunicador.newComunicador());
+        new ControlValidadorSimulador(moduEx);
+        CanalSimulador canSim = new CanalSimulador(0); 
+        moduEx.addObserver(canSim);
     }
     
     public ControlValidadorSimulador(ModuloExterno moduloExterno){
@@ -175,4 +181,49 @@ class ComunicadorSimulador implements Comunicable{
     public void crearJFileChooser(){
         
     }    
+}
+
+class CanalSimulador implements Observer{
+       
+    private char[] señal;
+    private int estado = 0;
+    private int id;
+    
+    public CanalSimulador(int i){
+        this.id = i;
+    }
+
+    public char[] obtenerRango(int i, int f){
+        i = ((i<0)?0:i);
+        f = ((f>señal.length-1)?señal.length-1:f);
+        int cant = f-i+1;
+        char bits[] = new char[Math.abs(cant)];
+        for (int k=0;k<cant;k++){
+            bits[k]=señal[k+i];
+        }
+        return bits;
+    }
+    
+    public int obtenerEstado(){
+        return this.estado; // Por ahora consideramos que el estado 1 es el muestreo hecho.
+    }
+
+    public int obtenerId(){
+        return this.id; // Por ahora consideramos que el estado 0 es el de inicialización correcta y muestreo hecho.
+    }
+    
+    public void update(Observable o, Object arg) {
+        int i;
+        char[] argumento = (char[])arg;
+        this.señal = new char[argumento.length];
+        
+        System.out.println("Señal Actualiza en el Canal");
+        
+        for (i=0;i<argumento.length;i++){
+            this.señal[i] = (char)((argumento[i]>>this.id)&1);
+            //System.out.print(señal[i]);
+        }
+        //System.out.print("\n");
+        estado = 1;
+    }
 }
