@@ -22,7 +22,7 @@ echo "java -jar ../../dist/Analizador.jar"
 echo "Volviendo a src..."
 echo "Borrando los archivos generados..."
 rm *.class
-rm *.h
+rm a*.h
 rm *.so
 rm *.o
 echo "Listo."

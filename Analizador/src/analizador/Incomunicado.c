@@ -18,17 +18,17 @@ void generar_trama(int nuevo, int modo, long velocidad){
     unsigned int j=0;
     char buffer_aux[60];
 
-    sprintf(buffer_aux,"<inicio nuevo=%u modo=%u velocidad=%lu> ",nuevo,modo,velocidad);
+    sprintf(buffer_aux,"<i n=%u m=%u p=%lu> ",nuevo,modo,velocidad);
     strncpy(buffer, buffer_aux,60);
     //printf("Etapa 1: '%s'.\n",buffer);
     
     for(j=0;j<1024;j++){
-        sprintf(buffer_aux,"%d ",j%256);
+        sprintf(buffer_aux,"%x ",j%256);
         strcat(buffer, buffer_aux);
         //printf("Etapa %d: '%s'.\n",2+j,buffer);
     }
     
-    sprintf(buffer_aux , "<CRC> %d </CRC> </inicio>",0);
+    sprintf(buffer_aux , "<v> %d </v> </i>",0);
     strncat(buffer, buffer_aux,60);
     //printf("Etapa ultima: '%s'.\n",buffer);
 }
@@ -37,9 +37,9 @@ JNIEXPORT void JNICALL Java_analizador_Comunicador_enviar(JNIEnv *env, jobject o
     if (c==13){
         char buff_auxiliar[50];
         
-        printf("Comando recibido (en C): %s\n.",comando);
-        sscanf( comando, "<inicio nuevo=%d modo=%d velocidad=%lu> %s", &nuevo,&modo,&velocidad,buff_auxiliar);
-        printf("Interpretado: nuevo=%d modo=%d velocidad=%lu.\nResto: '%s'.\n",nuevo,modo,velocidad,buff_auxiliar);
+        printf("Comando recibido (en C): '%s'.\n",comando);
+        sscanf( comando, "\n<i n=%d m=%d p=%lu>%s", &nuevo,&modo,&velocidad,buff_auxiliar);
+        printf("Interpretado: n=%d m=%d p=%lu.\nResto: '%s'.\n",nuevo,modo,velocidad,buff_auxiliar);
         
         p_comando = 0;
     }else{
