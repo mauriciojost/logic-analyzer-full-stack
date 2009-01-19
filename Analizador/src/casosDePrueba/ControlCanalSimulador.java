@@ -80,21 +80,42 @@ public class ControlCanalSimulador extends JPanel{
         dibujo.setBounds(50,50,700,100);
         for(int j=1023;j>100;j=j-1){
             dibujo.cambiarRango(simulador.obtenerRango(0, j));
-            try{Thread.sleep(20);}catch(Exception e){e.printStackTrace();}
+            try{Thread.sleep(10);}catch(Exception e){e.printStackTrace();}
             dibujo.actualizarDibujo();
         }
         try{Thread.sleep(1000);}catch(Exception e){e.printStackTrace();}
-        for(int j=0;j<800;j=j+1){
+        for(int j=0;j<500;j=j+1){
             dibujo.cambiarRango(simulador.obtenerRango(j, 100+j));
-            try{Thread.sleep(20);}catch(Exception e){e.printStackTrace();}
+            try{Thread.sleep(10);}catch(Exception e){e.printStackTrace();}
             dibujo.actualizarDibujo();
             
             if (j%100==0){
                 dibujo.cambiarColor(Color.getHSBColor(a.nextFloat(), a.nextFloat(), a.nextFloat()).brighter().brighter());
             }
         }
-        try{Thread.sleep(1000);}catch(Exception e){e.printStackTrace();}
         
+        
+        try{Thread.sleep(1000);}catch(Exception e){e.printStackTrace();}
+        System.out.println("Test de documentacion.");
+        simulador.inicializar_señal_tipo();
+        try{Thread.sleep(2000);}catch(Exception e){e.printStackTrace();}
+        System.out.println("Rango 0:1023. Color rosa.");
+        dibujo.cambiarRango(simulador.obtenerRango(0, 1023));
+        dibujo.cambiarColor(Color.pink);
+        try{Thread.sleep(6000);}catch(Exception e){e.printStackTrace();}
+        
+        System.out.println("Rango 4:7. Color rosa.");
+        dibujo.cambiarRango(simulador.obtenerRango(4, 7));
+        try{Thread.sleep(6000);}catch(Exception e){e.printStackTrace();}
+        
+        System.out.println("Desplazamiento en -2.");
+        dibujo.cambiarRango(simulador.obtenerRango(2, 5));
+        dibujo.cambiarColor(Color.pink);
+        try{Thread.sleep(6000);}catch(Exception e){e.printStackTrace();}
+        
+        System.out.println("Color azul.");
+        dibujo.cambiarColor(Color.blue.brighter());
+        try{Thread.sleep(6000);}catch(Exception e){e.printStackTrace();}
         
         System.exit(0);
         
