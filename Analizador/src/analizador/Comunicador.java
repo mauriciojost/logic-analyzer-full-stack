@@ -8,7 +8,7 @@ import javax.swing.filechooser.FileFilter;
  * Clase Comunicador. 
  * Enlace entre la abstraccion ModuloExterno y el HW externo.
  */
-public class Comunicador {
+public class Comunicador implements Comunicable{
     byte[] ultimaTramaRecibida;
     private JFileChooser fc;
     private boolean conectado=false;
@@ -41,7 +41,7 @@ public class Comunicador {
     }
     
     /* Metodo constructor. */
-    public Comunicador(){
+    private Comunicador(){
         crearJFileChooser();
         int fd = this.iniciar();
         if (fd==-1){
@@ -50,6 +50,11 @@ public class Comunicador {
         }else{
             conectado=true;
         }
+    }
+    
+    /* Metodo constructor. */
+    public static Comunicable newComunicador(){
+        return new Comunicador();
     }
     
     /* Envia comando hacia el HW externo. */
@@ -185,4 +190,5 @@ public class Comunicador {
         };
         fc.setFileFilter(filter);
     }
+
 }

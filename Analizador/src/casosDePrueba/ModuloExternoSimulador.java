@@ -12,14 +12,14 @@ import analizador.*;
  */
 public class ModuloExternoSimulador {
  
-    private Comunicador comunicador;
+    private Comunicable comunicador;
     
     public static void main(String[] args) {
-        new ModuloExternoSimulador(new Comunicador());
+        new ModuloExternoSimulador(Comunicador.newComunicador());
      }
     
     /* Constructor. */
-    public ModuloExternoSimulador(Comunicador comunicador){
+    public ModuloExternoSimulador(Comunicable comunicador){
         this.comunicador = comunicador;
         pruebaDeEnvioDeComando();        
     }

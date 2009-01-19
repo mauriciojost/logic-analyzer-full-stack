@@ -17,7 +17,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private Dibujo dibujo[];                    /* Conjunto de dibujos.                                 */
     private ControlCanal controlCanal[];        /* Conjunto de controles para cada canal.               */
     private ControlMonitor controlMonitor;      /* Control general.                                     */
-    private Comunicador comunicador;            /* Objeto comunicador.                                  */
+    private Comunicable comunicador;            /* Objeto comunicador.                                  */
     private ModuloExterno moduloExterno;        /* Objeto moduloExterno.                                */
     private ControlValidador controlValidador;  /* Objeto controlValidador.                             */
     
@@ -59,7 +59,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         GridBagConstraints gbc = new GridBagConstraints();      /* Establece restricciones para ese Layout. */
         panelDibujos.setLayout(gbl);                            /* Cambio de Layout (panel de Dibujos).     */
         controlMonitor = new ControlMonitor();                  /* Creacion de objetos.                     */
-        comunicador = new Comunicador();
+        comunicador = Comunicador.newComunicador();
         moduloExterno = new ModuloExterno(comunicador);
         controlValidador = new ControlValidador(moduloExterno);
         controlValidador.inicializarModuloExterno(false,1000);  /* Inicializar en modo sincrono, a 1000 Hz. */

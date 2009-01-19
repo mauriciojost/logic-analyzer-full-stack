@@ -15,11 +15,11 @@ public class ModuloExterno extends Observable{
     private boolean modo=false;                         /* Modo de muestreo solicitado: False -> Sincrono.  */
     private long freqHz;                                /* Frecuencia (en Hz) solicitada.                   */
     private char[] muestras;                            /* Conjunto de muestras obtenidas.                  */
-    private Comunicador comunicador;
+    private Comunicable comunicador;
     private Parseador parseador;
     
     /* Constructor. */
-    public ModuloExterno(Comunicador comunicador){
+    public ModuloExterno(Comunicable comunicador){
         this.comunicador = comunicador;
         ModuloExterno.moduloExterno = this;
         this.parseador = new Parseador();
