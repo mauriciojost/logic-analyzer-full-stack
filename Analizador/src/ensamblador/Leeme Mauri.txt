@@ -1,6 +1,0 @@
-Para hacer funcionar esto, es necesario tener instalado Microsoft Visual Studio.
-También debe estar en el PATH de Windows el directorio:
-
-C:\Archivos de programa\Microsoft Visual Studio\VC98\Bin
-
-O el que corresponda para llegar al archivo cl.exe.
