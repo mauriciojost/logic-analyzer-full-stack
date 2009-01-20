@@ -5,7 +5,7 @@ echo "Ruta de JDK encontrada:"
 echo $JDK_ACTUAL
 cd ../analizador/
 echo "Compilando Comunicador.java..."
-javac Comunicador.java
+javac Comunicable.java Comunicador.java
 cd ..
 echo "Generando el .h..."
 javah -jni analizador.Comunicador

@@ -6,7 +6,7 @@ echo Esta puede ser por ejemplo:
 echo    C:\Archivos de programa\Java\jdk1.6.0_01
 echo 
 echo Compilando el .java...
-javac Comunicador.java
+javac Comunicable.java Comunicador.java
 cd ..
 echo Generando el .h...
 javah -jni analizador.Comunicador

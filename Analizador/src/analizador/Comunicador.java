@@ -21,7 +21,7 @@ public class Comunicador implements Comunicable{
     
     /* Carga de la libreria: JNI. */
     static {
-        System.out.println("Buscando librerias en:" + System.getProperty("java.library.path"));
+        System.out.println("Comunicador. Buscando librerias en:" + System.getProperty("java.library.path"));
         try{
             System.load("/usr/lib/comunicado.so");
             System.out.println("Librería de Linux cargada correctamente.");
@@ -46,6 +46,7 @@ public class Comunicador implements Comunicable{
         int fd = this.iniciar();
         if (fd==-1){
             System.out.println("No se ha podido abrir el puerto serie.");
+            JOptionPane.showMessageDialog(null, "No se ha podido abrir el puerto serie.", "Error", JOptionPane.ERROR_MESSAGE);
             conectado=false;
         }else{
             conectado=true;

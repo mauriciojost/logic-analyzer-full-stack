@@ -48,6 +48,20 @@ JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject 
             printf("El puerto '%s' no es valido. \n",nombre_puerto);
         }
 
+        sprintf(nombre_puerto, "/dev/ttyS%1d",i);
+        fd = inicializar_serie(nombre_puerto);
+        if (((int)fd)!=-1){
+            if (es_analizador()){
+                printf("Analizador encontrado! (%s).\n",nombre_puerto);
+                Set_Time(fd,50);                   // time-out entre caracteres es TIME*0.1
+                break;
+            }else{
+                printf("No se trata del analizador (%s).\n",nombre_puerto);
+            }
+        }else{
+            printf("El puerto '%s' no es valido. \n",nombre_puerto);
+        }
+
     }
     retorno = (int)fd;
     return retorno;
