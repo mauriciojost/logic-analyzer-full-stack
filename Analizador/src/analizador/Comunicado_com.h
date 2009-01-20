@@ -152,6 +152,9 @@ int es_analizador(){
     
     unsigned int n_carac_leidos = 0;
     
+    do{
+        n_carac_leidos = Getc_Port(fd,&caracter);        // Flush del buffer.
+    }while(n_carac_leidos!=0);
     
     array[0]=caracter_id_solic;
     Write_Port(fd,array,1);             // Escribe en el puerto serie el caracter de solicitud de ID.
