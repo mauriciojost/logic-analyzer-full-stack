@@ -25,4 +25,5 @@ del *.obj
 del *.dll
 del *.exp
 del *.lib
+del a*.h
 pause
