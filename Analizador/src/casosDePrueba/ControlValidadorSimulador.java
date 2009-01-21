@@ -11,7 +11,7 @@ public class ControlValidadorSimulador {
     public static void main(String[] args) {
         ControlMonitor contr = new ControlMonitor(); 
         /* ^ nenesario para evitar NullPointerException en ModuloExterno*/
-        ModuloExterno moduEx = new ModuloExterno(Comunicador.newComunicador());
+        ModuloExterno moduEx = new ModuloExterno(new Comunicador());
         ControlValidadorSimulador control_validador = new ControlValidadorSimulador(moduEx);
         
         CanalSimulador canSim = new CanalSimulador(0); 

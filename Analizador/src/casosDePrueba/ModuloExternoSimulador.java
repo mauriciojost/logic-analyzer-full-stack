@@ -15,7 +15,7 @@ public class ModuloExternoSimulador {
     private Comunicable comunicador;
     
     public static void main(String[] args) {
-        new ModuloExternoSimulador(Comunicador.newComunicador());
+        new ModuloExternoSimulador(new Comunicador());
      }
     
     /* Constructor. */

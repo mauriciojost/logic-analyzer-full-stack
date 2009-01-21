@@ -41,7 +41,7 @@ public class Comunicador implements Comunicable{
     }
     
     /* Metodo constructor. */
-    private Comunicador(){
+    public Comunicador(){
         crearJFileChooser();
         int fd = this.iniciar();
         if (fd==-1){
@@ -51,11 +51,6 @@ public class Comunicador implements Comunicable{
         }else{
             conectado=true;
         }
-    }
-    
-    /* Metodo constructor. */
-    public static Comunicable newComunicador(){
-        return new Comunicador();
     }
     
     /* Envia comando hacia el HW externo. */
