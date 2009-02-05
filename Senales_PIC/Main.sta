@@ -1,47 +1,53 @@
 
-ROM used: 122 (1%)
-          122 (1%) including unused fragments
+ROM used: 340 (4%)
+          340 (4%) including unused fragments
 
           0 Average locations per line
-          3 Average locations per statement
+          1 Average locations per statement
 
-RAM used: 15 (4%) at main() level
-          17 (5%) worst case
+RAM used: 24 (7%) at main() level
+          26 (7%) worst case
 
-Stack used: 2 worst case (out of 6 total available)
+Stack used: 3 worst case (out of 6 total available)
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-   88    43 100  E:\Analizador\trunk\Senales_PIC\Main.c
+  130    78  13  E:\Analizador\trunk\Senales_PIC\Main.c
   309     0   0  C:\ARCHIV~1\PICC\devices\16f877a.h
+  893   380  65  C:\ARCHIV~1\PICC\drivers\stdlib.h
+   28     0   0  C:\ARCHIV~1\PICC\drivers\stddef.h
+  417   126  22  C:\ARCHIV~1\PICC\drivers\string.h
+   28     0   0  C:\ARCHIV~1\PICC\drivers\ctype.h
 ----- -----
-  397    43 Total
+ 1805   584 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
- Inline        2    63  2.1  hacer_decr1
-0     10   8   2    63  2.1  hacer_cuenta1
-0     30  25   0   243  3.5  interrupcion_int
-0      9   7   0             @goto10094
-0     22  18   0    67  1.6  MAIN
+0      9   3   1    94  2.8  hacer_parpadeo
+0     32   9   2   336  5.3  hacer_shift
+0     10   3   2    63  2.1  hacer_decr1
+0     10   3   2    63  2.1  hacer_cuenta1
+0     59  17   0   388  4.2  interrupcion_int
+0      9   3   0             @goto11360
+0    160  47   2   564  5.6  MAIN
 
 Program metrics:
-    Functions               4
-    Statements              43
-    Comments                76
-    Volume (V)              630
-    Difficilty (D)          9.3
-    Effort to implement (E) 5859
-    Time to implement (T)   5 minutes
+    Functions               6
+    Statements              584
+    Comments                837
+    Volume (V)              2199
+    Difficilty (D)          22.7
+    Effort to implement (E) 49964
+    Time to implement (T)   46 minutes
     Est Delivered Bugs (B)  0
-    Cyclomatic Complexity   7
-    Maintainability (MI)    128
+    Cyclomatic Complexity   21
+    Maintainability (MI)    39
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00003     4  0  
 00004-00032    47  0  
-00033-007FF    71  1926  
+00033-007FF   289  1708  
 00800-00FFF     0  2048  
 01000-017FF     0  2048  
 01800-01FFF     0  2048  

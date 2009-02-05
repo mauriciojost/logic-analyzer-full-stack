@@ -1,11 +1,11 @@
-004-005 @READ_PROGRAM_MEMORY8.P1
-004     @WRITE_PROGRAM_MEMORY8.P2
+004     @WRITE_PROGRAM_MEMORY8.P1
+004-005 @READ_PROGRAM_MEMORY8.P2
 008     PSP_DATA
-015-016 CCP_1
 015     CCP_1_LOW
+015-016 CCP_1
 016     CCP_1_HIGH
-01B     CCP_2_LOW
 01B-01C CCP_2
+01B     CCP_2_LOW
 01C     CCP_2_HIGH
 020     @INTERRUPT_AREA
 021     @INTERRUPT_AREA
@@ -15,11 +15,19 @@
 025     @INTERRUPT_AREA
 026     @INTERRUPT_AREA
 027     @INTERRUPT_AREA
-028     i
-029     hacer_decr1.i
-029     hacer_cuenta1.i
-02A     hacer_decr1.@SCRATCH
-02A     hacer_cuenta1.@SCRATCH
+028     @INTERRUPT_AREA
+029-02A strtok.save
+02B-02E _Randseed
+02F     actividad
+030     MAIN.@SCRATCH
+031     MAIN.@SCRATCH
+032     hacer_parpadeo.i
+032     hacer_decr1.i
+032     hacer_shift.i
+032     hacer_cuenta1.i
+033     hacer_shift.j
+033     hacer_decr1.@SCRATCH
+033     hacer_cuenta1.@SCRATCH
 077     @SCRATCH
 078     @SCRATCH
 078     _RETURN_
@@ -30,8 +38,8 @@
 09C.6   C1OUT
 09C.7   C2OUT
 0FF     @INTERRUPT_AREA
-10D-10E @READ_PROGRAM_MEMORY8.P1
-10D-10E @WRITE_PROGRAM_MEMORY8.P2
+10D-10E @WRITE_PROGRAM_MEMORY8.P1
+10D-10E @READ_PROGRAM_MEMORY8.P2
 17F     @INTERRUPT_AREA
 1FF     @INTERRUPT_AREA
 27F     @INTERRUPT_AREA
@@ -39,16 +47,24 @@
 37F     @INTERRUPT_AREA
 3FF     @INTERRUPT_AREA
 
-0047  hacer_decr1
+0047  hacer_parpadeo
+0050  hacer_shift
+003D  hacer_decr1
 0033  hacer_cuenta1
-003D  interrupcion_int
-005B  @goto10094
-0064  MAIN
-0064  @cinit
+0070  interrupcion_int
+00AB  @goto11360
+00B4  MAIN
+00B4  @cinit
+0136  StrtoulGO
+0136  StrtolGO
 
 Project Files:
     E:\Analizador\trunk\Senales_PIC\Main.c
     C:\ARCHIV~1\PICC\devices\16f877a.h
+    C:\ARCHIV~1\PICC\drivers\stdlib.h
+    C:\ARCHIV~1\PICC\drivers\stddef.h
+    C:\ARCHIV~1\PICC\drivers\string.h
+    C:\ARCHIV~1\PICC\drivers\ctype.h
 
 Units:
     Main.c (main)

@@ -1,10 +1,19 @@
 ÀÄMain
-   ÃÄMAIN  0/22  Ram=0
-   ³  ÀÄ??0??
-   ÀÄinterrupcion_int  0/30  Ram=0
-      ÃÄ@goto10094  0/9  Ram=0
+   ÃÄMAIN  0/160  Ram=2
+   ³  ÃÄ??0??
+   ³  ÃÄhacer_cuenta1  0/10  Ram=2
+   ³  ÃÄhacer_decr1  0/10  Ram=2
+   ³  ÃÄhacer_parpadeo  0/9  Ram=1
+   ³  ÃÄhacer_shift  0/32  Ram=2
+   ³  ÃÄhacer_cuenta1  0/10  Ram=2
+   ³  ÃÄhacer_cuenta1  0/10  Ram=2
+   ³  ÃÄhacer_cuenta1  0/10  Ram=2
+   ³  ÃÄhacer_cuenta1  0/10  Ram=2
+   ³  ÀÄhacer_cuenta1  0/10  Ram=2
+   ÀÄinterrupcion_int  0/59  Ram=0
+      ÃÄ@goto11360  0/9  Ram=0
       ÃÄhacer_cuenta1  0/10  Ram=2
-      ÃÄhacer_decr1  (Inline)  Ram=2
-      ÃÄhacer_cuenta1  0/10  Ram=2
-      ÃÄhacer_cuenta1  0/10  Ram=2
+      ÃÄhacer_decr1  0/10  Ram=2
+      ÃÄhacer_parpadeo  0/9  Ram=1
+      ÃÄhacer_shift  0/32  Ram=2
       ÀÄhacer_cuenta1  0/10  Ram=2
