@@ -1,0 +1,50 @@
+
+ROM used: 122 (1%)
+          122 (1%) including unused fragments
+
+          0 Average locations per line
+          3 Average locations per statement
+
+RAM used: 15 (4%) at main() level
+          17 (5%) worst case
+
+Stack used: 2 worst case (out of 6 total available)
+
+Lines Stmts  %   Files
+----- ----- ---  -----
+   88    43 100  E:\Analizador\trunk\Senales_PIC\Main.c
+  309     0   0  C:\ARCHIV~1\PICC\devices\16f877a.h
+----- -----
+  397    43 Total
+
+Page ROM  %  RAM   Vol Diff  Functions:
+---- --- --- ---   --- ----  ----------
+ Inline        2    63  2.1  hacer_decr1
+0     10   8   2    63  2.1  hacer_cuenta1
+0     30  25   0   243  3.5  interrupcion_int
+0      9   7   0             @goto10094
+0     22  18   0    67  1.6  MAIN
+
+Program metrics:
+    Functions               4
+    Statements              43
+    Comments                76
+    Volume (V)              630
+    Difficilty (D)          9.3
+    Effort to implement (E) 5859
+    Time to implement (T)   5 minutes
+    Est Delivered Bugs (B)  0
+    Cyclomatic Complexity   7
+    Maintainability (MI)    128
+
+ Segment     Used  Free
+-----------  ----  ----
+00000-00003     4  0  
+00004-00032    47  0  
+00033-007FF    71  1926  
+00800-00FFF     0  2048  
+01000-017FF     0  2048  
+01800-01FFF     0  2048  
+
+
+

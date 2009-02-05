@@ -1,0 +1,10 @@
+ÀÄMain
+   ÃÄMAIN  0/22  Ram=0
+   ³  ÀÄ??0??
+   ÀÄinterrupcion_int  0/30  Ram=0
+      ÃÄ@goto10094  0/9  Ram=0
+      ÃÄhacer_cuenta1  0/10  Ram=2
+      ÃÄhacer_decr1  (Inline)  Ram=2
+      ÃÄhacer_cuenta1  0/10  Ram=2
+      ÃÄhacer_cuenta1  0/10  Ram=2
+      ÀÄhacer_cuenta1  0/10  Ram=2
