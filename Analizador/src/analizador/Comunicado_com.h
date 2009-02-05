@@ -9,6 +9,18 @@ DCB OldConf;
 HANDLE fd;
 
 #define LARGO_BUFFER 5000
+
+// 460800 BPS
+#define TIME_OUT_ID 5
+#define TIME_OUT_RUN 50
+#define BPS B460800
+
+// 9600 BPS
+//#define TIME_OUT_ID 500
+//#define TIME_OUT_RUN 5000
+//#define BPS B9600
+
+
 enum BUFF_ESTADO {LLENO=1, VACIO=0};
 
 char buffer[LARGO_BUFFER];
@@ -25,10 +37,10 @@ JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject 
         if (((int)fd)!=-1){
             if (es_analizador()){
                 printf("Analizador encontrado! (%s).\n",nombre_puerto);
-                Set_Time(fd,50);                   // time-out entre caracteres es TIME*0.1
+                Set_Time(fd,TIME_OUT_RUN);                   // time-out entre caracteres es TIME*0.1
                 break;
             }else{
-                printf("No se trata del analizador (%s).\n",nombre_puerto);
+                printf("No se trata del analizador (%s).\nVerifique que este no se encuentre en el modo consola.\n",nombre_puerto);
             }
         }else{
             printf("El puerto '%s' no es valido. \n",nombre_puerto);
@@ -39,7 +51,7 @@ JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject 
         if (((int)fd)!=-1){
             if (es_analizador()){
                 printf("Analizador encontrado! (%s).\n",nombre_puerto);
-                Set_Time(fd,50);                   // time-out entre caracteres es TIME*0.1
+                Set_Time(fd,TIME_OUT_RUN);                   // time-out entre caracteres es TIME*0.1
                 break;
             }else{
                 printf("No se trata del analizador (%s).\n",nombre_puerto);
@@ -53,7 +65,7 @@ JNIEXPORT jint JNICALL Java_analizador_Comunicador_iniciar(JNIEnv *env, jobject 
         if (((int)fd)!=-1){
             if (es_analizador()){
                 printf("Analizador encontrado! (%s).\n",nombre_puerto);
-                Set_Time(fd,50);                   // time-out entre caracteres es TIME*0.1
+                Set_Time(fd,TIME_OUT_RUN);                   // time-out entre caracteres es TIME*0.1
                 break;
             }else{
                 printf("No se trata del analizador (%s).\n",nombre_puerto);
@@ -109,8 +121,8 @@ HANDLE inicializar_serie(char* puerto){
     if ((int)fd != -1){
         OldConf=Get_Configure_Port(fd);   // Guarda la configuracion del puerto.
         //Configure_Port(fd,B115200,"8N1"); // Configura el puerto serie.
-        Configure_Port(fd,B460800,"8N1"); // Configura el puerto serie.
-        Set_Time(fd,5);                   // time-out entre caracteres es TIME*0.1
+        Configure_Port(fd,BPS,"8N1"); // Configura el puerto serie.
+        Set_Time(fd,TIME_OUT_ID);                   // time-out entre caracteres es TIME*0.1
     }
     return fd;
 }
@@ -149,13 +161,13 @@ int es_analizador(){
     char caracter;
     char caracter_id_solic='*';
     char caracter_id_resp='#';
-    
+
     unsigned int n_carac_leidos = 0;
-    
+
     do{
         n_carac_leidos = Getc_Port(fd,&caracter);        // Flush del buffer.
     }while(n_carac_leidos!=0);
-    
+
     array[0]=caracter_id_solic;
     Write_Port(fd,array,1);             // Escribe en el puerto serie el caracter de solicitud de ID.
     n_carac_leidos = Getc_Port(fd,&caracter);        // Recibe y compara.
