@@ -23,9 +23,10 @@ file_002=no
 file_003=no
 file_004=no
 file_005=no
-file_006=yes
+file_006=no
 file_007=yes
 file_008=yes
+file_009=yes
 [FILE_INFO]
 file_000=Main.c
 file_001=C:\ARCHIV~1\PICC\devices\16f877a.h
@@ -33,9 +34,10 @@ file_002=C:\ARCHIV~1\PICC\drivers\stdlib.h
 file_003=C:\ARCHIV~1\PICC\drivers\stddef.h
 file_004=C:\ARCHIV~1\PICC\drivers\string.h
 file_005=C:\ARCHIV~1\PICC\drivers\ctype.h
-file_006=Main.SYM
-file_007=Main.TRE
-file_008=Main.STA
+file_006=C:\ARCHIV~1\PICC\devices\16f84A.h
+file_007=Main.SYM
+file_008=Main.TRE
+file_009=Main.STA
 [SUITE_INFO]
 suite_guid={BA86BF99-4C07-4CE2-A9E7-C2A337910996}
 suite_state=
