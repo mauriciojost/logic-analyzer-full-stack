@@ -5,17 +5,18 @@
 
 DCB OldConf;
 
-HANDLE inicializar_serie(char* puerto){
+HANDLE initialize_serial(char* puerto){
     HANDLE fd;
-    fd=Open_Port(puerto);           // Abre el puerto serie.
-    OldConf=Get_Configure_Port(fd); // Guarda la configuracion del puerto.
-    Configure_Port(fd,B9600,"8N1"); // Configura el puerto serie.
+
+    fd=Open_Port(puerto);           // Open the serial port. 
+    OldConf=Get_Configure_Port(fd); // Save the previous configuration. 
+    Configure_Port(fd,B9600,"8N1"); // Use the current configuration. 
     return fd;
 }
 
-void finalizar_serie(HANDLE fd){
-  Set_Configure_Port(fd,OldConf); // Restituye la antigua configuracion.
-  Close_Port(fd);                 // Cierra el puerto serie.
+void finalize_serial(HANDLE fd){
+  Set_Configure_Port(fd,OldConf); // Restore previous configuration.
+  Close_Port(fd);                 // Close.
 }
 
 int main()
@@ -24,22 +25,21 @@ int main()
 
     char buff[5]="J";
 
-    fd = inicializar_serie("COM6");
-
+    fd = initialize_serial("COM6");
 
     while(TRUE){
-        if(Kbhit_Port(fd)!=0){      // Existe algo para leer del puerto serie?
-          Read_Port(fd,buff,1);			// En ese caso leerlo, y
-          printf("%c",buff[0]);     // mostrarlo en consola.
+        if(Kbhit_Port(fd)!=0){      // Is there something to read from serial port?
+          Read_Port(fd,buff,1);		// Then read it and show it.
+          printf("%c",buff[0]);
         }
-        if (kbhit()!=0){						// Se ha presionado una tecla?
-          char a = getch();					// En ese caso, tomarla y
-          buff[0] = a;							// enviarla por puerto serie.
-          Write_Port(fd,buff,1);    // Escribe en el puerto serie.
+        if (kbhit()!=0){			// Pressed key?
+          char a = getch();			// Catch it, and send it through the serial port.
+          buff[0] = a;							
+          Write_Port(fd,buff,1);    // Write the serial port. 
         }
     }
 
-    finalizar_serie(fd);
+    finalize_serial(fd);
 
     return 0;
 }
