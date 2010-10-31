@@ -1,4 +1,4 @@
-/** \file
+/** \file 
  *  \brief Archivo usado para SO Windows.
  *
  *  Este archivo contiene la definición de las funciones de 
@@ -13,76 +13,76 @@
 #ifndef __SERIE_WINDOWS__
 #define __SERIE_WINDOWS__
 
-    #include <stdio.h>
-    #include <string.h>
+    #include <stdio.h>   
+    #include <string.h>  
     #include <windows.h>
     #include "baudios.h"
-
+    
     #define MAX_SIZE_BUFFER 8192
 
-    #define NONE      0
+    #define NONE      0    
     #define RTSCTS    1
     #define HARD      1
     #define XONXOFF   2
     #define SOFT      2
-
+    
     BOOL ERROR_CONFIGURE_PORT=FALSE;
 
   /** \var HANDLE Open_Port(char COMx[])
    *  \brief Abre el puerto de comunicaciones
    *  \param COMx es el puerto a abrir  "COM1","COM2","COM3","COM4",...
    *  \return El manejador del puerto
-   *
+   *  
    */
     HANDLE Open_Port(char COMx[])
     {
          HANDLE fd;
-         fd = CreateFile( COMx,	          	   // pointer to name of the file
-	             GENERIC_READ | GENERIC_WRITE, // access (read-write) mode
-	             0,				   // share mode
-	             NULL,			   // pointer to security attributes
+         fd = CreateFile( COMx,	          	   // pointer to name of the file 
+	             GENERIC_READ | GENERIC_WRITE, // access (read-write) mode 
+	             0,				   // share mode 
+	             NULL,			   // pointer to security attributes 
 	             OPEN_EXISTING,		   // how to create
 	             0,				   // file attributes
 	             NULL);			   // handle to file with attributes
-                                                   // to copy
+                                                   // to copy 
 
-         if (fd == INVALID_HANDLE_VALUE)
+         if (fd == INVALID_HANDLE_VALUE) 
          {
-              printf("Error:No se puede abrir puerto: %s \n",COMx);
+              printf("Error:No se puede abrir puerto: %s \n",COMx); 
               return INVALID_HANDLE_VALUE;
-         }
+         } 
          return (fd);
     }
 
   /** \var DCB Get_Configure_Port(HANDLE fd)
-   *  \brief Devuelve la configuración Actual del Puerto serie
+   *  \brief Devuelve la configuración Actual del Puerto serie 
    *  \param fd Es el manejador del puerto
    *  \return Una estructuracon DCB con la configuración actual del puerto
-   *
-   */
+   *  
+   */    
     DCB Get_Configure_Port(HANDLE fd)
     {
          DCB PortDCB;
-         PortDCB.DCBlength = sizeof (DCB);
-
+         PortDCB.DCBlength = sizeof (DCB);     
+         
          if(!GetCommState (fd, &PortDCB))
          {
                printf("Error Pidiendo configuracion de Puerto\n");
-               ERROR_CONFIGURE_PORT=TRUE;
-               return PortDCB;
+               ERROR_CONFIGURE_PORT=TRUE; 
+               return PortDCB;        
          }
          ERROR_CONFIGURE_PORT=FALSE;
          return PortDCB;
     }
-
+    
   /** \var DCB Configure_Port(HANDLE fd,unsigned int BaudRate,char CharParity[])
-   *  \brief Configura el puerto serie
-   *  \param fd Es el manejador del puerto
+   *  \brief Configura el puerto serie 
+   *  \param fd Es el manejador del puerto 
    *  \param BaudRate Es la velocidad del puerto
-   *  \param CharParity indica el numero de bits de la transmisión "8N1","7E1","7O1","7S1"
+   *  \param CharParity indica el numero de bits de la transmisión "8N1","7E1","7O1","7S1" 
    *  \return Una estructura con Bcd con la configuración del puerto
-   *
-   */
+   *  
+   */      
     DCB Configure_Port(HANDLE fd,unsigned int BaudRate,char CharParity[])
     {
          DCB PortDCB;
@@ -185,7 +185,7 @@
    *  \param fd Es el manejador del puerto 
    *  \param PortDCB es la configuración del puerto
    *  \return TRUE si todo fue bien o FALSE si no 
-   *
+   *  
    */  
     int Set_Configure_Port(HANDLE fd,DCB PortDCB)
     {
@@ -207,37 +207,37 @@
    *  \param fd Es el manejador del puerto 
    *  \param Data Es el dato a mandar
    *  \param SizeData es el tamaño del dato
-   *  \return En caso de éxito, se devuelve el número de bytes escritos (cero
-   *          indica que no se ha escrito nada). En caso de error, se devuelve -1
-   *
-   */
+   *  \return En caso de éxito, se devuelve el número de bytes escritos (cero 
+   *          indica que no se ha escrito nada). En caso de error, se devuelve -1 
+   *  
+   */      
     long Write_Port(HANDLE fd,char Data[],int SizeData)
     {
-         unsigned long n;
+         long n;
 
          WriteFile(fd,                // Port handle
-                   Data,              // Pointer to the data to write
+                   Data,              // Pointer to the data to write 
                    SizeData,          // Number of bytes to write
                    &n,                // Pointer to the number of bytes written
                    NULL);             // Must be NULL for Windows CE
          return n;
     }
-
+    
   /** \var long Read_Port(HANDLE fd,char *Data,int SizeData)
    *  \brief Recibe datos en el puerto serie
-   *  \param fd Es el manejador del puerto
+   *  \param fd Es el manejador del puerto 
    *  \param Data Es el arreglo donde se almacenarán los datos recibidos
    *  \param SizeData es el tamaño del arreglo
-   *  \return En caso de éxito, se devuelve el número de bytes recibidos (cero
-   *          indica que no se ha recibido nada). En caso de error, se devuelve -1
-   *
-   */
+   *  \return En caso de éxito, se devuelve el número de bytes recibidos (cero 
+   *          indica que no se ha recibido nada). En caso de error, se devuelve -1 
+   *  
+   */      
     long Read_Port(HANDLE fd,char *Data,int SizeData)
     {
-         unsigned long n;
+         long n;
 
          ReadFile (fd,                // Port handle
-                   Data,              // Pointer to the data to write
+                   Data,              // Pointer to the data to write 
                    SizeData,          // Number of bytes to write
                    &n,                // Pointer to the number of bytes read
                    NULL);             // Must be NULL for Windows CE
@@ -258,8 +258,7 @@
    */
     long Gets_Port(HANDLE fd,char *Data,int SizeData)
     {
-         unsigned long n=0;
-				 long i=0;
+         long n=0,i=0;
 
          for(i=0;i<SizeData;i++)
          {
@@ -271,30 +270,30 @@
                 i=SizeData;
                }
          }
-
+         
          return n;
     }
 
   /** \var Getc_Port(HANDLE fd,char *Data)
    *  \brief Recibe un caracter en el puerto serie.
-   *  \param fd Es el manejador del puerto
+   *  \param fd Es el manejador del puerto 
    *  \param Data Es el dato(8-bit) a mandar
-   *  \return En caso de éxito, se devuelve el número de bytes recibidos (cero
-   *          indica que no se ha recibido nada). En caso de error, se devuelve -1
-   *
-   */
+   *  \return En caso de éxito, se devuelve el número de bytes recibidos (cero 
+   *          indica que no se ha recibido nada). En caso de error, se devuelve -1 
+   *      
+   */    
     long Getc_Port(HANDLE fd,char *Data)
     {
-         unsigned long n;
+         long n;
 
          ReadFile(fd,Data,1,&n,NULL);
-
+        
          return n;
     }
 
   /** \var int Kbhit_Port(HANDLE fd)
    *  \brief Indica el numero de caracteres disponible en el buffer de entrada.
-   *  \param fd Es el manejador del puerto.
+   *  \param fd Es el manejador del puerto. 
    *  \return El numero de caracteres en el buffer de recepción.
    *      
    */    
@@ -602,3 +601,7 @@
     #endif
 
 #endif
+
+/**
+ * @}
+ */
