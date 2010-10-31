@@ -4,7 +4,7 @@
 #include <conio.h>
 
 DCB OldConf;
-
+ 
 HANDLE initialize_serial(char* puerto){
     HANDLE fd;
 
