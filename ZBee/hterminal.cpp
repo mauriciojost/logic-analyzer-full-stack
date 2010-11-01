@@ -6,8 +6,13 @@
 #define __WINDOWS_COM__
 #include "com/serial.h"
 
+#define TRUE 1 
+#define FALSE 0
+
 DCB OldConf;
 HANDLE fd;
+
+int Read_Port_Blocking(HANDLE fd, char* buff);
 
 
 void 
@@ -26,13 +31,14 @@ force_exit(char* string)
     system("PAUSE");
     exit(-1);
 }
+
  
 HANDLE 
 initialize_serial(char* puerto)
 {
-    fd=Open_Port(puerto);           // Open the serial port. 
-    OldConf=Get_Configure_Port(fd); // Save the previous configuration. 
-    Configure_Port(fd,B9600,"8N1"); // Use the current configuration. 
+    fd = Open_Port(puerto);             // Open the serial port. 
+    OldConf = Get_Configure_Port(fd);   // Save the previous configuration. 
+    Configure_Port(fd,B9600,"8N1");     // Use the current configuration. 
     return fd;
 }
 
@@ -48,6 +54,7 @@ read_all(char* data)
     
 }
 
+
 void
 send_to(char* destination, char* data, int size)
 {
@@ -58,26 +65,47 @@ send_to(char* destination, char* data, int size)
         Write_Port(fd,buff,1);  // Write the serial port. 
     }
     */
-
     Write_Port(fd,data,size);  // Write the serial port. 
     
 }
 
-void Read_Port_Blocking(HANDLE fd, char* buff, int* size)
+
+int 
+check_OK_retrieved(HANDLE fd)
+{
+    char buff[1024];
+    int size;
+    int res = Read_Port_Blocking(fd, buff);
+    if (res > 1)
+    {
+        if (strncmp("OK", buff, 2)==0)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+int
+Read_Port_Blocking(HANDLE fd, char* buff)
 {    
     int size_to_read; 
+    int time_out=0;
     do
     {
+        time_out++;
         Sleep(100);
         size_to_read = Kbhit_Port(fd); /* How many bytes are available to read? */
     }
-    while(size_to_read == 0);
+    while(size_to_read == 0 && time_out < 30);
 
     Read_Port(fd, buff, size_to_read);
-    *size = size_to_read;
+    printf("Read port blocking time_out %d size_to_read\n", time_out, size_to_read);
+
+    return size_to_read;
+
 }
 
-void 
+
+int
 write_AT_command(char* command)
 {
     /* Clean the buffer. */
@@ -87,13 +115,26 @@ write_AT_command(char* command)
     res = Clean_Buffer(fd);
     if (res != TRUE) force_exit("Clean buffer");
 
-    long nr = Write_Port(fd,"+++",3);  /* Enter to command mode. */
-    if (nr<0) force_exit("Write_Port to enter to command mode");
+    Write_Port(fd,"+++",3);  /* Enter to command mode. */
     
-    Read_Port_Blocking(fd, buff, &size);
-    buff[size] = 0;
-    printf("Received command %s\n", buff);
-    system("PAUSE");
+    if (check_OK_retrieved(fd))
+    {
+        printf("Command mode.\n");            
+        Write_Port(fd,command,strlen(command)); /* Send command. */
+        Write_Port(fd,"\n",1);                  /* Write new line character. */        
+        if (check_OK_retrieved(fd))
+        {
+
+            return TRUE;       
+        }
+    }    
+    
+    
+    printf("ERROR: Cannot send %s command.\n", command);
+    return FALSE;
+    
+    
+    
 }
 
 void
@@ -105,7 +146,7 @@ initialize_zigbee_module()
     /* Initialize serial port. */
     fd = initialize_serial("COM7");
 
-    write_AT_command(NULL);
+    write_AT_command("ATDL0000");
     system("PAUSE");
 
     /* Initialization stuff. */
