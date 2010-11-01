@@ -121,14 +121,12 @@ write_AT_command(char* command)
     {
         printf("Command mode.\n");            
         Write_Port(fd,command,strlen(command)); /* Send command. */
-        Write_Port(fd,"\n",1);                  /* Write new line character. */        
         if (check_OK_retrieved(fd))
         {
-
+            printf("Command sent OK.\n");            
             return TRUE;       
         }
     }    
-    
     
     printf("ERROR: Cannot send %s command.\n", command);
     return FALSE;
@@ -146,7 +144,8 @@ initialize_zigbee_module()
     /* Initialize serial port. */
     fd = initialize_serial("COM7");
 
-    write_AT_command("ATDL0000");
+    write_AT_command("ATDL0000\r");
+
     system("PAUSE");
 
     /* Initialization stuff. */
