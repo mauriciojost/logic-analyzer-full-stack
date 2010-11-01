@@ -10,7 +10,7 @@
 #define FALSE 0
 
 DCB OldConf;
-HANDLE fd;
+
 
 int Read_Port_Blocking(HANDLE fd, char* buff);
 
@@ -24,7 +24,7 @@ finalize_serial(HANDLE fd)
 
 
 int 
-force_exit(char* string)
+force_exit(HANDLE fd, char* string)
 {
     printf("FORCE EXIT: %s\n", string); 
     finalize_serial(fd);
@@ -36,6 +36,7 @@ force_exit(char* string)
 HANDLE 
 initialize_serial(char* puerto)
 {
+    HANDLE fd; 
     fd = Open_Port(puerto);             // Open the serial port. 
     OldConf = Get_Configure_Port(fd);   // Save the previous configuration. 
     Configure_Port(fd,B9600,"8N1");     // Use the current configuration. 
@@ -44,7 +45,7 @@ initialize_serial(char* puerto)
 
 
 void
-read_all(char* data)
+read_all(HANDLE fd, char* data)
 {
     
     if(Kbhit_Port(fd)!=0){      // Is there something to read from serial port?
@@ -56,7 +57,7 @@ read_all(char* data)
 
 
 void
-send_to(char* destination, char* data, int size)
+send_to(HANDLE fd, char* destination, char* data, int size)
 {
     /*
     if (kbhit()!=0){			// Pressed key?
@@ -106,14 +107,15 @@ Read_Port_Blocking(HANDLE fd, char* buff)
 
 
 int
-write_AT_command(char* command)
+write_AT_command(HANDLE fd, char* command)
 {
     /* Clean the buffer. */
     int size;
     int res;
     char buff[1024];
     res = Clean_Buffer(fd);
-    if (res != TRUE) force_exit("Clean buffer");
+    if (res != TRUE) 
+        force_exit(fd, "Clean buffer");
 
     Write_Port(fd,"+++",3);  /* Enter to command mode. */
     
@@ -136,15 +138,15 @@ write_AT_command(char* command)
 }
 
 void
-initialize_zigbee_module()
+initialize_zigbee_module(HANDLE* fd)
 {
     int res; 
     char buff[1024];
 
     /* Initialize serial port. */
-    fd = initialize_serial("COM7");
+    *fd = initialize_serial("COM7");
 
-    write_AT_command("ATDL0000\r");
+    write_AT_command(*fd, "ATDL0000\r");
 
     system("PAUSE");
 
@@ -157,16 +159,16 @@ main()
 
     char buff[100];
 
-    initialize_zigbee_module();
+    HANDLE fd;
+    initialize_zigbee_module(&fd);
 
     if (fd!=(HANDLE)-1)
     {
         printf("Connected to ZigBee module.\n");
         while(TRUE){
-            
-            
-            send_to("1111", "1234", 4);
-            read_all(buff);
+              
+            send_to(fd, "1111", "1234", 4);
+            read_all(fd, buff);
             printf("Press f to finish...\n");
             char a = getch();       
             if (a=='f')
