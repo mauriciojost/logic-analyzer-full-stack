@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <conio.h>
 #include <string.h>
@@ -66,6 +65,7 @@ send_to(HANDLE fd, char* destination, char* data, int size)
         Write_Port(fd,buff,1);  // Write the serial port. 
     }
     */
+    
     Write_Port(fd,data,size);  // Write the serial port. 
     
 }
@@ -76,7 +76,10 @@ check_OK_retrieved(HANDLE fd)
 {
     char buff[1024];
     int size;
-    int res = Read_Port_Blocking(fd, buff);
+    int res;
+
+    printf("Waiting for OK response..."); 
+    res = Read_Port_Blocking(fd, buff);
     if (res > 1)
     {
         if (strncmp("OK", buff, 2)==0)
@@ -88,21 +91,20 @@ check_OK_retrieved(HANDLE fd)
 int
 Read_Port_Blocking(HANDLE fd, char* buff)
 {    
-    int size_to_read; 
+    int size_to_read = 0; 
     int time_out=0;
     do
     {
         time_out++;
-        Sleep(100);
+        Sleep(150);
         size_to_read = Kbhit_Port(fd); /* How many bytes are available to read? */
     }
-    while(size_to_read == 0 && time_out < 30);
+    while(size_to_read == 0 && time_out < 100);
 
     Read_Port(fd, buff, size_to_read);
-    printf("Read port blocking time_out %d size_to_read\n", time_out, size_to_read);
+    printf("Read port blocking time_out %d size_to_read %d\n", time_out, size_to_read);
 
     return size_to_read;
-
 }
 
 
@@ -113,23 +115,31 @@ write_AT_command(HANDLE fd, char* command)
     int size;
     int res;
     char buff[1024];
-    res = Clean_Buffer(fd);
-    if (res != TRUE) 
-        force_exit(fd, "Clean buffer");
+
+    //res = Clean_Buffer(fd);
+    //if (res != TRUE) 
+    //    force_exit(fd, "Clean buffer");
 
     Write_Port(fd,"+++",3);  /* Enter to command mode. */
     
     if (check_OK_retrieved(fd))
     {
-        printf("Command mode.\n");            
         Write_Port(fd,command,strlen(command)); /* Send command. */
+        Write_Port(fd,"\r",1);                  /* Enter command. */
         if (check_OK_retrieved(fd))
         {
-            printf("Command sent OK.\n");            
-            return TRUE;       
+
+            Write_Port(fd,"ATCN",4);          /* Exit command mode. */
+            Sleep(500);
+            Write_Port(fd,"\r" , 1);
+            if (check_OK_retrieved(fd))
+            {
+                printf("Command sent OK.\n");            
+                return TRUE;       
+            }
+            
         }
     }    
-    
     printf("ERROR: Cannot send %s command.\n", command);
     return FALSE;
     
@@ -138,18 +148,33 @@ write_AT_command(HANDLE fd, char* command)
 }
 
 void
-initialize_zigbee_module(HANDLE* fd)
+initialize_zigbee_module(HANDLE* fdr)
 {
     int res; 
     char buff[1024];
 
+    HANDLE fd;
     /* Initialize serial port. */
-    *fd = initialize_serial("COM7");
+    fd = initialize_serial("COM7");
 
-    write_AT_command(*fd, "ATDL0000\r");
+    
+    Sleep(1500);
+    write_AT_command(fd, "ATDLFFFF");
+    Sleep(1500);
+    write_AT_command(fd, "ATDH0000");
+    Sleep(1500);
+    write_AT_command(fd, "ATDH0000");
+    Sleep(1500);
+    write_AT_command(fd, "ATDH0000");
+    Sleep(1500);
+    write_AT_command(fd, "ATDH0000");
+    Sleep(1500);
+    write_AT_command(fd, "ATDH0000");
+
 
     system("PAUSE");
 
+    *fdr = fd;
     /* Initialization stuff. */
 }
 
