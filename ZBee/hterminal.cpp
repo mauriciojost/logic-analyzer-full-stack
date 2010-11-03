@@ -13,7 +13,6 @@ DCB OldConf;
 
 int Read_Port_Blocking(HANDLE fd, char* buff);
 
-
 void 
 finalize_serial(HANDLE fd)
 {
@@ -158,18 +157,31 @@ initialize_zigbee_module(HANDLE* fdr)
     fd = initialize_serial("COM7");
 
     
+    /*
+    CH CHANNEL          C
+    ID PHAN ID          0000
+    DL DEST. ADDRESS    XXXX
+    DH DEST. ADDRESS    0000
+    MY MY ADDRESS       XXXX
+
+    MM CONF.            2
+    */
+
     Sleep(1500);
-    write_AT_command(fd, "ATDLFFFF");
+    write_AT_command(fd, "ATID0000,ATDH0000,ATDLFFFF,ATMY0008"); 
     Sleep(1500);
-    write_AT_command(fd, "ATDH0000");
+
+    /*
+    write_AT_command(fd, "ATID0000"); 
     Sleep(1500);
-    write_AT_command(fd, "ATDH0000");
+    write_AT_command(fd, "ATDH0000"); 
     Sleep(1500);
-    write_AT_command(fd, "ATDH0000");
+    write_AT_command(fd, "ATDLFFFF"); 
     Sleep(1500);
-    write_AT_command(fd, "ATDH0000");
+    write_AT_command(fd, "ATMY0008"); 
     Sleep(1500);
-    write_AT_command(fd, "ATDH0000");
+
+    */
 
 
     system("PAUSE");
