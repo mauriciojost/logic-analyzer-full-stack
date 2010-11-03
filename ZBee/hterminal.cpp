@@ -8,6 +8,9 @@
 #define TRUE 1 
 #define FALSE 0
 
+#define SOURCE "0008"
+#define DESTINATION "0009"
+
 DCB OldConf;
 
 
@@ -181,21 +184,14 @@ initialize_zigbee_module(HANDLE* fdr)
     */
 
 
-    write_AT_command(fd, "ATID0000,ATDH0000,ATDLFFFF,ATMY0008,ATMM2"); 
-    //Sleep(1500);
-
-    /*
+    
     write_AT_command(fd, "ATID0000"); 
-    Sleep(1500);
     write_AT_command(fd, "ATDH0000"); 
-    Sleep(1500);
     write_AT_command(fd, "ATDLFFFF"); 
-    Sleep(1500);
-    write_AT_command(fd, "ATMY0008"); 
-    Sleep(1500);
+    write_AT_command(fd, "ATMY" SOURCE); 
+    write_AT_command(fd, "ATMM2");
 
-    */
-
+   
 
     system("PAUSE");
 
@@ -217,7 +213,7 @@ main()
         printf("Connected to ZigBee module.\n");
         while(TRUE){
               
-            send_to(fd, "0009", "12345678");
+            send_to(fd, DESTINATION, "12345678");
             printf("Press q to finish...\n");
             char a = getch();       
             if (a=='q')
