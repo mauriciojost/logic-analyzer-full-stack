@@ -11,7 +11,9 @@
 DCB OldConf;
 
 
+
 int Read_Port_Blocking(HANDLE fd, char* buff);
+int write_AT_command(HANDLE fd, char* command);
 
 void 
 finalize_serial(HANDLE fd)
@@ -57,17 +59,21 @@ read_all(HANDLE fd, char* data)
 
 
 void
-send_to(HANDLE fd, char* destination, char* data, int size)
+send_to(HANDLE fd, char* destination, char* data)
 {
-    /*
-    if (kbhit()!=0){			// Pressed key?
-        char a = getch();       // Catch it, and send it through the serial port.
-        buff[0] = a;							
-        Write_Port(fd,buff,1);  // Write the serial port. 
+    int size; 
+    char buff[16];
+    if (strlen(destination)<=4)
+    {
+        printf("Sending data to %s: %s\n", destination, data);
+        sprintf(buff, "ATDL%s", destination);
+        write_AT_command(fd, (char*)buff); 
+        Write_Port(fd,data,strlen(data));  // Write the serial port. 
     }
-    */
-    
-    Write_Port(fd,data,size);  // Write the serial port. 
+    else
+    {
+        printf("Error trying to interpret destination... More than 4 characters.\n");
+    }
     
 }
 
@@ -79,7 +85,7 @@ check_OK_retrieved(HANDLE fd)
     int size;
     int res;
 
-    printf("Waiting for OK response..."); 
+    //printf("Waiting for OK response..."); 
     res = Read_Port_Blocking(fd, buff);
     if (res > 1)
     {
@@ -103,7 +109,7 @@ Read_Port_Blocking(HANDLE fd, char* buff)
     while(size_to_read == 0 && time_out < 100);
 
     Read_Port(fd, buff, size_to_read);
-    printf("Read port blocking time_out %d size_to_read %d\n", time_out, size_to_read);
+    //printf("Read port blocking time_out %d size_to_read %d\n", time_out, size_to_read);
 
     return size_to_read;
 }
@@ -117,10 +123,14 @@ write_AT_command(HANDLE fd, char* command)
     int res;
     char buff[1024];
 
-    //res = Clean_Buffer(fd);
-    //if (res != TRUE) 
-    //    force_exit(fd, "Clean buffer");
 
+    Sleep(1500); /* No too many commands in a short period of time! */ 
+
+    res = Clean_Buffer(fd);
+    if (res != TRUE) 
+        force_exit(fd, "Clean buffer");
+
+    printf("AT Command: %s\n", command);
     Write_Port(fd,"+++",3);  /* Enter to command mode. */
     
     if (check_OK_retrieved(fd))
@@ -131,11 +141,12 @@ write_AT_command(HANDLE fd, char* command)
         {
 
             Write_Port(fd,"ATCN",4);          /* Exit command mode. */
-            Sleep(500);
+            //Sleep(500);
             Write_Port(fd,"\r" , 1);
             if (check_OK_retrieved(fd))
             {
                 printf("Command sent OK.\n");            
+
                 return TRUE;       
             }
             
@@ -169,9 +180,9 @@ initialize_zigbee_module(HANDLE* fdr)
     MM CONF.            2
     */
 
-    Sleep(1500);
-    write_AT_command(fd, "ATID0000,ATDH0000,ATDL0009,ATMY0008,ATMM2"); 
-    Sleep(1500);
+
+    write_AT_command(fd, "ATID0000,ATDH0000,ATDLFFFF,ATMY0008,ATMM2"); 
+    //Sleep(1500);
 
     /*
     write_AT_command(fd, "ATID0000"); 
@@ -206,14 +217,14 @@ main()
         printf("Connected to ZigBee module.\n");
         while(TRUE){
               
-            send_to(fd, "1111", "1234", 4);
-            read_all(fd, buff);
+            send_to(fd, "0009", "12345678");
             printf("Press q to finish...\n");
             char a = getch();       
             if (a=='q')
             {
                 break;
             }
+            read_all(fd, buff);
             
         }
     
