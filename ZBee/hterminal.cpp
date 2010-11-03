@@ -46,9 +46,11 @@ void
 read_all(HANDLE fd, char* data)
 {
     
-    if(Kbhit_Port(fd)!=0){      // Is there something to read from serial port?
-        Read_Port(fd,data,1);	// Then read it and show it.
-        printf("%c",data[0]);
+    int a;
+    if((a = Kbhit_Port(fd))!=0){      // Is there something to read from serial port?
+        Read_Port(fd,data,a);	      // Then read it and show it.
+        data[a] = 0;
+        printf("Data received: %s",data);
     }
     
 }
@@ -154,7 +156,7 @@ initialize_zigbee_module(HANDLE* fdr)
 
     HANDLE fd;
     /* Initialize serial port. */
-    fd = initialize_serial("COM7");
+    fd = initialize_serial("COM" 7 4 );
 
     
     /*
@@ -168,7 +170,7 @@ initialize_zigbee_module(HANDLE* fdr)
     */
 
     Sleep(1500);
-    write_AT_command(fd, "ATID0000,ATDH0000,ATDLFFFF,ATMY0008"); 
+    write_AT_command(fd, "ATID0000,ATDH0000,ATDLFFFF,ATMY0008,ATMM2"); 
     Sleep(1500);
 
     /*
@@ -206,9 +208,9 @@ main()
               
             send_to(fd, "1111", "1234", 4);
             read_all(fd, buff);
-            printf("Press f to finish...\n");
+            printf("Press q to finish...\n");
             char a = getch();       
-            if (a=='f')
+            if (a=='q')
             {
                 break;
             }
