@@ -50,7 +50,7 @@ read_all(HANDLE fd, char* data)
     if((a = Kbhit_Port(fd))!=0){      // Is there something to read from serial port?
         Read_Port(fd,data,a);	      // Then read it and show it.
         data[a] = 0;
-        printf("Data received: %s",data);
+        printf("Data received: %s\n",data);
     }
     
 }
@@ -156,7 +156,7 @@ initialize_zigbee_module(HANDLE* fdr)
 
     HANDLE fd;
     /* Initialize serial port. */
-    fd = initialize_serial("COM" 7 4 );
+    fd = initialize_serial("COM7");
 
     
     /*
@@ -170,7 +170,7 @@ initialize_zigbee_module(HANDLE* fdr)
     */
 
     Sleep(1500);
-    write_AT_command(fd, "ATID0000,ATDH0000,ATDLFFFF,ATMY0008,ATMM2"); 
+    write_AT_command(fd, "ATID0000,ATDH0000,ATDL0009,ATMY0008,ATMM2"); 
     Sleep(1500);
 
     /*
@@ -196,7 +196,7 @@ int
 main()
 {
 
-    char buff[100];
+    char buff[1024*8];
 
     HANDLE fd;
     initialize_zigbee_module(&fd);
