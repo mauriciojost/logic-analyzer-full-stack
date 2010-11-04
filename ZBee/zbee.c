@@ -1,6 +1,6 @@
 #define __WINDOWS_COM__
-
 #include "com/serial.h"
+
 #include "zbee.h"
 
 void 
@@ -134,9 +134,6 @@ write_AT_command(HANDLE fd, char* command)
     }    
     printf("ERROR: Cannot send %s command.\n", command);
     return FALSE;
-    
-    
-    
 }
 
 void
@@ -148,6 +145,8 @@ initialize_zigbee_module(HANDLE* fdr, char* serial_port, address source)
     HANDLE fd;
     /* Initialize serial port. */
     fd = initialize_serial(serial_port);
+
+    printf("Initializing ZigBee module...\n");
 
     write_AT_command(fd, "ATCH0x0C");           /* CHANNEL ID */
     write_AT_command(fd, "ATID0000");           /* PAN ID */

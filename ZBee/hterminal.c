@@ -5,7 +5,14 @@
 
 #define SOURCE "0008"
 #define DESTINATION "0009"
-#define SERIAL_PORT "COM7"
+#define SERIAL_PORT "COM1"
+
+
+void
+print_instructions()
+{
+    printf("Instructions: \n  q (quit)\n  p (proceed)\n");
+}
 
 int 
 main()
@@ -13,12 +20,8 @@ main()
 
     char buff[1024*8];
 
-    HANDLE fd;
-    address source;
-    init_address(source, SOURCE);
-    //initialize_zigbee_module(&fd, SERIAL_PORT, source);
 
-
+    /*
     routing_table_item table[ROUTING_TABLE_MAX_ITEMS];
     routing_table_item item;
     item.destination[0] = '7';
@@ -59,17 +62,8 @@ main()
     put_item_at_routing_table(table, item);
     print_routing_table(table);
     system("pause");
-
-
+    */
     
-    exit(1);
-    initialize_routing_table(table);
-    print_routing_table(table);
-    system("pause");
-
-    initialize_routing_table(table);
-    print_routing_table(table);
-    system("pause");
    
 
 
@@ -101,21 +95,62 @@ main()
         
     */    
 
-    /*
+    HANDLE fd;
+    char data[] = "*packet_content*                          ";
+    
+    address source;
+    printf("Write local address (4 characters 0-F): ");
+    gets(buff);
+    init_address(source, buff);
+    initialize_zigbee_module(&fd, SERIAL_PORT, source);
+
+    
+
     if (fd!=(HANDLE)-1)
     {
         printf("Connected to ZigBee module.\n");
-        while(TRUE){
-              
-            send_to(fd, DESTINATION, "12345678");
-            printf("Press q to finish...\n");
-            char a = getch();       
-            if (a=='q')
+
+        int exit = FALSE;
+
+        while(exit==FALSE){
+            print_instructions();
+            char a = getch();           
+            fflush(stdin);  
+
+            switch(a)
             {
-                break;
-            }
-            read_all(fd, buff);
+                case 'r': // Read. 
+                    read_all(fd, buff);
+                    break;
+
+                case 'c': // Change data/destination.
+                    {
+                    printf("Please, write the new address (4 characters, 0-F): ");
+                    gets(buff);
+                    init_address(source, buff);
+                    printf("Please, write the new data (less than 20 characters): ");
+                    gets(data);
+                    
+                    }
+                    break;
             
+                case 's': // Send.
+                    send_to(fd, DESTINATION, data);
+                    break;
+
+            
+                case 'p': // Proceed.
+                    read_all(fd, buff);
+                    send_to(fd, DESTINATION, "12345678");
+                    break;
+
+                case 'q': // Quit. 
+                    exit = TRUE;
+                    break;
+                default: 
+                    printf("Non valid option.\n");
+            }
+
         }
     
         finalize_serial(fd);
@@ -124,6 +159,6 @@ main()
     {
         printf("ERROR: Cannot connect to ZigBee module.\n");
     }
-    */
+    
     return 0;
 }

@@ -50,7 +50,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit4]
-FileName=hterminal.cpp
+FileName=hterminal.c
 CompileCpp=0
 Folder=ejemplo
 Compile=1
@@ -60,7 +60,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit5]
-FileName=misc.cpp
+FileName=misc.c
 CompileCpp=0
 Folder=ejemplo
 Compile=1

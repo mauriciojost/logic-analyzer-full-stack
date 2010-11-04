@@ -37,7 +37,8 @@ init_address(address a, char* str)
 {
     if (strlen(str)==4)
     {
-        for (int i=0; i<4; i++)
+        int i;
+        for (i=0; i<4; i++)
             a[i] = str[i];
     }
     else
