@@ -4,6 +4,8 @@
 #define TRUE 1 
 #define FALSE 0
 
+#define MESSAGE_ID_RREQ 1
+
 #define ROUTING_TABLE_MAX_ITEMS 8
 
 typedef char address [4];
@@ -17,10 +19,12 @@ typedef struct{
 } routing_table_item;
 
 typedef struct{
+	char message_id; /* Must be MESSAGE_ID_RREQ. */
+	address source;
     address destination; 
-    address source;
     int lifespan;
     int id;
+	char tail; /* Must be 0 (it's useful to print the whole message at once). */
 } RREQ;
 
 typedef struct{
@@ -37,6 +41,6 @@ void remove_item_routing_table(routing_table_item table[], address destination);
 void print_routing_table_item(routing_table_item item);
 void print_routing_table(routing_table_item table[]);
 void init_address(address a, char* str);
-
+void print_address(address ad);
 
 #endif /* MISC_H */

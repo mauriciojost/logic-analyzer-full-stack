@@ -44,7 +44,7 @@ initialize_serial(char* puerto)
 }
 
 
-void
+int
 read_all(HANDLE fd, char* data)
 {
     
@@ -54,20 +54,26 @@ read_all(HANDLE fd, char* data)
         data[a] = 0;
         printf("Data received: %s\n",data);
     }
+	return a;
     
 }
 
-
 void
-send_to(HANDLE fd, address dest, char* data)
+send_data_to(HANDLE fd, address dest, char* data, int size)
 {
-    int size; 
     char buff[16];
 
     printf("Sending data to %c%c%c%c: %s\n", dest[0], dest[1], dest[2], dest[3], data);
     sprintf(buff, "ATDL%c%c%c%c", dest[0], dest[1], dest[2], dest[3]);
     write_AT_command(fd, (char*)buff); 
-    Write_Port(fd,data,strlen(data));  // Write the serial port.    
+    Write_Port(fd,data,size);  // Write the serial port.    
+}
+
+
+void
+send_string_to(HANDLE fd, address dest, char* data)
+{
+    send_data_to(fd, dest, data, strlen(data));
 }
 
 int 

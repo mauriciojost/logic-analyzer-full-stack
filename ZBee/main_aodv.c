@@ -9,9 +9,47 @@
 
 
 void
-print_instructions()
+print_RREQ(void* m)
 {
-    printf("\n\n*************\nInstructions: \n  q (quit)\n  p (proceed) r (read) c (change) s (send) h (show r. table)\n");
+
+	RREQ* msg;
+	
+	msg = (RREQ*)m;
+	if (msg->message_id == MESSAGE_ID_RREQ)
+	{
+		printf(" RREQ(%d) source=", (int)msg->message_id);
+		print_address(msg->source);
+		printf(" destination=");
+		print_address(msg->destination);
+		printf(" lifespan=%03d id=%02d\n", msg->lifespan, msg->id);
+	}
+	else
+	{
+		printf("ERROR: RREQ expected.\n");
+	}
+}
+
+
+void
+send_RREQ(HANDLE fd, address source, address destination, address next_hop, int lifespan, int id)
+{
+	RREQ rreq;
+	address broadcast;
+	
+	init_address(broadcast, "FFFF");
+	
+	rreq.message_id = MESSAGE_ID_RREQ;
+	copy_addresses(rreq.source, source);
+	copy_addresses(rreq.destination, destination);
+	rreq.lifespan = lifespan;
+	rreq.id = id;
+	rreq.tail = 0;
+	
+	printf("Sending RREQ broadcast: ");
+	print_RREQ(&rreq);
+	printf("\n");
+	
+	send_data_to(fd, broadcast, (void*)&rreq, sizeof(RREQ));
 }
 
 int 
@@ -64,7 +102,7 @@ main()
     
     address source;
     address destination;
-    printf("Write local address (4 characters 0-F): ");
+    printf("Write local address (4 characters 0000-FFFF): ");
     gets(buff);
     init_address(source, buff);
     init_address(destination, DESTINATION);
@@ -81,25 +119,44 @@ main()
 
         while(exit==FALSE){
             int index;
-            print_instructions();
+            printf("\n\n*************\nInstructions: "
+			" q (quit) p (proceed) r (read) c (change) s (send) h (show r. table)\n");
+			
             char a = getch();           
             fflush(stdin);  
 
             switch(a)
             {
-                case 'h':
+                case 'h': // Show routing table.
                     print_routing_table(table);
                     break; 
+
                 case 'r': // Read. 
-                    read_all(fd, buff);
+                    {
+                    int size = read_all(fd, buff);
+					if (size>0)
+					{
+						switch(buff[0])
+						{
+							case MESSAGE_ID_RREQ:
+								print_RREQ((char*)buff);
+								break;
+							default:
+								printf("Message not valid.\n");
+							
+						}
+					
+					}
+                    }
                     break;
+
                 case 'c': // Change data/destination.
                     {
-                    printf("Please, write the new local address (4 characters, 0-F): ");
+                    printf("Please, write the new local address (4 characters, 0000-FFFF): ");
                     gets(buff);
                     init_address(source, buff);
                     change_local_address(fd, source);
-                    printf("Please, write the new destination address (4 characters, 0-F): ");
+                    printf("Please, write the new destination address (4 characters, 0000-FFFF): ");
                     gets(buff);
                     init_address(destination, buff);
                     printf("Please, write the new data (less than 20 characters): ");
@@ -114,12 +171,13 @@ main()
                         /* Send Message (using the next hop). */
                         printf("Destination is in the table.\n");
                         /* send_to_through(fd, destination, next_hop, ttl). */
-                        send_to(fd, destination, data);
+                        send_string_to(fd, destination, data);
                     }
                     else
                     {
-                        /* Send RREQ. */
+                        
                         printf("Destination is NOT in the table.\n");
+						send_RREQ(fd, source, destination, destination, 0, 0); /* Send RREQ. */
                         /*
 						While(){
 							Send RREQ.
@@ -127,7 +185,7 @@ main()
 							
 						}
                         */
-                        send_to(fd, destination, data);
+                        //send_string_to(fd, destination, data);
                     }
                     break;
 
@@ -138,8 +196,8 @@ main()
 					Si es mensaje con destino a mi, mostrar.
 					Si es 
 					*/
-                    read_all(fd, buff);
-                    send_to(fd, destination, "12345678");
+                    //read_all(fd, buff);
+                    //send_to(fd, destination, "12345678");
                     break;
 
                 case 'q': // Quit. 

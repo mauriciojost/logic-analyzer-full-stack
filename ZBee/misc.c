@@ -109,13 +109,7 @@ remove_item_routing_table(routing_table_item table[], address destination)
 void
 print_routing_table_item(routing_table_item item)
 {
-
-    printf("  dest=[%c%c%c%c] empty=[%d]\n" , 
-                                    item.destination[0], 
-                                    item.destination[1], 
-                                    item.destination[2], 
-                                    item.destination[3], 
-                                    item.empty);
+    printf("  dest=["); print_address(item.destination); printf("] empty=[%d]\n", item.empty);
 }
 
 void
@@ -130,3 +124,8 @@ print_routing_table(routing_table_item table[])
     printf("End table...\n");    
 }
 
+void 
+print_address(address ad)
+{
+	printf("%c%c%c%c", ad[0], ad[1], ad[2], ad[3]);
+}
