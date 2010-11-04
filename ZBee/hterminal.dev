@@ -60,7 +60,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit5]
-FileName=misc.c
+FileName=misc.cpp
 CompileCpp=0
 Folder=ejemplo
 Compile=1
