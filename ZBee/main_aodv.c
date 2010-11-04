@@ -5,7 +5,6 @@
 
 #define SOURCE "0008"
 #define DESTINATION "0009"
-#define SERIAL_PORT "COM7"
 
 
 void
@@ -17,17 +16,39 @@ print_RREQ(void* m)
 	msg = (RREQ*)m;
 	if (msg->message_id == MESSAGE_ID_RREQ)
 	{
-		printf(" RREQ(%d) source=", (int)msg->message_id);
+		printf(" RREQ(%d): \n\tsource=", (int)msg->message_id);
 		print_address(msg->source);
-		printf(" destination=");
+		printf("\n\tdestination=");
 		print_address(msg->destination);
-		printf(" lifespan=%03d id=%02d\n", msg->lifespan, msg->id);
+		printf("\n\tlifespan=%03d\n\tid=%02d\n\n", msg->lifespan, msg->id);
 	}
 	else
 	{
 		printf("ERROR: RREQ expected.\n");
 	}
 }
+
+void
+print_RREP(void* m)
+{
+
+	RREP* msg;
+	
+	msg = (RREP*)m;
+	if (msg->message_id == MESSAGE_ID_RREP)
+	{
+		printf(" RREP(%d): \n\tsource=", (int)msg->message_id);
+		print_address(msg->source);
+		printf("\n\tdestination=");
+		print_address(msg->destination);
+		printf("\n\tlifespan=%03d\n\tid=%02d\n\n", msg->lifespan, msg->id);
+	}
+	else
+	{
+		printf("ERROR: RREP expected.\n");
+	}
+}
+
 
 
 void
@@ -50,6 +71,52 @@ send_RREQ(HANDLE fd, address source, address destination, address next_hop, int 
 	printf("\n");
 	
 	send_data_to(fd, broadcast, (void*)&rreq, sizeof(RREQ));
+}
+
+
+
+void
+send_RREP(HANDLE fd, address source, address destination, address next_hop, int lifespan, int id)
+{
+	RREP rrep;
+	address broadcast;
+	
+	init_address(broadcast, "FFFF");
+	
+	rrep.message_id = MESSAGE_ID_RREP;
+	copy_addresses(rrep.source, source);
+	copy_addresses(rrep.destination, destination);
+	rrep.lifespan = lifespan;
+	rrep.id = id;
+	rrep.tail = 0;
+	
+	printf("Sending RREQ broadcast: ");
+	print_RREP(&rrep);
+	printf("\n");
+	
+	send_data_to(fd, broadcast, (void*)&rrep, sizeof(RREP));
+}
+
+
+void
+read_one_message(HANDLE fd, char* buff)
+{
+    int size = read_all(fd, buff);
+    if (size>0)
+    {
+        switch(buff[0])
+        {
+            case MESSAGE_ID_RREP:
+		        print_RREP((char*)buff);
+		        break;
+            case MESSAGE_ID_RREQ:
+		        print_RREQ((char*)buff);
+		        break;
+            default:
+		        printf("Message not valid.\n");
+	
+        }
+     }
 }
 
 int 
@@ -132,21 +199,19 @@ main()
                     break; 
 
                 case 'r': // Read. 
+                    read_one_message(fd, buff);
+                    switch(buff[0])
                     {
-                    int size = read_all(fd, buff);
-					if (size>0)
-					{
-						switch(buff[0])
-						{
-							case MESSAGE_ID_RREQ:
-								print_RREQ((char*)buff);
-								break;
-							default:
-								printf("Message not valid.\n");
+                        case MESSAGE_ID_RREQ:
+                            /* If the destination is in my link state table, reply RREP. */
+							/* Else, forward RREQ. */
 							
-						}
-					
-					}
+							/* Wrong supposition: I AM THE DESTINATION. RREP FORMAT IS OKAY (IT IS NOT!). */
+							printf("Sending a WRONG RREP...\n");
+							send_RREP(fd, source, destination, destination, 0, 0);
+                            break;
+                        default:
+                            break;
                     }
                     break;
 
@@ -176,16 +241,28 @@ main()
                     else
                     {
                         
-                        printf("Destination is NOT in the table.\n");
-						send_RREQ(fd, source, destination, destination, 0, 0); /* Send RREQ. */
-                        /*
-						While(){
-							Send RREQ.
-							Wait for RREP. y salir
-							
-						}
-                        */
-                        //send_string_to(fd, destination, data);
+
+                        while(TRUE)
+                        {
+                            printf("Destination is NOT in the table. Sending RREQ...\n");
+				            send_RREQ(fd, source, destination, destination, 0, 0); /* Send RREQ. */
+                            /* Wait for the first RREP. The other RREP messages will 
+                            be processed in other stage. */
+                            printf("Waiting for the first RREP...\n"); 
+                            Sleep(6000); 
+                            
+                            read_one_message(fd, buff);
+                            if (buff[0] == MESSAGE_ID_RREP)
+                            {
+                                break;
+                            }
+                        }
+                        printf("I have one route to the destination!\n");
+						
+						/*
+						packet p = new packet(destination, data);
+                        send_data_to(fd, destination_next_hop, p);
+						*/
                     }
                     break;
 
