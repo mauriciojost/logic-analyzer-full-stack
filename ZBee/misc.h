@@ -36,7 +36,7 @@ int get_index_item_routing_table(routing_table_item table[], address destination
 void remove_item_routing_table(routing_table_item table[], address destination);
 void print_routing_table_item(routing_table_item item);
 void print_routing_table(routing_table_item table[]);
-
+void init_address(address a, char* str);
 
 
 #endif /* MISC_H */

@@ -1,6 +1,7 @@
 #include "misc.h"
-
 #include <stdio.h>
+#include <string.h>
+
 /***********************/
 /* ROUTING TABLE STUFF */
 /***********************/
@@ -31,6 +32,19 @@ copy_addresses(address dest, address sou)
     dest[3] = sou[3];
 }
 
+void
+init_address(address a, char* str)
+{
+    if (strlen(str)==4)
+    {
+        for (int i=0; i<4; i++)
+            a[i] = str[i];
+    }
+    else
+    {
+        printf("ERROR: Invalid address.\n");
+    }
+}
 
 void
 put_item_at_routing_table(routing_table_item table[], routing_table_item item)
