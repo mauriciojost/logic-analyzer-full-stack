@@ -4,15 +4,35 @@
 
 #define __WINDOWS_COM__
 #include "com/serial.h"
+#include "misc.h"
 
-#define TRUE 1 
-#define FALSE 0
 
 #define SOURCE "0008"
 #define DESTINATION "0009"
+#define SERIAL_PORT "COM7"
+#define ROUTING_TABLE_MAX_ITEMS 4
 
 DCB OldConf;
 
+
+typedef struct{
+    char empty;
+    address destination;
+    address nexthop;
+    int sequence_number;
+    int number_of_hops;
+} routing_table_item;
+
+typedef struct{
+    address destination; 
+    address source;
+    int lifespan;
+    int id;
+} RREQ;
+
+typedef struct{
+    
+} RREP;
 
 
 int Read_Port_Blocking(HANDLE fd, char* buff);
@@ -62,24 +82,16 @@ read_all(HANDLE fd, char* data)
 
 
 void
-send_to(HANDLE fd, char* destination, char* data)
+send_to(HANDLE fd, address dest, char* data)
 {
     int size; 
     char buff[16];
-    if (strlen(destination)<=4)
-    {
-        printf("Sending data to %s: %s\n", destination, data);
-        sprintf(buff, "ATDL%s", destination);
-        write_AT_command(fd, (char*)buff); 
-        Write_Port(fd,data,strlen(data));  // Write the serial port. 
-    }
-    else
-    {
-        printf("Error trying to interpret destination... More than 4 characters.\n");
-    }
-    
-}
 
+    printf("Sending data to %c%c%c%c: %s\n", dest[0], dest[1], dest[2], dest[3], data);
+    sprintf(buff, "ATDL%c%c%c%c", dest[0], dest[1], dest[2], dest[3]);
+    write_AT_command(fd, (char*)buff); 
+    Write_Port(fd,data,strlen(data));  // Write the serial port.    
+}
 
 int 
 check_OK_retrieved(HANDLE fd)
@@ -170,7 +182,7 @@ initialize_zigbee_module(HANDLE* fdr)
 
     HANDLE fd;
     /* Initialize serial port. */
-    fd = initialize_serial("COM7");
+    fd = initialize_serial(SERIAL_PORT);
 
     
     /*
@@ -182,14 +194,13 @@ initialize_zigbee_module(HANDLE* fdr)
 
     MM CONF.            2
     */
-
-
     
-    write_AT_command(fd, "ATID0000"); 
-    write_AT_command(fd, "ATDH0000"); 
-    write_AT_command(fd, "ATDLFFFF"); 
-    write_AT_command(fd, "ATMY" SOURCE); 
-    write_AT_command(fd, "ATMM2");
+    write_AT_command(fd, "ATCH0x0C");       /* CHANNEL ID */
+    write_AT_command(fd, "ATID0000");       /* PAN ID */
+    write_AT_command(fd, "ATDH0000");       /* DEST. ADDRESS */
+    write_AT_command(fd, "ATDLFFFF");       /* DEST. ADDRESS */
+    write_AT_command(fd, "ATMY" SOURCE);    /* MY ADDRESS */
+    write_AT_command(fd, "ATMM2");          /* ACK */
 
    
 
@@ -199,6 +210,124 @@ initialize_zigbee_module(HANDLE* fdr)
     /* Initialization stuff. */
 }
 
+
+
+
+
+
+/***********************/
+/* ROUTING TABLE STUFF */
+/***********************/
+
+void 
+initialize_routing_table(routing_table_item table[])
+{
+    /* Initialize */
+    int i;
+    for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
+    {
+        table[i].empty = TRUE;
+    }
+}
+
+int 
+addresses_are_equal(address a, address b)
+{
+    return (a[0]==b[0] && a[1]==b[1] && a[2]==b[2] && a[3]==b[3]);
+}
+
+void
+copy_addresses(address dest, address sou)
+{
+    dest[0] = sou[0];
+    dest[1] = sou[1];
+    dest[2] = sou[2];
+    dest[3] = sou[3];
+}
+
+
+void
+put_item_at_routing_table(routing_table_item table[], routing_table_item item)
+{   
+    int i;
+    printf("Put item...\n");
+    for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
+    {
+        if (table[i].empty == TRUE)
+        {
+            break;
+        }
+    }
+    
+    if (i<ROUTING_TABLE_MAX_ITEMS)
+    {
+        table[i].empty = FALSE;
+        copy_addresses(table[i].destination, item.destination);
+        copy_addresses(table[i].nexthop, item.nexthop);
+        table[i].sequence_number = item.sequence_number;
+        table[i].number_of_hops = item.number_of_hops;
+    }
+    else
+    {
+        printf("ERROR: Maximun number of items on a routing table reached...\n");
+    }
+}
+
+
+int
+get_index_item_routing_table(routing_table_item table[], address destination)
+{
+    printf("Get index item...\n");
+    int i;
+    for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
+    {
+        if (addresses_are_equal(table[i].destination, destination) 
+            && (table[i].empty==FALSE))
+        {
+            break;
+        }
+    }
+    return i;
+}
+
+void
+remove_item_routing_table(routing_table_item table[], address destination)
+{
+    printf("Remove item...\n");
+    int i;
+    i = get_index_item_routing_table(table, destination);
+    table[i].empty = TRUE;
+}
+    
+void
+print_routing_table_item(routing_table_item item)
+{
+
+    printf("  Item -> destination =[%c%c%c%c] empty=[%d]\n" , 
+                                    item.destination[0], 
+                                    item.destination[1], 
+                                    item.destination[2], 
+                                    item.destination[3], 
+                                    item.empty);
+}
+
+void
+print_routing_table(routing_table_item table[])
+{
+    printf("Table...\n");    
+    int i;
+    for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
+    {   
+        print_routing_table_item(table[i]);
+    }
+    printf("End table...\n");    
+}
+
+/****************************/
+/* Things in the main file. */
+/****************************/
+
+
 int 
 main()
 {
@@ -206,8 +335,92 @@ main()
     char buff[1024*8];
 
     HANDLE fd;
-    initialize_zigbee_module(&fd);
+    //initialize_zigbee_module(&fd);
 
+
+    routing_table_item table[ROUTING_TABLE_MAX_ITEMS];
+    routing_table_item item;
+    item.destination[0] = '7';
+
+    initialize_routing_table(table);
+    print_routing_table(table);
+    system("pause");
+
+    put_item_at_routing_table(table, item);
+    print_routing_table(table);
+    system("pause");
+    
+    item.destination[0] = '5';
+    put_item_at_routing_table(table, item);
+    print_routing_table(table);
+    system("pause");
+
+    item.destination[0] = '3';
+    put_item_at_routing_table(table, item);
+    print_routing_table(table);
+    system("pause");
+
+    item.destination[0] = '1';
+    put_item_at_routing_table(table, item);
+    print_routing_table(table);
+    system("pause");
+
+    item.destination[0] = '5';
+    put_item_at_routing_table(table, item);
+    print_routing_table(table);
+    system("pause");
+
+    remove_item_routing_table(table, item.destination);
+    print_routing_table(table);
+    system("pause");
+
+    item.destination[0] = '9';
+    put_item_at_routing_table(table, item);
+    print_routing_table(table);
+    system("pause");
+
+
+    
+    exit(1);
+    initialize_routing_table(table);
+    print_routing_table(table);
+    system("pause");
+
+    initialize_routing_table(table);
+    print_routing_table(table);
+    system("pause");
+   
+
+
+    /*
+    
+    Requestor
+    I want to send a message to node X.
+    Check whether we have him in our routing table or not.
+      If he's not in our routing table, just send RREQ.
+    If I don't receive a route in certain amount of time, I will 
+    resend the message (longer lifespane and other ID). 
+
+    Requested
+    I receive a RREQ. 
+        Do I know a route to the destination?
+        Yes
+            Send a RREP. 
+        No
+            Re-broadcast RREQ (until lifespan is dead). Be sure not to
+            rebroadcast a message with the same sequence number. 
+            
+    If I receive a RREP... I have to update routes that go the destination of
+    the route reply.     
+
+    Each node has a SN that will be updated each time it sends a message. It 
+    represents how fresh is the information about itself. 
+
+    Case for 3 nodes maximun.
+        
+    */    
+
+    /*
     if (fd!=(HANDLE)-1)
     {
         printf("Connected to ZigBee module.\n");
@@ -230,5 +443,6 @@ main()
     {
         printf("ERROR: Cannot connect to ZigBee module.\n");
     }
+    */
     return 0;
 }

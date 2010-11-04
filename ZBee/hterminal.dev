@@ -1,7 +1,7 @@
 [Project]
 FileName=hterminal.dev
 Name=ejemplo
-UnitCount=4
+UnitCount=6
 Type=1
 Ver=1
 ObjFiles=
@@ -60,7 +60,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit5]
-FileName=ejemplo.c
+FileName=misc.c
 CompileCpp=0
 Folder=ejemplo
 Compile=1
@@ -89,6 +89,16 @@ AutoIncBuildNr=0
 
 [Unit3]
 FileName=com\seriewindows.h
+CompileCpp=0
+Folder=ejemplo
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit6]
+FileName=misc.h
 CompileCpp=0
 Folder=ejemplo
 Compile=1
