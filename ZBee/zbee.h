@@ -16,6 +16,6 @@ int check_OK_retrieved(HANDLE fd);
 int Read_Port_Blocking(HANDLE fd, char* buff);
 int write_AT_command(HANDLE fd, char* command);
 void initialize_zigbee_module(HANDLE* fdr, char* serial_port, address source);
-
+void change_local_address(HANDLE fd, address source);
 
 #endif /* ZBEE_H */

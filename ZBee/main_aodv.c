@@ -5,68 +5,32 @@
 
 #define SOURCE "0008"
 #define DESTINATION "0009"
-#define SERIAL_PORT "COM1"
+#define SERIAL_PORT "COM7"
 
 
 void
 print_instructions()
 {
-    printf("Instructions: \n  q (quit)\n  p (proceed)\n");
+    printf("\n\n*************\nInstructions: \n  q (quit)\n  p (proceed) r (read) c (change) s (send) h (show r. table)\n");
 }
 
 int 
 main()
 {
-
     char buff[1024*8];
-
-
-    /*
+   
     routing_table_item table[ROUTING_TABLE_MAX_ITEMS];
+    
     routing_table_item item;
     item.destination[0] = '7';
 
     initialize_routing_table(table);
-    print_routing_table(table);
-    system("pause");
 
-    put_item_at_routing_table(table, item);
-    print_routing_table(table);
-    system("pause");
-    
+    /* print_routing_table(table);
     item.destination[0] = '5';
-    put_item_at_routing_table(table, item);
-    print_routing_table(table);
-    system("pause");
-
-    item.destination[0] = '3';
-    put_item_at_routing_table(table, item);
-    print_routing_table(table);
-    system("pause");
-
-    item.destination[0] = '1';
-    put_item_at_routing_table(table, item);
-    print_routing_table(table);
-    system("pause");
-
-    item.destination[0] = '5';
-    put_item_at_routing_table(table, item);
-    print_routing_table(table);
-    system("pause");
-
-    remove_item_routing_table(table, item.destination);
-    print_routing_table(table);
-    system("pause");
-
-    item.destination[0] = '9';
-    put_item_at_routing_table(table, item);
-    print_routing_table(table);
-    system("pause");
-    */
+    put_item_at_routing_table(table, item); */
     
    
-
-
     /*
     
     Requestor
@@ -99,12 +63,15 @@ main()
     char data[] = "*packet_content*                          ";
     
     address source;
+    address destination;
     printf("Write local address (4 characters 0-F): ");
     gets(buff);
     init_address(source, buff);
-    initialize_zigbee_module(&fd, SERIAL_PORT, source);
-
-    
+    init_address(destination, DESTINATION);
+	
+	printf("Write serial port number (COM1-COM8): ");
+    gets(buff);
+    initialize_zigbee_module(&fd, buff, source);
 
     if (fd!=(HANDLE)-1)
     {
@@ -113,46 +80,76 @@ main()
         int exit = FALSE;
 
         while(exit==FALSE){
+            int index;
             print_instructions();
             char a = getch();           
             fflush(stdin);  
 
             switch(a)
             {
+                case 'h':
+                    print_routing_table(table);
+                    break; 
                 case 'r': // Read. 
                     read_all(fd, buff);
                     break;
-
                 case 'c': // Change data/destination.
                     {
-                    printf("Please, write the new address (4 characters, 0-F): ");
+                    printf("Please, write the new local address (4 characters, 0-F): ");
                     gets(buff);
                     init_address(source, buff);
+                    change_local_address(fd, source);
+                    printf("Please, write the new destination address (4 characters, 0-F): ");
+                    gets(buff);
+                    init_address(destination, buff);
                     printf("Please, write the new data (less than 20 characters): ");
-                    gets(data);
-                    
+                    gets(data);                    
                     }
                     break;
             
                 case 's': // Send.
-                    send_to(fd, DESTINATION, data);
+
+                    if ((index = get_index_item_routing_table(table, destination))!=-1)
+                    {
+                        /* Send Message (using the next hop). */
+                        printf("Destination is in the table.\n");
+                        /* send_to_through(fd, destination, next_hop, ttl). */
+                        send_to(fd, destination, data);
+                    }
+                    else
+                    {
+                        /* Send RREQ. */
+                        printf("Destination is NOT in the table.\n");
+                        /*
+						While(){
+							Send RREQ.
+							Wait for RREP. y salir
+							
+						}
+                        */
+                        send_to(fd, destination, data);
+                    }
                     break;
 
-            
                 case 'p': // Proceed.
+					/* 
+					Leer todo.
+					Si es RREQ responder con un RREP si tengo en mi tabla.
+					Si es mensaje con destino a mi, mostrar.
+					Si es 
+					*/
                     read_all(fd, buff);
-                    send_to(fd, DESTINATION, "12345678");
+                    send_to(fd, destination, "12345678");
                     break;
 
                 case 'q': // Quit. 
                     exit = TRUE;
                     break;
+
                 default: 
                     printf("Non valid option.\n");
             }
-
         }
-    
         finalize_serial(fd);
     }
     else

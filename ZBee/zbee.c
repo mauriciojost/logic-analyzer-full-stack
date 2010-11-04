@@ -3,6 +3,18 @@
 
 #include "zbee.h"
 
+/*
+// Simulation
+#define TIMEOUT 1
+#define SLEEP_UNIT 1
+*/
+
+// With hardware
+
+#define TIMEOUT 100
+#define SLEEP_UNIT 150
+
+
 void 
 finalize_serial(HANDLE fd)
 {
@@ -83,10 +95,10 @@ Read_Port_Blocking(HANDLE fd, char* buff)
     do
     {
         time_out++;
-        Sleep(150);
+        Sleep(SLEEP_UNIT);
         size_to_read = Kbhit_Port(fd); /* How many bytes are available to read? */
     }
-    while(size_to_read == 0 && time_out < 100);
+    while(size_to_read == 0 && time_out < TIMEOUT);
 
     Read_Port(fd, buff, size_to_read);
     //printf("Read port blocking time_out %d size_to_read %d\n", time_out, size_to_read);
@@ -104,7 +116,7 @@ write_AT_command(HANDLE fd, char* command)
     char buff[1024];
 
 
-    Sleep(1500); /* No too many commands in a short period of time! */ 
+    Sleep(SLEEP_UNIT*10); /* No too many commands in a short period of time! */ 
 
     res = Clean_Buffer(fd);
     if (res != TRUE) 
@@ -137,6 +149,19 @@ write_AT_command(HANDLE fd, char* command)
 }
 
 void
+change_local_address(HANDLE fd, address source)
+{
+    char command_my_address[10];
+    sprintf(command_my_address, "ATMY%c%c%c%c", 
+                                source[0], 
+                                source[1],
+                                source[2], 
+                                source[3]);
+
+    write_AT_command(fd, command_my_address);   /* MY ADDRESS */
+}
+
+void
 initialize_zigbee_module(HANDLE* fdr, char* serial_port, address source)
 {
     int res; 
@@ -153,21 +178,10 @@ initialize_zigbee_module(HANDLE* fdr, char* serial_port, address source)
     write_AT_command(fd, "ATDH0000");           /* DEST. ADDRESS */
     write_AT_command(fd, "ATDLFFFF");           /* DEST. ADDRESS */
 
-    char command_my_address[10];
-    sprintf(command_my_address, "ATMY%c%c%c%c", 
-                                source[0], 
-                                source[1],
-                                source[2], 
-                                source[3]);
-
-    write_AT_command(fd, command_my_address);   /* MY ADDRESS */
+    change_local_address(fd, source);
     write_AT_command(fd, "ATMM2");              /* ACK */
 
-   
-
-    system("PAUSE");
-
     *fdr = fd;
-    /* Initialization stuff. */
 }
+
 

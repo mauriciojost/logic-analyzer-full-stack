@@ -17,8 +17,8 @@ IsCpp=0
 Icon=
 ExeOutput=
 ObjectOutput=
-OverrideOutput=0
-OverrideOutputName=
+OverrideOutput=1
+OverrideOutputName=aodv.exe
 HostApplication=
 Folders=
 CommandLine=
@@ -27,7 +27,7 @@ CustomMakefile=
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
-CompilerSettings=
+CompilerSettings=0000000000000000000000
 
 [Unit1]
 FileName=com\baudios.h
@@ -50,7 +50,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit4]
-FileName=hterminal.c
+FileName=main_aodv.c
 CompileCpp=0
 Folder=ejemplo
 Compile=1

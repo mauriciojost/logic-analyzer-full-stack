@@ -52,6 +52,9 @@ put_item_at_routing_table(routing_table_item table[], routing_table_item item)
 {   
     int i;
     printf("Put item...\n");
+
+    remove_item_routing_table(table, item.destination);
+
     for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
     {
         if (table[i].empty == TRUE)
@@ -88,6 +91,9 @@ get_index_item_routing_table(routing_table_item table[], address destination)
             break;
         }
     }
+
+    i = (i==ROUTING_TABLE_MAX_ITEMS?-1:i);
+
     return i;
 }
 
@@ -104,7 +110,7 @@ void
 print_routing_table_item(routing_table_item item)
 {
 
-    printf("  Item -> destination =[%c%c%c%c] empty=[%d]\n" , 
+    printf("  dest=[%c%c%c%c] empty=[%d]\n" , 
                                     item.destination[0], 
                                     item.destination[1], 
                                     item.destination[2], 
