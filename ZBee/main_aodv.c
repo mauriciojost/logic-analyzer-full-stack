@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <conio.h>
 #include <string.h>
+#include <time.h>
+
 #include "zbee.h"
 
 #define SOURCE "0008"
@@ -8,113 +10,94 @@
 
 
 void
-print_RREQ(void* m)
+print_general_message(void* m)
 {
-
-	RREQ* msg;
+	general_message* msg;
 	
-	msg = (RREQ*)m;
+	msg = (general_message*)m;
 	if (msg->message_id == MESSAGE_ID_RREQ)
 	{
-		printf(" RREQ(%d): \n\tsource=", (int)msg->message_id);
+		printf(" Message ID=%d", (int)msg->message_id);
+		printf("\n\tsource=");
 		print_address(msg->source);
 		printf("\n\tdestination=");
 		print_address(msg->destination);
-		printf("\n\tlifespan=%03d\n\tid=%02d\n\n", msg->lifespan, msg->id);
-	}
-	else
-	{
-		printf("ERROR: RREQ expected.\n");
-	}
-}
-
-void
-print_RREP(void* m)
-{
-
-	RREP* msg;
-	
-	msg = (RREP*)m;
-	if (msg->message_id == MESSAGE_ID_RREP)
-	{
-		printf(" RREP(%d): \n\tsource=", (int)msg->message_id);
+		printf("\n\taodv_source=");
 		print_address(msg->source);
-		printf("\n\tdestination=");
+		printf("\n\taodv_destination=");
 		print_address(msg->destination);
-		printf("\n\tlifespan=%03d\n\tid=%02d\n\n", msg->lifespan, msg->id);
+		printf("\n\tlifespan=%03d\n\tsequence_number_message(id)=%02d\n\n", msg->lifespan, msg->sequence_number_message);
 	}
 	else
 	{
-		printf("ERROR: RREP expected.\n");
+		printf("ERROR: Cannot print this message.\n");
 	}
 }
 
-
-
 void
-send_RREQ(HANDLE fd, address source, address destination, address next_hop, int lifespan, int id)
+send_general_message(HANDLE fd, 
+					int message_id, 
+					address source, 
+					address destination, 
+					int hop_count,
+					address aodv_source, 
+					address aodv_destination,
+					int lifespan, 
+					int sequence_number_message,
+					char* data)
 {
-	RREQ rreq;
-	address broadcast;
+	general_message gm;
 	
-	init_address(broadcast, "FFFF");
+	gm.message_id = message_id;
+	copy_addresses(gm.source, source);
+	copy_addresses(gm.destination, destination);
+	gm.hop_count = hop_count;
+	copy_addresses(gm.aodv_source, aodv_source);
+	copy_addresses(gm.aodv_destination, aodv_destination);
+	gm.lifespan = lifespan;
+	gm.sequence_number_message = sequence_number_message;
 	
-	rreq.message_id = MESSAGE_ID_RREQ;
-	copy_addresses(rreq.source, source);
-	copy_addresses(rreq.destination, destination);
-	rreq.lifespan = lifespan;
-	rreq.id = id;
-	rreq.tail = 0;
+	if (data!=NULL && strlen(data)>=DATA_FIELD_LENGTH)
+	{
+		strncpy(gm.data, data, DATA_FIELD_LENGTH);
+	}	
+	else
+	{
+		printf("Message data too short. Filling with 'AA...'.");
+		strncpy(gm.data, "AAAAAAAA...", DATA_FIELD_LENGTH);
+	}
 	
-	printf("Sending RREQ broadcast: ");
-	print_RREQ(&rreq);
+	gm.tail = 0;
+	
+	printf("Sending message: ");
+	print_general_message(&gm);
 	printf("\n");
 	
-	send_data_to(fd, broadcast, (void*)&rreq, sizeof(RREQ));
-}
-
-
-
-void
-send_RREP(HANDLE fd, address source, address destination, address next_hop, int lifespan, int id)
-{
-	RREP rrep;
-	address broadcast;
-	
-	init_address(broadcast, "FFFF");
-	
-	rrep.message_id = MESSAGE_ID_RREP;
-	copy_addresses(rrep.source, source);
-	copy_addresses(rrep.destination, destination);
-	rrep.lifespan = lifespan;
-	rrep.id = id;
-	rrep.tail = 0;
-	
-	printf("Sending RREQ broadcast: ");
-	print_RREP(&rrep);
-	printf("\n");
-	
-	send_data_to(fd, broadcast, (void*)&rrep, sizeof(RREP));
+	send_data_to(fd, destination, (void*)&gm, sizeof(general_message));
 }
 
 
 void
 read_one_message(HANDLE fd, char* buff)
 {
-    int size = read_all(fd, buff);
+	int size;
+	
+	buff[0] = MESSAGE_ID_INVALID;
+    size = read_all(fd, buff);
+	
     if (size>0)
     {
+        print_general_message((char*)buff);
         switch(buff[0])
         {
-            case MESSAGE_ID_RREP:
-		        print_RREP((char*)buff);
+            case MESSAGE_ID_RREP:        
 		        break;
             case MESSAGE_ID_RREQ:
-		        print_RREQ((char*)buff);
 		        break;
+            /*case MESSAGE_ID_HELL:
+                break; */
             default:
-		        printf("Message not valid.\n");
-	
+		        printf("Message not valid.\n");	
         }
      }
 }
@@ -126,9 +109,6 @@ main()
    
     routing_table_item table[ROUTING_TABLE_MAX_ITEMS];
     
-    routing_table_item item;
-    item.destination[0] = '7';
-
     initialize_routing_table(table);
 
     /* print_routing_table(table);
@@ -167,9 +147,11 @@ main()
     HANDLE fd;
     char data[] = "*packet_content*                          ";
     
+	address broadcast; 
+	init_address(broadcast, "FFFF");
     address source;
     address destination;
-    printf("Write local address (4 characters 0000-FFFF): ");
+    printf("Write local address (4 characters 0000-FFFF, for example '0001'): ");
     gets(buff);
     init_address(source, buff);
     init_address(destination, DESTINATION);
@@ -203,13 +185,35 @@ main()
                     switch(buff[0])
                     {
                         case MESSAGE_ID_RREQ:
-                            /* If the destination is in my link state table, reply RREP. */
-							/* Else, forward RREQ. */
+							printf("Message RREQ received: \n");
 							
-							/* Wrong supposition: I AM THE DESTINATION. RREP FORMAT IS OKAY (IT IS NOT!). */
-							printf("Sending a WRONG RREP...\n");
-							send_RREP(fd, source, destination, destination, 0, 0);
+							general_message* gm = (general_message*)buff; 
+                            /* If the destination is in my link state table, reply RREP. */
+							// if ((index = get_index_item_routing_table(table, gm.destination)!=-1) && (table[index].hop_count==1))
+								print_general_message(buff);
+							
+								//send_general_message(fd, MESSAGE_ID_RREP, source, table[index].next_hop, 
+								//	0, source,  destination, DEFAULT_TTL, message_sequence_number, NULL);
+							
+								send_general_message(fd, MESSAGE_ID_RREP, source, destination, /* WRONG! NOT TO DESTINATION! */
+									0, source,  destination, DEFAULT_TTL, gm->sequence_number_message, NULL);
+							/* Else, forward RREQ. */
+							/*
+							printf("Forwarding RREQ...\n");
+							
+							send_general_message(fd, MESSAGE_ID_RREQ, source, broadcast, 
+												gm., source,  destination, DEFAULT_TTL, message_sequence_number, NULL);
+								
+							
+							*/
+							
+												
+					
                             break;
+							
+						case MESSAGE_ID_RREP:
+							/* Update your table!!! */
+							break;
                         default:
                             break;
                     }
@@ -217,10 +221,10 @@ main()
 
                 case 'c': // Change data/destination.
                     {
-                    printf("Please, write the new local address (4 characters, 0000-FFFF): ");
-                    gets(buff);
-                    init_address(source, buff);
-                    change_local_address(fd, source);
+                    //printf("Please, write the new local address (4 characters, 0000-FFFF): ");
+                    //gets(buff);
+                    //init_address(source, buff);
+                    //change_local_address(fd, source);
                     printf("Please, write the new destination address (4 characters, 0000-FFFF): ");
                     gets(buff);
                     init_address(destination, buff);
@@ -230,34 +234,57 @@ main()
                     break;
             
                 case 's': // Send.
-
+					printf("Sending a message...\nPlease, write the new destination address (4 characters, 0000-FFFF): ");
+                    gets(buff);
+                    init_address(destination, buff);
+                    printf("Please, write the new data (less than 20 characters): ");
+                    gets(data);                    
+					
+					int route_found = FALSE;
+					
                     if ((index = get_index_item_routing_table(table, destination))!=-1)
                     {
                         /* Send Message (using the next hop). */
-                        printf("Destination is in the table.\n");
-                        /* send_to_through(fd, destination, next_hop, ttl). */
-                        send_string_to(fd, destination, data);
+                        printf("Destination is already in the routing table. Checking validity...\n");
+						
+						time_t current_time = time (NULL);
+						printf("Checking time of the route: current=[%ld] initial_time+timeout=[%ld]\n");
+						if (table[index].initial_time + ROUTE_TIMEOUT > current_time)
+						{
+							/* It's okay. We can use this route now. */
+							
+							route_found = TRUE;
+							printf("Route found!\n");
+							
+						}
                     }
-                    else
+					
+                    if (route_found == FALSE)
                     {
-                        
-
                         while(TRUE)
                         {
                             printf("Destination is NOT in the table. Sending RREQ...\n");
-				            send_RREQ(fd, source, destination, destination, 0, 0); /* Send RREQ. */
+				            int message_sequence_number = rand();
+							send_general_message(fd, MESSAGE_ID_RREQ, source, broadcast, 
+												0, source,  /* Looking for ... */ destination , 
+												DEFAULT_TTL, message_sequence_number, NULL);
                             /* Wait for the first RREP. The other RREP messages will 
                             be processed in other stage. */
                             printf("Waiting for the first RREP...\n"); 
-                            Sleep(6000); 
+                            Sleep(7000); 
                             
                             read_one_message(fd, buff);
-                            if (buff[0] == MESSAGE_ID_RREP)
+                            if (buff[0] == MESSAGE_ID_RREP) /* The expected message was received. */
                             {
                                 break;
                             }
                         }
-                        printf("I have one route to the destination!\n");
+						
+                        
+						printf("Now sending message...\n");
+						int message_sequence_number = rand();
+						send_general_message(fd, MESSAGE_ID_DATA, source, table[index].next_hop, 
+								0, source,  destination, DEFAULT_TTL, message_sequence_number, NULL);
 						
 						/*
 						packet p = new packet(destination, data);

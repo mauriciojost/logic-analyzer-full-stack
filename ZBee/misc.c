@@ -13,7 +13,7 @@ initialize_routing_table(routing_table_item table[])
     int i;
     for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
     {
-        table[i].empty = TRUE;
+        table[i].is_item_empty = TRUE;
     }
 }
 
@@ -57,7 +57,7 @@ put_item_at_routing_table(routing_table_item table[], routing_table_item item)
 
     for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
     {
-        if (table[i].empty == TRUE)
+        if (table[i].is_item_empty == TRUE)
         {
             break;
         }
@@ -65,10 +65,11 @@ put_item_at_routing_table(routing_table_item table[], routing_table_item item)
     
     if (i<ROUTING_TABLE_MAX_ITEMS)
     {
-        table[i].empty = FALSE;
+        table[i].is_item_empty = FALSE;
         copy_addresses(table[i].destination, item.destination);
-        copy_addresses(table[i].nexthop, item.nexthop);
-        table[i].sequence_number = item.sequence_number;
+        copy_addresses(table[i].next_hop, item.next_hop);
+        table[i].initial_time = item.initial_time; 
+        table[i].sequence_number_destination = item.sequence_number_destination;
         table[i].number_of_hops = item.number_of_hops;
     }
     else
@@ -86,7 +87,7 @@ get_index_item_routing_table(routing_table_item table[], address destination)
     for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
     {
         if (addresses_are_equal(table[i].destination, destination) 
-            && (table[i].empty==FALSE))
+            && (table[i].is_item_empty==FALSE))
         {
             break;
         }
@@ -103,13 +104,13 @@ remove_item_routing_table(routing_table_item table[], address destination)
     printf("Remove item...\n");
     int i;
     i = get_index_item_routing_table(table, destination);
-    table[i].empty = TRUE;
+    table[i].is_item_empty = TRUE;
 }
     
 void
 print_routing_table_item(routing_table_item item)
 {
-    printf("  dest=["); print_address(item.destination); printf("] empty=[%d]\n", item.empty);
+    printf("  dest=["); print_address(item.destination); printf("] empty=[%d]\n", item.is_item_empty);
 }
 
 void

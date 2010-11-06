@@ -52,7 +52,7 @@ read_all(HANDLE fd, char* data)
     if((a = Kbhit_Port(fd))!=0){      // Is there something to read from serial port?
         Read_Port(fd,data,a);	      // Then read it and show it.
         data[a] = 0;
-        printf("Data received: %s\n",data);
+        printf("Data received: '%s'\n",data);
     }
 	return a;
     
@@ -63,7 +63,7 @@ send_data_to(HANDLE fd, address dest, char* data, int size)
 {
     char buff[16];
 
-    printf("Sending data to %c%c%c%c: %s\n", dest[0], dest[1], dest[2], dest[3], data);
+    printf("Sending data to %c%c%c%c: '%s'...\n", dest[0], dest[1], dest[2], dest[3], data);
     sprintf(buff, "ATDL%c%c%c%c", dest[0], dest[1], dest[2], dest[3]);
     write_AT_command(fd, (char*)buff); 
     Write_Port(fd,data,size);  // Write the serial port.    
