@@ -6,6 +6,7 @@
 #define TRUE 1 
 #define FALSE 0
 
+#define INITIAL_HOP_COUNT 0
 #define DEFAULT_TTL 10
 #define ROUTE_TIMEOUT 1000000
 
@@ -50,6 +51,8 @@ typedef struct{
     int lifespan; 				/* TTL (uses hop_count to check its trip). 			*/
     int sequence_number_message;/* Identifier of this particular message's instance 
 									(used to avoid re-broadcast). 					*/
+	int sequence_number_destination; 
+								/* Used to see how fresh is the information about the destination. */
 	char data[DATA_FIELD_LENGTH];/* Payload. 										*/
 	
 	/* Not used in this implementation.
