@@ -219,7 +219,7 @@ main()
 								
 								printf("Warning: answering a RREQ with an invalid RREP.\n");
 								send_general_message(fd, MESSAGE_ID_RREP, my_address, gm->source, 
-									INITIAL_HOP_COUNT, my_address, destination, DEFAULT_TTL, 
+									INITIAL_HOP_COUNT, gm->aodv_source,gm->aodv_destination, DEFAULT_TTL, 
                                     gm->sequence_number_message, my_sequence_number, NULL);
 							}
 
