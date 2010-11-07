@@ -52,7 +52,7 @@ read_all(HANDLE fd, char* data)
     if((a = Kbhit_Port(fd))!=0){      // Is there something to read from serial port?
         Read_Port(fd,data,a);	      // Then read it and show it.
         data[a] = 0;
-        printf("Data received: '%s'\n",data);
+        //printf("Data received: '%s'\n",data);
     }
 	return a;
     
@@ -178,13 +178,11 @@ initialize_zigbee_module(HANDLE* fdr, char* serial_port, address source)
     fd = initialize_serial(serial_port);
 
     printf("Initializing ZigBee module...\n");
-
-    write_AT_command(fd, "ATCH0x0C");           /* CHANNEL ID */
-    write_AT_command(fd, "ATID0000");           /* PAN ID */
+    change_local_address(fd, source);
     write_AT_command(fd, "ATDH0000");           /* DEST. ADDRESS */
     write_AT_command(fd, "ATDLFFFF");           /* DEST. ADDRESS */
-
-    change_local_address(fd, source);
+    write_AT_command(fd, "ATCH0x0C");           /* CHANNEL ID */
+    write_AT_command(fd, "ATID0000");           /* PAN ID */
     write_AT_command(fd, "ATMM2");              /* ACK */
 
     *fdr = fd;

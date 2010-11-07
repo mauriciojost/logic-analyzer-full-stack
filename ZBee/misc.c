@@ -53,9 +53,9 @@ remove_old_items(routing_table_item table[])
     int i;
     for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
     {
-        if ((time(NULL) - table[i].initial_time) > ROUTE_TIMEOUT)
+        if (((time(NULL) - table[i].initial_time) > ROUTE_TIMEOUT) && (table[i].is_item_empty == FALSE))
         {
-            printf("Detected obsolete route in routing table. Removing... \n");
+            printf("Detected obsolete route in item %d in routing table. Removing... \n", i);
             table[i].is_item_empty = TRUE;
         }
     }
@@ -65,7 +65,7 @@ void
 put_item_at_routing_table(routing_table_item table[], routing_table_item item)
 {   
     int i;
-    printf("Put item...\n");
+    printf("Putting item in routing table...\n");
     remove_old_items(table);
     remove_item_routing_table(table, item.aodv_destination);
 
@@ -96,7 +96,7 @@ put_item_at_routing_table(routing_table_item table[], routing_table_item item)
 int
 get_index_item_routing_table(routing_table_item table[], address destination)
 {
-    printf("Get index item...\n");
+    printf("Getting index item from routing table...\n");
     remove_old_items(table);
     int i;
     for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
@@ -116,13 +116,21 @@ get_index_item_routing_table(routing_table_item table[], address destination)
 void
 remove_item_routing_table(routing_table_item table[], address destination)
 {
-    printf("Remove item...\n");
     int i;
 
     remove_old_items(table);
 
+	
     i = get_index_item_routing_table(table, destination);
-    table[i].is_item_empty = TRUE;
+	if (i>=0)
+	{
+		printf("Removing item %d from routing table...\n", i);
+		table[i].is_item_empty = TRUE;
+	}
+	else
+	{
+		printf("Unable to remove item from routing table. It does not exist.\n");
+	}
 }
     
 void
@@ -130,15 +138,15 @@ print_routing_table_item(routing_table_item item)
 {
     if (item.is_item_empty)
     {
-        printf("Empty=[%d]\n\n"); 
+        printf("[Empty]\n"); 
     }
     else
     {
-        printf("Empty=[%d] dest=[\n", item.is_item_empty); 
+        printf("Destination["); 
         print_address(item.aodv_destination); 
-        printf("] next_hop=["); 
+        printf("] Next hop["); 
         print_address(item.next_hop); 
-        printf("] NoHops=%d in_time=%ld sn_dest=%d\n", 
+        printf("] Number of Hops[%d] Initial time[%ld] SN Destination[%d]\n", 
             item.number_of_hops, item.initial_time, item.sequence_number_destination); 
     }
     
@@ -147,13 +155,13 @@ print_routing_table_item(routing_table_item item)
 void
 print_routing_table(routing_table_item table[])
 {
-    printf("Table...\n");    
+    printf("***   TABLE   ***\n");    
     int i;
     for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
     {   
         print_routing_table_item(table[i]);
     }
-    printf("End table...\n");    
+    printf("*** END TABLE ***\n");    
 }
 
 void 

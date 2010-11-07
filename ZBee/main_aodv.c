@@ -25,12 +25,12 @@ print_general_message(void* m)
         default: 
             printf("*** UNKNOWN MESSAGE ***");
 	}
-	printf("\n\tsource="); print_address(msg->source);
-	printf("\n\tdestination="); print_address(msg->destination);
-	printf("\n\taodv_source="); print_address(msg->aodv_source);
-	printf("\n\taodv_destination="); print_address(msg->aodv_destination);
-	printf("\n\thop_count=%3d\n\tsequence_number_destination=%3d", msg->hop_count, msg->sequence_number_destination); 
-	printf("\n\tlifespan=%3d\n\tsequence_number_message(id)=%3d\n\n", msg->lifespan, msg->sequence_number_message);
+	printf("\n  Source = "); print_address(msg->source);
+	printf("\n  Destination = "); print_address(msg->destination);
+	printf("\n  AODV Source = "); print_address(msg->aodv_source);
+	printf("\n  AODV Destination = "); print_address(msg->aodv_destination);
+	printf("\n  Hop count = %d\n  Sequence Number of Destination = %d", msg->hop_count, msg->sequence_number_destination); 
+	printf("\n  Lifespan = %d\n  Sequence Number Message (ID) = %d\n\n", msg->lifespan, msg->sequence_number_message);
 }
 
 void
@@ -68,13 +68,24 @@ send_general_message(HANDLE fd,
 	
 	gm.tail = 0;
 	
-	printf("Sending message: ");
+	printf("Sending the following message: ");
 	print_general_message(&gm);
 	printf("\n");
 	
 	send_data_to(fd, destination, (void*)&gm, sizeof(general_message));
 }
 
+
+void
+send_hello_message(HANDLE fd, address my_address, int* my_sequence_number)
+{
+    address broadcast; 
+    init_address(broadcast, "FFFF");
+
+    *my_sequence_number = (*my_sequence_number) + 1;
+    send_general_message(fd, MESSAGE_ID_HELL, my_address, broadcast, INITIAL_HOP_COUNT, 
+		my_address, broadcast, DEFAULT_TTL, rand(), *my_sequence_number, NULL);
+}
 
 void
 read_one_message(HANDLE fd, char* buff)
@@ -86,16 +97,22 @@ read_one_message(HANDLE fd, char* buff)
 	
     if (size>0)
     {
-        print_general_message((char*)buff);
         switch(buff[0])
         {
             case MESSAGE_ID_RREP:        
+                printf("RREP message arrived.\n");
+                break;
             case MESSAGE_ID_RREQ:
+                printf("RREQ message arrived.\n");
+                break;
             case MESSAGE_ID_HELL:
+                printf("HELLO message arrived.\n");
+                break;
             case MESSAGE_ID_DATA:
+                printf("DATA message arrived.\n");
                 break;
             default:
-		        printf("Message not valid.\n");	
+		        printf("UNKNOWN message arrived.\n");	
         }
      }
 }
@@ -104,7 +121,7 @@ void
 use_HELLO_to_update_routing_table(routing_table_item table[], general_message* gm)
 {
 
-    printf("Updating routing table with HELLO... Using message: \n");
+    printf("Updating routing table with the following HELLO message: \n");
     print_general_message(gm); 
 
     routing_table_item item;
@@ -124,16 +141,15 @@ use_HELLO_to_update_routing_table(routing_table_item table[], general_message* g
     item.initial_time = time(NULL);
     item.sequence_number_destination = gm->sequence_number_destination;
   
-    printf("Route added as neighbor...\n");
     put_item_at_routing_table(table, item);
+    printf("New neighbor's route (one hop) added to the routing table.\n");
 
 }
 
 void
 use_RREP_to_update_routing_table(routing_table_item table[], general_message* gm)
 {
-
-    printf("Updating routing table with RREP... Using message: \n");
+    printf("Updating routing table with RREP... Using the following message: \n");
     print_general_message(gm); 
 
     routing_table_item item;
@@ -158,22 +174,24 @@ use_RREP_to_update_routing_table(routing_table_item table[], general_message* gm
 
     if (index==-1)
     {
-        printf("Route added (by the first time for this destination).\n");
         put_item_at_routing_table(table, item);
         route_changed = TRUE;
+        printf("Route added (it was not present in the table).\n");
     }
     else if (item.sequence_number_destination > table[index].sequence_number_destination)
     {  
-        printf("Checked the destination seq. number. Fresher data. OK.\n");
+        printf("Route item %d replaced (fresher data/sequence number of destination: %d > %d).\n", index, 
+            item.sequence_number_destination, table[index].sequence_number_destination);
         put_item_at_routing_table(table, item);
         route_changed = TRUE;
     } 
     else if (item.sequence_number_destination == table[index].sequence_number_destination)
     {
-        printf("Checked the destination seq. number. Same seq. number. Checking hops...\n");
+        printf("Route item %d about to be replaced (same destination seq. number). Checking hops...\n", index);
         if (item.number_of_hops < table[index].number_of_hops)
         {
-            printf("Less number of hops. OK.\n");
+            printf("New route item %d has less number of hops(%d < %d). Replaced.\n", 
+                index, item.number_of_hops, table[index].number_of_hops);
             put_item_at_routing_table(table, item);
             route_changed = TRUE;
         }
@@ -234,33 +252,42 @@ main()
     
     address my_address, destination, broadcast;
 	init_address(broadcast, "FFFF");
-    printf("Write local address (4 characters 0000-FFFF, for example '0001'): ");
+    printf("AODV/ZIGBEE\n---- ------\n\n");
+    printf("Write the local address of one connected device (4 characters 0000-FFFF, for example '0001'): ");
     gets(buff);
     init_address(my_address, buff);
     init_address(destination, "FFFF");
 	
-	printf("Write serial port number (COM1-COM8): ");
+	printf("Write serial port number (COM1-8, for example 'COM7'): ");
     gets(buff);
     initialize_zigbee_module(&fd, buff, my_address);
 
     if (fd!=(HANDLE)-1)
     {
-        printf("Connected to ZigBee module.\n");
+        printf("Connected to serial port.\n");
 
         int exit = FALSE;
 
         while(exit==FALSE){
             int index;
-            printf("\n\n*************\nInstructions: "
-			" q (quit) p (proceed) r (read) c (change) s (send) h (show r. table)\n");
+            printf("\n\n*************\nInstructions: \n"
+			"  q (Quit)\n" 
+            "  p (Proceed)\n" 
+			"  r (Read incoming messages)\n" 
+			"  c (Change destination address and message)\n"
+			"  s (Send data message to destination)\n"
+			"  w (shoW routing table)\n"
+			"  h (send Hello message)\n\n"
+
+            );
 			
             char a = getch();           
             fflush(stdin);  
 
             switch(a)
             {
-                case 'H':
-                case 'h': // Show routing table.
+                case 'W':
+                case 'w': // Show routing table.
                     print_routing_table(table);
                     break; 
 
@@ -303,9 +330,7 @@ main()
 							
 							if (message_answered == FALSE) /* No information about the requested node. */
 							{
-							/* Forward RREQ. */
-	
-								if (gm->lifespan > gm->hop_count) /* If it's still valid... */
+								if (gm->lifespan > gm->hop_count) /* If it's still valid, forward RREQ. */
 								{
 									send_general_message(fd, MESSAGE_ID_RREQ, my_address, broadcast, 
 										gm->hop_count+1, gm->aodv_source, gm->aodv_destination, gm->lifespan, 
@@ -428,7 +453,8 @@ main()
 
                         use_RREP_to_update_routing_table(table, mes);
 
-						printf("Route available. Now sending message...\n");
+                        index = get_index_item_routing_table(table, destination);
+						printf("Route available (routing table item = %d). Now sending message...\n", index);
 						int message_sequence_number = rand();
 						send_general_message(fd, MESSAGE_ID_DATA, my_address, table[index].next_hop, 
 								INITIAL_HOP_COUNT, my_address, destination, DEFAULT_TTL, message_sequence_number, 0, data);
@@ -438,6 +464,12 @@ main()
                         send_data_to(fd, destination_next_hop, p);
 						*/
                     }
+                    break;
+
+                case 'h':
+                case 'H':
+                    printf("Sending HELLO message: \n");
+                    send_hello_message(fd, my_address, &my_sequence_number);
                     break;
 
                 case 'P':
