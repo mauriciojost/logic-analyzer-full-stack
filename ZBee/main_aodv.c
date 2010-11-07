@@ -11,26 +11,32 @@ print_general_message(void* m)
 	general_message* msg;
 	
 	msg = (general_message*)m;
-    printf("\n");
     switch(msg->message_id)
     {
         case MESSAGE_ID_RREQ:
-            printf("*** RREQ message ***"); break;
+            printf("\n*** RREQ message ***"); 
+            break;
         case MESSAGE_ID_RREP: 
-            printf("*** RREP message ***"); break;
+            printf("\n*** RREP message ***"); 
+            printf("\n  Sequence Number of Destination = %d", msg->sequence_number_destination);
+            break;
         case MESSAGE_ID_HELL:
-            printf("*** HELLO message ***"); break;
+            printf("\n*** HELLO message ***"); 
+            printf("\n  Sequence Number of Source = %d", msg->sequence_number_destination);
+            break;
         case MESSAGE_ID_DATA:
-            printf("*** DATA message ***"); break;
+            printf("\n*** DATA message ***"); 
+            break;
         default: 
-            printf("*** UNKNOWN MESSAGE ***");
+            printf("\n*** UNKNOWN MESSAGE ***");
 	}
 	printf("\n  Source = "); print_address(msg->source);
 	printf("\n  Destination = "); print_address(msg->destination);
 	printf("\n  AODV Source = "); print_address(msg->aodv_source);
 	printf("\n  AODV Destination = "); print_address(msg->aodv_destination);
-	printf("\n  Hop count = %d\n  Sequence Number of Destination = %d", msg->hop_count, msg->sequence_number_destination); 
-	printf("\n  Lifespan = %d\n  Sequence Number Message (ID) = %d\n\n", msg->lifespan, msg->sequence_number_message);
+	printf("\n  Hop count = %d\n" , msg->hop_count);
+    printf("\n  Sequence Number Message (ID) = %d\n\n", msg->sequence_number_message);
+    printf("\n  Lifespan = %d", msg->lifespan);
 }
 
 void
@@ -114,7 +120,12 @@ read_one_message(HANDLE fd, char* buff)
             default:
 		        printf("UNKNOWN message arrived.\n");	
         }
-     }
+    }
+    else
+    {
+        printf("No message received.\n");
+    }
+     
 }
 
 void
@@ -214,10 +225,6 @@ main()
 	
 	int my_sequence_number = 0;
 
-    /* print_routing_table(table);
-    item.destination[0] = '5';
-    put_item_at_routing_table(table, item); */
-    
    
     /*
     
@@ -242,14 +249,13 @@ main()
 
     Each node has a SN that will be updated each time it sends a message. It 
     represents how fresh is the information about itself. 
-
-    Case for 3 nodes maximun.
         
     */    
 
     HANDLE fd;
+    int MAX_CYCLES = 100;
     char data[] = "                                  ";
-    
+
     address my_address, destination, broadcast;
 	init_address(broadcast, "FFFF");
     printf("AODV/ZIGBEE\n---- ------\n\n");
@@ -264,27 +270,59 @@ main()
 
     if (fd!=(HANDLE)-1)
     {
-        printf("Connected to serial port.\n");
+        printf("Connected to ZigBee module.\n");
 
         int exit = FALSE;
+        int mode_manual = TRUE;
+        char procedure;
+        int cycle_counter;
 
         while(exit==FALSE){
             int index;
-            printf("\n\n*************\nInstructions: \n"
-			"  q (Quit)\n" 
-            "  p (Proceed)\n" 
-			"  r (Read incoming messages)\n" 
-			"  c (Change destination address and message)\n"
-			"  s (Send data message to destination)\n"
-			"  w (shoW routing table)\n"
-			"  h (send Hello message)\n\n"
 
-            );
+            if (mode_manual==TRUE)
+            {
+                printf("\n\n*************\nInstructions: \n"
+    			"  q (Quit)\n" 
+                "  p (Proceed)\n" 
+    			"  r (Read incoming messages)\n" 
+    			"  c (Change destination address and message)\n"
+    			"  s (Send data message to destination)\n"
+    			"  w (shoW routing table)\n"
+    			"  h (send Hello message)\n"
+                "  m (change Mode) \n\n");
 			
-            char a = getch();           
-            fflush(stdin);  
+                procedure = getch();           
+                fflush(stdin);  
+            }
+            else
+            {
+                cycle_counter++;
+                printf("\n\n   %d CYCLE\n\n", cycle_counter);
+                switch(cycle_counter%4)
+                {
+                    case 0:
+                        procedure = 'h';
+                        break;
+                    case 1: 
+                        procedure = 'r';
+                        break;
+                    case 2: 
+                        procedure = 's';
+                        break;
+                    case 3:
+                        Sleep(1000); 
+                        if (cycle_counter > MAX_CYCLES)
+                        {
+                            mode_manual = TRUE;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
 
-            switch(a)
+            switch(procedure)
             {
                 case 'W':
                 case 'w': // Show routing table.
@@ -397,20 +435,21 @@ main()
                     }
                     break;
 				}
+
+                case 'C': // Change data/destination.
                 case 'c': // Change data/destination.
-                    printf("Please, write the new destination address (4 characters, 0000-FFFF): "); 
+                    printf("Please, write the new destination address (4 characters, 0000-FFFF, for example '0002'): "); 
                     gets(buff);
                     init_address(destination, buff);
                     printf("Please, write the new data (less than 20 characters): "); 
                     gets(data);
                     break;
             
+
+                case 'S': // Send.
                 case 's': // Send.
-					printf("Sending a message...\nPlease, write the new destination address (4 characters, 0000-FFFF): ");
-                    gets(buff);
-                    init_address(destination, buff);
-                    printf("Please, write the new data (less than 20 characters): "); gets(data);                    
-					
+					printf("Sending a message...\n");
+                    
 					int route_found = FALSE;
 					
                     if ((index = get_index_item_routing_table(table, destination))!=-1)
@@ -466,8 +505,8 @@ main()
                     }
                     break;
 
-                case 'h':
                 case 'H':
+                case 'h':
                     printf("Sending HELLO message: \n");
                     send_hello_message(fd, my_address, &my_sequence_number);
                     break;
@@ -488,7 +527,13 @@ main()
                 case 'q': // Quit. 
                     exit = TRUE;
                     break;
-
+                case 'M':
+                case 'm':
+                    mode_manual = (mode_manual?FALSE:TRUE);
+                    printf("Write the amount of cycles to run automatically: ");
+                    scanf("%d", &MAX_CYCLES);
+                    cycle_counter = 0;
+                    break;
                 default: 
                     printf("Non valid option.\n");
             }
@@ -502,3 +547,4 @@ main()
     
     return 0;
 }
+

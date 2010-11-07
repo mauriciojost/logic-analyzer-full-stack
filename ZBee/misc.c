@@ -142,11 +142,11 @@ print_routing_table_item(routing_table_item item)
     }
     else
     {
-        printf("Destination["); 
+        printf("Dest.["); 
         print_address(item.aodv_destination); 
-        printf("] Next hop["); 
+        printf("] Next Hop["); 
         print_address(item.next_hop); 
-        printf("] Number of Hops[%d] Initial time[%ld] SN Destination[%d]\n", 
+        printf("] No. Hops[%d] Init. Time[%ld] SN Dest.[%d]\n", 
             item.number_of_hops, item.initial_time, item.sequence_number_destination); 
     }
     
