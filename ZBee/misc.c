@@ -48,12 +48,26 @@ init_address(address a, char* str)
 }
 
 void
+remove_old_items(routing_table_item table[])
+{
+    int i;
+    for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
+    {
+        if ((time(NULL) - table[i].initial_time) > ROUTE_TIMEOUT)
+        {
+            printf("Detected obsolete route in routing table. Removing... \n");
+            table[i].is_item_empty = TRUE;
+        }
+    }
+}
+
+void
 put_item_at_routing_table(routing_table_item table[], routing_table_item item)
 {   
     int i;
     printf("Put item...\n");
-
-    remove_item_routing_table(table, item.destination);
+    remove_old_items(table);
+    remove_item_routing_table(table, item.aodv_destination);
 
     for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
     {
@@ -66,7 +80,7 @@ put_item_at_routing_table(routing_table_item table[], routing_table_item item)
     if (i<ROUTING_TABLE_MAX_ITEMS)
     {
         table[i].is_item_empty = FALSE;
-        copy_addresses(table[i].destination, item.destination);
+        copy_addresses(table[i].aodv_destination, item.aodv_destination);
         copy_addresses(table[i].next_hop, item.next_hop);
         table[i].initial_time = item.initial_time; 
         table[i].sequence_number_destination = item.sequence_number_destination;
@@ -83,10 +97,11 @@ int
 get_index_item_routing_table(routing_table_item table[], address destination)
 {
     printf("Get index item...\n");
+    remove_old_items(table);
     int i;
     for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
     {
-        if (addresses_are_equal(table[i].destination, destination) 
+        if (addresses_are_equal(table[i].aodv_destination, destination) 
             && (table[i].is_item_empty==FALSE))
         {
             break;
@@ -103,6 +118,9 @@ remove_item_routing_table(routing_table_item table[], address destination)
 {
     printf("Remove item...\n");
     int i;
+
+    remove_old_items(table);
+
     i = get_index_item_routing_table(table, destination);
     table[i].is_item_empty = TRUE;
 }
@@ -110,7 +128,20 @@ remove_item_routing_table(routing_table_item table[], address destination)
 void
 print_routing_table_item(routing_table_item item)
 {
-    printf("  dest=["); print_address(item.destination); printf("] empty=[%d]\n", item.is_item_empty);
+    if (item.is_item_empty)
+    {
+        printf("Empty=[%d]\n\n"); 
+    }
+    else
+    {
+        printf("Empty=[%d] dest=[\n", item.is_item_empty); 
+        print_address(item.aodv_destination); 
+        printf("] next_hop=["); 
+        print_address(item.next_hop); 
+        printf("] NoHops=%d in_time=%ld sn_dest=%d\n", 
+            item.number_of_hops, item.initial_time, item.sequence_number_destination); 
+    }
+    
 }
 
 void

@@ -27,7 +27,7 @@ typedef struct{
 	/***********************/
 	
     char is_item_empty;
-    address destination;
+    address aodv_destination;
     address next_hop;
     int number_of_hops; /* Cost. */
     time_t initial_time; /* Lifetime. */
