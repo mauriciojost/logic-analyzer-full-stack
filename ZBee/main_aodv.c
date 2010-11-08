@@ -14,29 +14,30 @@ print_general_message(void* m)
     switch(msg->message_id)
     {
         case MESSAGE_ID_RREQ:
-            printf("\n*** RREQ message ***"); 
+            printf("\nRREQ message"); 
             break;
         case MESSAGE_ID_RREP: 
-            printf("\n*** RREP message ***"); 
+            printf("\nRREP message"); 
             printf("\n  Sequence Number of Destination = %d", msg->sequence_number_destination);
             break;
         case MESSAGE_ID_HELL:
-            printf("\n*** HELLO message ***"); 
+            printf("\nHELLO message"); 
             printf("\n  Sequence Number of Source = %d", msg->sequence_number_destination);
             break;
         case MESSAGE_ID_DATA:
-            printf("\n*** DATA message ***"); 
+            printf("\nDATA message"); 
+            printf("\n  Data = '%s'", msg->data);
             break;
         default: 
-            printf("\n*** UNKNOWN MESSAGE ***");
+            printf("\nUNKNOWN MESSAGE");
 	}
 	printf("\n  Source = "); print_address(msg->source);
 	printf("\n  Destination = "); print_address(msg->destination);
 	printf("\n  AODV Source = "); print_address(msg->aodv_source);
 	printf("\n  AODV Destination = "); print_address(msg->aodv_destination);
-	printf("\n  Hop count = %d\n" , msg->hop_count);
-    printf("\n  Sequence Number Message (ID) = %d\n\n", msg->sequence_number_message);
-    printf("\n  Lifespan = %d", msg->lifespan);
+	printf("\n  Hop count = %d" , msg->hop_count);
+    printf("\n  Sequence Number Message (ID) = %d", msg->sequence_number_message);
+    printf("\n  Lifespan = %d\n\n", msg->lifespan);
 }
 
 void
@@ -74,7 +75,7 @@ send_general_message(HANDLE fd,
 	
 	gm.tail = 0;
 	
-	printf("Sending the following message: ");
+	printf("\nSending the following message: ");
 	print_general_message(&gm);
 	printf("\n");
 	
@@ -106,19 +107,19 @@ read_one_message(HANDLE fd, char* buff)
         switch(buff[0])
         {
             case MESSAGE_ID_RREP:        
-                printf("RREP message arrived.\n");
+                printf("******** RREP message arrived.\n");
                 break;
             case MESSAGE_ID_RREQ:
-                printf("RREQ message arrived.\n");
+                printf("******** RREQ message arrived.\n");
                 break;
             case MESSAGE_ID_HELL:
-                printf("HELLO message arrived.\n");
+                printf("******** HELLO message arrived.\n");
                 break;
             case MESSAGE_ID_DATA:
-                printf("DATA message arrived.\n");
+                printf("******** DATA message arrived.\n");
                 break;
             default:
-		        printf("UNKNOWN message arrived.\n");	
+		        printf("******** UNKNOWN message arrived.\n");	
         }
     }
     else
@@ -139,14 +140,14 @@ use_HELLO_to_update_routing_table(routing_table_item table[], general_message* g
 	/* 
 	We receive a message that must be used to fill the table in this way:
 		TABLE				Msg. RREP			
-		destination	<- 		destination_aodv
+		destination	<- 		source_aodv
 		next_hop <-			source (physical source)
 		number_of_hops <-	1
 		initial_time <-		time(NULL)
 		sequence_numb... <- sequence_number_destination
 	*/
 
-    copy_addresses(item.aodv_destination, gm->aodv_destination);
+    copy_addresses(item.aodv_destination, gm->aodv_source);
     copy_addresses(item.next_hop, gm->source);
     item.number_of_hops = 1;
     item.initial_time = time(NULL);
@@ -214,6 +215,31 @@ use_RREP_to_update_routing_table(routing_table_item table[], general_message* gm
     }
 }
 
+void
+assign_automatic_procedure(char* procedure, int cycle_counter)
+{
+    Sleep(1500);
+    printf("\n\n   %d CYCLE\n\n", cycle_counter);
+
+    int r = rand();
+
+    if (r<(RAND_MAX/25))
+    {
+        *procedure = 's'; /* Send sometimes... */
+    }
+    else
+    {
+        *procedure = 'r'; /* Read each cycle... */                
+    }
+
+    if (cycle_counter%20==0)
+    {
+        *procedure = 'h'; /* Hello with frequence... */
+    }
+
+}
+
+
 int 
 main()
 {
@@ -222,7 +248,7 @@ main()
     routing_table_item table[ROUTING_TABLE_MAX_ITEMS];
     
     initialize_routing_table(table);
-	
+	srand (time(NULL));
 	int my_sequence_number = 0;
 
    
@@ -262,7 +288,7 @@ main()
     printf("Write the local address of one connected device (4 characters 0000-FFFF, for example '0001'): ");
     gets(buff);
     init_address(my_address, buff);
-    init_address(destination, "FFFF");
+    init_address(destination, "0003");
 	
 	printf("Write serial port number (COM1-8, for example 'COM7'): ");
     gets(buff);
@@ -283,44 +309,35 @@ main()
             if (mode_manual==TRUE)
             {
                 printf("\n\n*************\nInstructions: \n"
-    			"  q (Quit)\n" 
+                "  c (Change destination address and message)\n"
+                "  w (shoW routing table)\n"
                 "  p (Proceed)\n" 
     			"  r (Read incoming messages)\n" 
-    			"  c (Change destination address and message)\n"
     			"  s (Send data message to destination)\n"
-    			"  w (shoW routing table)\n"
     			"  h (send Hello message)\n"
-                "  m (change Mode) \n\n");
+                "  q (Quit)\n\n");
 			
                 procedure = getch();           
                 fflush(stdin);  
             }
             else
             {
+
+                assign_automatic_procedure(&procedure, cycle_counter);
+
+                if (cycle_counter%4==0)
+                {   
+                    print_routing_table(table);
+                }
                 cycle_counter++;
-                printf("\n\n   %d CYCLE\n\n", cycle_counter);
-                switch(cycle_counter%4)
+
+                if (cycle_counter > MAX_CYCLES)
                 {
-                    case 0:
-                        procedure = 'h';
-                        break;
-                    case 1: 
-                        procedure = 'r';
-                        break;
-                    case 2: 
-                        procedure = 's';
-                        break;
-                    case 3:
-                        Sleep(1000); 
-                        if (cycle_counter > MAX_CYCLES)
-                        {
-                            mode_manual = TRUE;
-                        }
-                        break;
-                    default:
-                        break;
+                    mode_manual = TRUE;
                 }
             }
+
+
 
             switch(procedure)
             {
@@ -427,6 +444,7 @@ main()
                         case MESSAGE_ID_DATA:
 						{
                             printf("Data message received!!!\n"); 
+							print_general_message(buff);
 							break;
 						}
 
@@ -448,7 +466,7 @@ main()
 
                 case 'S': // Send.
                 case 's': // Send.
-					printf("Sending a message...\n");
+					printf("Trying to send a message...\n");
                     
 					int route_found = FALSE;
 					
@@ -472,6 +490,7 @@ main()
                     if (route_found == FALSE)
                     {
                         general_message* mes = (general_message*)buff;
+                        int times = 3;
                         while(TRUE)
                         {
                             /* Send RREQ to discover a new route. */
@@ -488,20 +507,29 @@ main()
                             read_one_message(fd, buff);
                             if (buff[0] == MESSAGE_ID_RREP) /* The expected message was received. */
                                 break;
+                            if (--times <0)
+                                break;
                         }
+                    
+                        if (times<0)
+                        {
+                            printf("Aborting the send of a message. The destination either does not exist, or is busy.\n");
+                        }
+                        else
+                        {
+                            use_RREP_to_update_routing_table(table, mes);
+                            route_found = TRUE;
+                        }
+                    }
 
-                        use_RREP_to_update_routing_table(table, mes);
-
+                    if (route_found == TRUE)
+                    {
                         index = get_index_item_routing_table(table, destination);
 						printf("Route available (routing table item = %d). Now sending message...\n", index);
 						int message_sequence_number = rand();
 						send_general_message(fd, MESSAGE_ID_DATA, my_address, table[index].next_hop, 
 								INITIAL_HOP_COUNT, my_address, destination, DEFAULT_TTL, message_sequence_number, 0, data);
 						
-						/*
-						packet p = new packet(destination, data);
-                        send_data_to(fd, destination_next_hop, p);
-						*/
                     }
                     break;
 
@@ -511,24 +539,18 @@ main()
                     send_hello_message(fd, my_address, &my_sequence_number);
                     break;
 
-                case 'P':
-                case 'p': // Proceed.
-					/* 
-					Leer todo.
-					Si es RREQ responder con un RREP si tengo en mi tabla.
-					Si es mensaje con destino a mi, mostrar.
-					Si es 
-					*/
-                    //read_all(fd, buff);
-                    //send_to(fd, destination, "12345678");
-                    break;
-
                 case 'Q':
                 case 'q': // Quit. 
                     exit = TRUE;
                     break;
-                case 'M':
-                case 'm':
+                case 'p':
+                case 'P':
+                    printf("Please, write the new destination address (4 characters, 0000-FFFF, for example '009F'): "); 
+                    gets(buff);
+                    init_address(destination, buff);
+                    printf("Please, write the new data (less than 20 characters): "); 
+                    gets(data);
+            
                     mode_manual = (mode_manual?FALSE:TRUE);
                     printf("Write the amount of cycles to run automatically: ");
                     scanf("%d", &MAX_CYCLES);

@@ -55,7 +55,7 @@ remove_old_items(routing_table_item table[])
     {
         if (((time(NULL) - table[i].initial_time) > ROUTE_TIMEOUT) && (table[i].is_item_empty == FALSE))
         {
-            printf("Detected obsolete route in item %d in routing table. Removing... \n", i);
+            printf(" (Detected obsolete route in item %d in routing table. Removing... )\n", i);
             table[i].is_item_empty = TRUE;
         }
     }
@@ -65,7 +65,7 @@ void
 put_item_at_routing_table(routing_table_item table[], routing_table_item item)
 {   
     int i;
-    printf("Putting item in routing table...\n");
+    printf(" (Putting item in routing table...)\n");
     remove_old_items(table);
     remove_item_routing_table(table, item.aodv_destination);
 
@@ -96,7 +96,6 @@ put_item_at_routing_table(routing_table_item table[], routing_table_item item)
 int
 get_index_item_routing_table(routing_table_item table[], address destination)
 {
-    printf("Getting index item from routing table...\n");
     remove_old_items(table);
     int i;
     for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
@@ -124,12 +123,12 @@ remove_item_routing_table(routing_table_item table[], address destination)
     i = get_index_item_routing_table(table, destination);
 	if (i>=0)
 	{
-		printf("Removing item %d from routing table...\n", i);
+		printf(" (Removing item %d from routing table...)\n", i);
 		table[i].is_item_empty = TRUE;
 	}
 	else
 	{
-		printf("Unable to remove item from routing table. It does not exist.\n");
+		printf(" (Unable to remove item from routing table. It does not exist.)\n");
 	}
 }
     
