@@ -414,7 +414,7 @@ main()
                                     INITIAL_HOP_COUNT, gm->aodv_source, gm->aodv_destination, DEFAULT_TTL, 
                                     gm->sequence_number_message, ++my_sequence_number, NULL);
                             }
-                            else if (index = get_index_item_routing_table(table, gm->destination)!=-1)
+                            else if (index = get_index_item_routing_table(table, gm->aodv_destination)!=-1)
                             { /* If the destination is in my link state table, reply RREP. */
                                 if (table[index].number_of_hops==1) /* It's a neighbor. */
                                 {
