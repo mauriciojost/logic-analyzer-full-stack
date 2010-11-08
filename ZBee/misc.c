@@ -154,13 +154,13 @@ print_routing_table_item(routing_table_item item)
 void
 print_routing_table(routing_table_item table[])
 {
-    printf("***   TABLE   ***\n");    
+    printf("***  ROUTING TABLE   ***\n");    
     int i;
     for (i=0;i<ROUTING_TABLE_MAX_ITEMS;i++)
     {   
         print_routing_table_item(table[i]);
     }
-    printf("*** END TABLE ***\n");    
+    printf("*** END ROUTING TABLE ***\n");    
 }
 
 void 

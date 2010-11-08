@@ -228,11 +228,11 @@ use_RREQ_to_update_routing_table(routing_table_item table[], general_message* gm
     /* 
     We receive a message that must be used to fill the table in this way:
         TABLE                Msg. RREQ            
-        destination    <-         source_aodv
-        next_hop <-            source (physical source)
+        destination    <-    source_aodv
+        next_hop <-          source (physical source)
         number_of_hops <-    hop_count
-        initial_time <-        time(NULL) + (ROUTE_TIMEOUT / 10)*3 (only allow time for RREP message on the way back).
-        sequence_numb... <- 0 (we want it not to persist since it's not necessary the best path). 
+        initial_time <-      time(NULL) + (ROUTE_TIMEOUT / 10)*3 (only allow time for RREP message on the way back).
+        sequence_numb... <-  0 (we want it not to persist since it's not necessary the best path). 
     */
 
     copy_addresses(item.aodv_destination, gm->aodv_source);
@@ -282,19 +282,69 @@ assign_automatic_procedure(char* procedure, int cycle_counter)
 
 }
 
+void
+init_broadcast_table(int table[])
+{
+    int j;
+    for(j=0;j<MAX_ELEMENTS_IN_REBROADCASTED_TABLE;j++)
+    {
+        table[j]=-1;            
+    }
+}
+
+void
+put_broadcast_sn(int table[], int sn, int* index)
+{
+    printf("Putting a new SN in the broadcast table.\n");
+    table[*index] = sn;
+    *index = *index + 1;
+}
+
+
+int
+check_if_already_broadcasted(int table[], int sn, int index)
+{
+    int i;
+    for (i=0;i<index;i++)
+    {
+        if (sn==table[i])
+        {
+            printf("Already broadcasted message (SN=%d).\n", sn);
+            return TRUE;
+        }
+    }
+    printf("Message not broadcasted before. Free to rebroadcast (SN=%d).\n", sn);
+    return FALSE;
+}
+
+void
+print_broadcasted_table(int table[], int index)
+{
+    int i;
+    printf("\n**** BROADCASTED TABLE : ");
+    for (i=0;i<index;i++)
+    {
+        printf("%d ", table[i]);
+    }
+    printf("\n\n");
+}
+
 
 int 
 main()
 {
     char buff[1024*8];
-   
+    int rebroadcast_index = 0;
     routing_table_item table[ROUTING_TABLE_MAX_ITEMS];
     
     initialize_routing_table(table);
     srand (time(NULL));
     int my_sequence_number = 0;
 
-   
+    int sn_of_broadcasted_messages_table[MAX_ELEMENTS_IN_REBROADCASTED_TABLE];
+    init_broadcast_table(sn_of_broadcasted_messages_table);
+    
+
     /*
     
     Requestor
@@ -325,15 +375,15 @@ main()
     int MAX_CYCLES = 100;
     char data[] = "                                  ";
 
-    address my_address, destination, broadcast;
+    address my_address, default_destination, broadcast;
     init_address(broadcast, "FFFF");
     printf("AODV/ZIGBEE\n---- ------\n\n");
     printf("Write the local address of one connected device (4 characters 0000-FFFF, for example '0001'): ");
     gets(buff);
     init_address(my_address, buff);
-    init_address(destination, "0003");
+    init_address(default_destination, "0003");
     
-    printf("Write serial port number (COM1-8, for example 'COM7'): ");
+    printf("Write serial port number (COM1-8, for example 'COM4'): ");
     gets(buff);
     initialize_zigbee_module(&fd, buff, my_address);
 
@@ -353,11 +403,12 @@ main()
             {
                 printf("\n\n*************\nInstructions: \n"
                 "  c (Change destination address and message)\n"
-                "  w (shoW routing table)\n"
+                "  w (shoW routing table & rebroadcast table)\n"
                 "  p (Proceed)\n" 
                 "  r (Read incoming messages)\n" 
-                "  s (Send data message to destination)\n"
+                "  s (Send data message to destination, changing destination \n    address before is required)\n"
                 "  h (send Hello message)\n"
+                "  t (test sending any raw message)\n"
                 "  q (Quit)\n\n");
             
                 procedure = getch();           
@@ -387,6 +438,7 @@ main()
                 case 'W':
                 case 'w': // Show routing table.
                     print_routing_table(table);
+                    print_broadcasted_table(sn_of_broadcasted_messages_table,rebroadcast_index);
                     break; 
 
                 case 'R':
@@ -427,17 +479,21 @@ main()
                             
                             if (message_answered == FALSE) /* No information about the requested node. */
                             {
-                                if (gm->lifespan > gm->hop_count) /* If it's still valid, forward RREQ. */
+                                if ((gm->lifespan > gm->hop_count) && (!check_if_already_broadcasted(sn_of_broadcasted_messages_table, gm->sequence_number_message, rebroadcast_index)))
+                                /* If it's still valid and was not broadcasted before, forward RREQ. */
                                 {
+                                    put_broadcast_sn(sn_of_broadcasted_messages_table, gm->sequence_number_message, &rebroadcast_index);
+                        
                                     use_RREQ_to_update_routing_table(table, gm);
                                     send_general_message(fd, MESSAGE_ID_RREQ, my_address, broadcast, 
                                         gm->hop_count+1, gm->aodv_source, gm->aodv_destination, gm->lifespan, 
                                         gm->sequence_number_message, gm->sequence_number_destination, NULL);
                                     printf("RREQ forwarded.\n");
+
                                 }
                                 else
                                 {
-                                    printf("RREQ not forwarded (hopcount=%d>=lifespan=%d).\n", gm->hop_count, gm->lifespan);
+                                    printf("RREQ not forwarded ( already broadcasted or hopcount=%d>=lifespan=%d).\n", gm->hop_count, gm->lifespan);
                                 }
                             }
                             break;
@@ -529,7 +585,7 @@ main()
                 case 'c': // Change data/destination.
                     printf("Please, write the new destination address (4 characters, 0000-FFFF, for example '0002'): "); 
                     gets(buff);
-                    init_address(destination, buff);
+                    init_address(default_destination, buff);
                     printf("Please, write the new data (less than 20 characters): "); 
                     gets(data);
                     break;
@@ -541,21 +597,16 @@ main()
                     
                     int route_found = FALSE;
                     
-                    if ((index = get_index_item_routing_table(table, destination))!=-1)
+                    if ((index = get_index_item_routing_table(table, default_destination))!=-1)
                     {
                         /* Send Message (using the next hop). */
-                        printf("Destination is already in the routing table. Checking validity...\n");
+                        printf("Destination is already in the routing table.\n");
                         
-                        time_t current_time = time (NULL);
-                        printf("Checking time of the route: current=[%ld] initial_time+timeout=[%ld]\n");
-                        if (table[index].initial_time + ROUTE_TIMEOUT > current_time)
-                        {
-                            /* It's okay. We can use this route now. */
+                        /* It's okay. We can use this route now. */
+                        
+                        route_found = TRUE;
+                        printf("Route found!\n");
                             
-                            route_found = TRUE;
-                            printf("Route found!\n");
-                            
-                        }
                     }
                     
                     if (route_found == FALSE)
@@ -568,8 +619,9 @@ main()
                             printf("Destination is NOT in the table. Sending RREQ...\n");
                             int message_sequence_number = rand();
                             send_general_message(fd, MESSAGE_ID_RREQ, my_address, broadcast, 
-                                                INITIAL_HOP_COUNT, my_address,  /* Looking for ... */ destination , 
+                                                INITIAL_HOP_COUNT, my_address,  /* Looking for ... */ default_destination , 
                                                 DEFAULT_TTL, message_sequence_number, 0,NULL);
+                            put_broadcast_sn(sn_of_broadcasted_messages_table, message_sequence_number, &rebroadcast_index);
                             /* Wait for the first RREP. The other RREP messages will 
                             be processed in other stage. */
                             printf("Waiting for the first RREP...\n"); 
@@ -595,11 +647,11 @@ main()
 
                     if (route_found == TRUE)
                     {
-                        index = get_index_item_routing_table(table, destination);
+                        index = get_index_item_routing_table(table, default_destination);
                         printf("Route available (routing table item = %d). Now sending message...\n", index);
                         int message_sequence_number = rand();
                         send_general_message(fd, MESSAGE_ID_DATA, my_address, table[index].next_hop, 
-                                INITIAL_HOP_COUNT, my_address, destination, DEFAULT_TTL, message_sequence_number, 0, data);
+                                INITIAL_HOP_COUNT, my_address, default_destination, DEFAULT_TTL, message_sequence_number, 0, data);
                         
                     }
                     break;
@@ -618,7 +670,7 @@ main()
                 case 'P':
                     printf("Please, write the new destination address (4 characters, 0000-FFFF, for example '009F'): "); 
                     gets(buff);
-                    init_address(destination, buff);
+                    init_address(default_destination, buff);
                     printf("Please, write the new data (less than 20 characters): "); 
                     gets(data);
             
@@ -626,6 +678,36 @@ main()
                     printf("Write the amount of cycles to run automatically: ");
                     scanf("%d", &MAX_CYCLES);
                     cycle_counter = 0;
+                    break;
+                case 't':
+                case 'T':
+                    {
+                        int ttll=1, mseqn=18, sn_destin, hcn;
+                        char mesid = MESSAGE_ID_DATA;
+                        char bf[6];
+                        address nh, aodv_dest, aodv_src; 
+                        printf("Testing...\n");
+                        printf("Write message ID (RREQ 'Q', RREP 'P', HELL 'H', DATA 'D' UPPERCASE): \n");
+                        mesid = getche();
+                        printf("\nWrite next_hop: \n");
+                        gets(bf);
+                        init_address(nh, bf);
+                        printf("Write aodv_destination: \n");
+                        gets(bf);                        
+                        init_address(aodv_dest, bf); 
+                        printf("Write aodv_source: \n");
+                        gets(bf);                        
+                        init_address(aodv_src, bf); 
+                        printf("Write lifespan:\n");
+                        scanf("%d", &ttll);
+                        printf("Write hop_count:\n");
+                        scanf("%d", &hcn);
+                        printf("Write SN of destination.\n");
+                        scanf("%d", &sn_destin);
+                        printf("Testing...\n");
+                        send_general_message(fd, mesid, my_address, nh, 
+                                    INITIAL_HOP_COUNT, aodv_src, aodv_dest, ttll, mseqn, sn_destin, NULL);
+                    }
                     break;
                 default: 
                     printf("Non valid option.\n");

@@ -17,6 +17,8 @@
 #define MESSAGE_ID_HELL 'H'
 #define MESSAGE_ID_DATA 'D'
 
+#define MAX_ELEMENTS_IN_REBROADCASTED_TABLE 1024
+
 #define ROUTING_TABLE_MAX_ITEMS 8
 
 typedef char address [4]; /* Type 'address'. */
@@ -43,11 +45,11 @@ typedef struct{
     /******************************/
     /* REAL FIELDS OF THE MESSAGE */
     /******************************/
-    address source;                /* Physical source.                                    */
-    address destination;           /* Physical destination.                               */
-    int hop_count;                 /* Hops already visited.                               */
-    address aodv_source;           /* Logical source.                                     */
-    address aodv_destination;      /* Logical destination.                                */
+    address source;                /* Physical source.                                    */ 
+    address destination;           /* Physical destination.                               */ 
+    int hop_count;                 /* Hops already visited.                               */ 
+    address aodv_source;           /* Logical source.                                     */ 
+    address aodv_destination;      /* Logical destination.                                */ 
     int lifespan;                  /* TTL (uses hop_count to check its trip).             */
     int sequence_number_message;   /* Identifier of this particular message's instance 
                                       (used to avoid re-broadcast).                       */
