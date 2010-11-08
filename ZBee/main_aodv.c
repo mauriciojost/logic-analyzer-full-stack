@@ -120,6 +120,7 @@ read_one_message(HANDLE fd, char* buff)
                 break;
             default:
 		        printf("******** UNKNOWN message arrived.\n");	
+                print_general_message((void*)buff); 
         }
     }
     else
@@ -322,7 +323,7 @@ main()
             }
             else
             {
-
+                printf("My sequence number %d. \n\n ", my_sequence_number);
                 assign_automatic_procedure(&procedure, cycle_counter);
 
                 if (cycle_counter%4==0)
