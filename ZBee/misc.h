@@ -22,10 +22,10 @@
 typedef char address [4]; /* Type 'address'. */
 
 typedef struct{
-	/***********************/
-	/* ROUTING TABLE ITEMS */
-	/***********************/
-	
+    /***********************/
+    /* ROUTING TABLE ITEMS */
+    /***********************/
+    
     char is_item_empty;
     address aodv_destination;
     address next_hop;
@@ -38,28 +38,28 @@ typedef struct{
 
 
 typedef struct{
-	char message_id; 			/* Identifier of the type of message: RREQ, RREP, HELL... */
-	
-	/******************************/
-	/* REAL FIELDS OF THE MESSAGE */
-	/******************************/
-	address source; 			/* Physical source. 								*/
-    address destination; 		/* Physical destination. 							*/
-    int hop_count; 				/* Hops already visited. 							*/
-    address aodv_source; 		/* Logical source. 									*/
-    address aodv_destination;	/* Logical destination. 							*/
-    int lifespan; 				/* TTL (uses hop_count to check its trip). 			*/
-    int sequence_number_message;/* Identifier of this particular message's instance 
-									(used to avoid re-broadcast). 					*/
-	int sequence_number_destination; 
-								/* Used to see how fresh is the information about the destination. */
-	char data[DATA_FIELD_LENGTH];/* Payload. 										*/
-	
-	/* Not used in this implementation.
-	int sequence_number_source;
-	int sequence_number_destionation;
-	*/
-	char tail; /* Must be 0 (it's useful to print the whole message at once). */
+    char message_id;             /* Identifier of the type of message: RREQ, RREP, HELL... */
+    
+    /******************************/
+    /* REAL FIELDS OF THE MESSAGE */
+    /******************************/
+    address source;                /* Physical source.                                    */
+    address destination;           /* Physical destination.                               */
+    int hop_count;                 /* Hops already visited.                               */
+    address aodv_source;           /* Logical source.                                     */
+    address aodv_destination;      /* Logical destination.                                */
+    int lifespan;                  /* TTL (uses hop_count to check its trip).             */
+    int sequence_number_message;   /* Identifier of this particular message's instance 
+                                      (used to avoid re-broadcast).                       */
+    int sequence_number_destination; 
+                       /* Used to see how fresh is the information about the destination. */
+    char data[DATA_FIELD_LENGTH];/* Payload.                                         */
+    
+    /* Not used in this implementation.
+    int sequence_number_source;
+    int sequence_number_destionation;
+    */
+    char tail; /* Must be 0 (it's useful to print the whole message at once). */
 } general_message;
 
 

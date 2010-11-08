@@ -50,11 +50,11 @@ read_all(HANDLE fd, char* data)
     
     int a;
     if((a = Kbhit_Port(fd))!=0){      // Is there something to read from serial port?
-        Read_Port(fd,data,a);	      // Then read it and show it.
+        Read_Port(fd,data,a);          // Then read it and show it.
         data[a] = 0;
         //printf("Data received: '%s'\n",data);
     }
-	return a;
+    return a;
     
 }
 

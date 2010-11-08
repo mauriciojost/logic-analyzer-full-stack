@@ -119,17 +119,17 @@ remove_item_routing_table(routing_table_item table[], address destination)
 
     remove_old_items(table);
 
-	
+    
     i = get_index_item_routing_table(table, destination);
-	if (i>=0)
-	{
-		printf(" (Removing item %d from routing table...)\n", i);
-		table[i].is_item_empty = TRUE;
-	}
-	else
-	{
-		printf(" (Unable to remove item from routing table. It does not exist.)\n");
-	}
+    if (i>=0)
+    {
+        printf(" (Removing item %d from routing table...)\n", i);
+        table[i].is_item_empty = TRUE;
+    }
+    else
+    {
+        printf(" (Unable to remove item from routing table. It does not exist.)\n");
+    }
 }
     
 void
@@ -166,5 +166,5 @@ print_routing_table(routing_table_item table[])
 void 
 print_address(address ad)
 {
-	printf("%c%c%c%c", ad[0], ad[1], ad[2], ad[3]);
+    printf("%c%c%c%c", ad[0], ad[1], ad[2], ad[3]);
 }
