@@ -216,6 +216,48 @@ use_RREP_to_update_routing_table(routing_table_item table[], general_message* gm
     }
 }
 
+
+void
+use_RREQ_to_update_routing_table(routing_table_item table[], general_message* gm)
+{
+    
+    printf("Updating routing table (way back) with RREQ... Using the following message: \n");
+    print_general_message(gm); 
+
+    routing_table_item item;
+	/* 
+	We receive a message that must be used to fill the table in this way:
+		TABLE				Msg. RREQ			
+		destination	<- 		source_aodv
+		next_hop <-			source (physical source)
+		number_of_hops <-	hop_count
+		initial_time <-		time(NULL) + (ROUTE_TIMEOUT / 10)*3 (only allow time for RREP message on the way back).
+		sequence_numb... <- 0 (we want it not to persist since it's not necessary the best path). 
+	*/
+
+    copy_addresses(item.aodv_destination, gm->aodv_source);
+    copy_addresses(item.next_hop, gm->source);
+    item.number_of_hops = gm->hop_count;
+    item.initial_time = time(NULL) + (ROUTE_TIMEOUT / 10) * 3;
+    item.sequence_number_destination = 0;
+  
+    int index = get_index_item_routing_table(table, gm->aodv_destination);
+    int route_changed = FALSE;
+
+    if (index==-1)
+    {
+        put_item_at_routing_table(table, item);
+        route_changed = TRUE;
+        printf("Route added (for way back) (it was not present in the table).\n");
+    } 
+    if (route_changed == FALSE)
+    {
+        printf("The routing table was NOT modified. ");
+    }
+}
+
+
+
 void
 assign_automatic_procedure(char* procedure, int cycle_counter)
 {
@@ -368,7 +410,6 @@ main()
                             {
 								message_answered = TRUE;
 								
-								printf("Warning: answering a RREQ with an invalid RREP.\n");
 								send_general_message(fd, MESSAGE_ID_RREP, my_address, gm->source, 
 									INITIAL_HOP_COUNT, gm->aodv_source, gm->aodv_destination, DEFAULT_TTL, 
                                     gm->sequence_number_message, ++my_sequence_number, NULL);
@@ -388,6 +429,7 @@ main()
 							{
 								if (gm->lifespan > gm->hop_count) /* If it's still valid, forward RREQ. */
 								{
+                                    use_RREQ_to_update_routing_table(table, gm);
 									send_general_message(fd, MESSAGE_ID_RREQ, my_address, broadcast, 
 										gm->hop_count+1, gm->aodv_source, gm->aodv_destination, gm->lifespan, 
                                         gm->sequence_number_message, gm->sequence_number_destination, NULL);
@@ -444,8 +486,36 @@ main()
                         /**************************/
                         case MESSAGE_ID_DATA:
 						{
-                            printf("Data message received!!!\n"); 
-							print_general_message(buff);
+                            if (addresses_are_equal(gm->aodv_destination, my_address))
+                            {
+                                printf("Data message for me received!!!\n"); 
+    							print_general_message(buff);
+                            }
+                            else
+                            {
+                                printf("Data message NOT for me, received.\n");  
+    							print_general_message(buff);
+                                int index;
+                                if ((index=get_index_item_routing_table(table, gm->aodv_destination))!=-1)
+                                {
+                                    if (gm->hop_count < gm->lifespan)
+                                    {
+                                        printf("Route known. Forwarding...\n");
+                                        send_general_message(fd, MESSAGE_ID_DATA, my_address, table[index].next_hop, 
+										  gm->hop_count+1, gm->aodv_source, gm->aodv_destination, gm->lifespan, 
+                                            gm->sequence_number_message, gm->sequence_number_destination, gm->data);
+                                    }
+                                    else
+                                    {
+                                        printf("Dropping packet (lifespan expired). ");
+                                    }
+                                }
+                                else
+                                {
+                                    printf("Route unknown. Dropping packet.\n");
+                                }
+                            }
+                            
 							break;
 						}
 
