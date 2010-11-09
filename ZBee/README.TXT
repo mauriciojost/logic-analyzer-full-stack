@@ -1,5 +1,5 @@
-Ubinet's Master
-Polytech'Nice
+Ubinet Master
+Polytech'Nice INRIA
 
 Subject: WPAN / WLAN
 Year: 2010
@@ -19,3 +19,5 @@ Each message must be sent in one node, and READ in the other, the application is
 The command W (shoW) shows how each table is. 
 
 If the ZigBee module is in command line mode, it will not receive messages, so it's pointless have multiple threads when the own device behaves as a sequential device. 
+
+For each message that is received, it is necessary to perform a read procedure. Then the system will response with other messages if it is needed (for instance rebroadcasting RREQ, or routing certain package). It is for academic purposes.
