@@ -22,18 +22,27 @@ public class Comunicador implements Comunicable{
     /* Carga de la libreria: JNI. */
     static {
         System.out.println("Comunicador. Buscando librerias en:" + System.getProperty("java.library.path"));
+
+        //String strliblin = "/usr/lib/incomunicado.so"; // Simulacion de HW.
+        //String strlibwin = "Incomunicado";
+
+        String strliblin = "/usr/lib/comunicado.so"; // Uso de HW real.
+        String strlibwin = "Comunicado";
+
         try{
-            System.load("/usr/lib/comunicado.so");
+            System.load(strliblin);
             System.out.println("Librería de Linux cargada correctamente.");
-        }catch(java.lang.UnsatisfiedLinkError e){
-            System.out.println("Error al cargar la librería en Linux.");
-            e.printStackTrace();
+        }catch(Throwable e){
+            System.out.println("Error al cargar la librería de Linux('"+strliblin+"').");
+            System.out.println("Put the corrresponding file in Libs (.dll or .so) into the OS libraries directory.");
+            System.out.println("For Windows usually it is '#WINDOWS#System32' and for Linux '/usr/lib/'.");
+            //e.printStackTrace();
             try{
-                System.loadLibrary("Comunicado");
+                System.loadLibrary(strlibwin);
                 System.out.println("Librería de Windows cargada correctamente.");
-            }catch(Exception b){
-                System.out.println("Error al cargar la librería en Windows.");
-                b.printStackTrace();
+            }catch(Throwable b){
+                System.out.println("Error al cargar la librería de Windows('"+strlibwin+".dll').");
+                //b.printStackTrace();
             }
             
         }
