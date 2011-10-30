@@ -1,3 +1,5 @@
+This project ZBee is not related at all with the Logic Analyser project. 
+
 Ubinet Master
 Polytech'Nice INRIA
 
