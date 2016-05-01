@@ -12,7 +12,7 @@ This is a low cost logic analyzer project.
 
 Find here more complete [documentation](logic-analyzer/docs/).
 
-Find here a demo video in YouTube:
+Find here a [demo video](https://www.youtube.com/watch?v=hvg7bHg8U7Q) in YouTube.
 
-![demo video](https://www.youtube.com/watch?v=hvg7bHg8U7Q)
+
 
