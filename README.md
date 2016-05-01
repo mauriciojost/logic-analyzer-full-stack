@@ -6,9 +6,13 @@ This is a low cost logic analyzer project.
 
 ![screenshot here](logic-analyzer/docs/screenshots/00.jpg)
 
-- The lower level module is implemented using a `PIC uC` in `C` language.
+- The lower level module is implemented using a `PIC uC` in `C` language and provided PCB (printed circuit board):
+
+![screenshot here](logic-analyzer/docs/screenshots/01.png)
 
 Find here more complete [documentation](logic-analyzer/docs/).
 
-Find here a [demo video](https://www.youtube.com/watch?v=hvg7bHg8U7Q) in YouTube. 
+Find here a demo video in YouTube:
+
+![demo video](https://www.youtube.com/watch?v=hvg7bHg8U7Q)
 
